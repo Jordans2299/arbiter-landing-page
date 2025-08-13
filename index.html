@@ -1579,19 +1579,23 @@
 <div class="slides" id="slides">
 <div class="slide">
 <img alt="AI Chat Interface showing poetry conversation" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/screenshots/screenshot-1.png"/>
-<div class="slide-placeholder" style="display:none;">Screenshot 1: Creative AI Conversations</div>
+<div class="slide-placeholder" style="display:none;">Screenshot 1: Learn Something New</div>
 </div>
 <div class="slide">
-<img alt="Settings screen with model selection" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/screenshots/screenshot-2.png"/>
-<div class="slide-placeholder" style="display:none;">Screenshot 2: Model Settings</div>
+<img alt="Technical conversation with keyboard visible" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/screenshots/screenshot-5.jpg"/>
+<div class="slide-placeholder" style="display:none;">Screenshot 2: Creative AI Conversations</div>
 </div>
 <div class="slide">
-<img alt="Technical conversation with keyboard visible" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/screenshots/screenshot-3.jpg"/>
-<div class="slide-placeholder" style="display:none;">Screenshot 3: Technical Conversations</div>
+<img alt="Screen showing all locally saved chats" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/screenshots/screenshot-3.jpg"/>
+<div class="slide-placeholder" style="display:none;">Screenshot 3: Model Settings</div>
 </div>
 <div class="slide">
 <img alt="Code generation showing merge sort algorithm" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/screenshots/screenshot-4.png"/>
 <div class="slide-placeholder" style="display:none;">Screenshot 4: Code Generation</div>
+</div>
+<div class="slide">
+<img alt="Settings screen with model selection" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/screenshots/screenshot-2.png"/>
+<div class="slide-placeholder" style="display:none;">Screenshot 5: Model Settings</div>
 </div>
 </div>
 <button class="slideshow-controls prev" onclick="changeSlide(-1)">‹</button>
@@ -1602,6 +1606,7 @@
 <span class="dot" onclick="goToSlide(1)"></span>
 <span class="dot" onclick="goToSlide(2)"></span>
 <span class="dot" onclick="goToSlide(3)"></span>
+<span class="dot" onclick="goToSlide(4)"></span>
 </div>
 <div class="slideshow-caption">
 <div class="caption-title" id="caption-title">Creative AI Conversations</div>
@@ -1821,21 +1826,25 @@
         // Slideshow data
         const slideData = [
             {
-                title: "Creative AI Conversations",
+                title: "Learn Something New",
+                text: "Ask Arbiter about any topic, from history to science, and get detailed explanations and insights.",
+            },
+            {
+                title: "Creative AI Conversations", 
                 text: "Engage in creative writing, poetry, and artistic projects with AI models running locally on your device."
+            },
+            {
+                title: "Save Chats Locally On Device",
+                text: "All conversations are stored on your device, ensuring privacy and ownership. Search and export your chats anytime."
+            },
+            {
+                title: "Code Generation & Learning",
+                text: "Generate, review, and learn from code examples in multiple programming languages."
             },
             {
                 title: "Flexible Model Management", 
                 text: "Easily switch between AI models and adjust settings like temperature for different conversation styles."
             },
-            {
-                title: "Technical Problem Solving",
-                text: "Get help with complex technical topics, data structures, and programming concepts."
-            },
-            {
-                title: "Code Generation & Learning",
-                text: "Generate, review, and learn from code examples in multiple programming languages."
-            }
         ];
 
         let currentSlideIndex = 0;

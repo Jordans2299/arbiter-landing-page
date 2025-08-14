@@ -1285,7 +1285,7 @@
             .team-member {
                 padding: 1.5rem 1rem;
                 margin: 0 auto;
-                max-width: 300px;
+                width: 300px;
             }
 
             h1 {

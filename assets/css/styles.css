@@ -1179,7 +1179,7 @@
         .section-title {
             font-size: 2.5rem;
             font-weight: 300;
-            margin-bottom: 4rem;
+            margin-bottom: 2rem;
             letter-spacing: -0.02em;
             text-align: center;
             color: var(--purple);
@@ -1270,7 +1270,7 @@
                 width: 100%;
                 max-width: 100%;
                 text-align: center;
-                padding: 0;
+                padding-top: 4rem
             }
 
             .sketches-container {
@@ -1429,7 +1429,7 @@
             }
 
             .hero-content {
-                padding: 0 0.5rem;
+                padding-top: 4rem;
             }
 
             .section-title {
@@ -1517,6 +1517,9 @@
 }
 @media (max-width: 768px) {
   .team-member { height: 340px; }  /* fixed uniform height on mobile */
+}
+section {
+  padding: 2rem 0 !important;
 }
 
 

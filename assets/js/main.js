@@ -25,7 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 social: {
                     linkedin: "https://www.linkedin.com/in/jordan-stone-051a25142/",
                     email: "jordan@askarbiter.ai",
-                    github: "https://github.com/Jordans2299"
+                    github: "https://github.com/Jordans2299",
+                    website: "https://jordanstoneportfolio.com"
                 }
             },
             yousef: {

@@ -26,6 +26,10 @@
             font-weight: 300;
         }
 
+        section {
+          padding: 4rem 0 !important;
+        }
+
         /* Floating sketches container */
         .sketches-container {
             position: fixed;

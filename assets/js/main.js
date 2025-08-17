@@ -372,7 +372,7 @@ async function handleFormSubmit(event) {
             closeBetaModal();
             const form = document.getElementById('beta-form');
             if (form) form.reset();
-        }, 2000);
+        }, 20000);
         
     } catch (error) {
         console.error('Error submitting form:', error);

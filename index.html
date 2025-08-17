@@ -7,6 +7,9 @@
 <title>Arbiter - Private AI on Your Device</title>
 <link rel="stylesheet" href="assets/css/styles.css">
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 </head>
 <body>
@@ -31,6 +34,7 @@
 </ul>
 </div>
 </nav>
+
 <!-- Hero Section -->
 <section class="hero">
 <div class="container">
@@ -52,23 +56,23 @@
 <div class="slideshow-wrapper">
 <div class="slides" id="slides">
 <div class="slide">
-<img alt="AI Chat Interface showing poetry conversation" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/screenshots/screenshot-1.png"/>
+<img alt="AI Chat Interface showing poetry conversation" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="assets/screenshots/screenshot-1.png"/>
 <div class="slide-placeholder" style="display:none;">Screenshot 1: Learn Something New</div>
 </div>
 <div class="slide">
-<img alt="Technical conversation with keyboard visible" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/screenshots/screenshot-5.jpg"/>
+<img alt="Technical conversation with keyboard visible" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="assets/screenshots/screenshot-5.jpg"/>
 <div class="slide-placeholder" style="display:none;">Screenshot 2: Creative AI Conversations</div>
 </div>
 <div class="slide">
-<img alt="Screen showing all locally saved chats" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/screenshots/screenshot-3.jpg"/>
+<img alt="Screen showing all locally saved chats" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="assets/screenshots/screenshot-3.jpg"/>
 <div class="slide-placeholder" style="display:none;">Screenshot 3: Model Settings</div>
 </div>
 <div class="slide">
-<img alt="Code generation showing merge sort algorithm" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/screenshots/screenshot-4.png"/>
+<img alt="Code generation showing merge sort algorithm" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="assets/screenshots/screenshot-4.png"/>
 <div class="slide-placeholder" style="display:none;">Screenshot 4: Code Generation</div>
 </div>
 <div class="slide">
-<img alt="Settings screen with model selection" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="./assets/screenshots/screenshot-2.png"/>
+<img alt="Settings screen with model selection" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="assets/screenshots/screenshot-2.png"/>
 <div class="slide-placeholder" style="display:none;">Screenshot 5: Model Settings</div>
 </div>
 </div>
@@ -91,6 +95,7 @@
 </div>
 </div>
 </section>
+
 <!-- Features Section -->
 <section class="features" id="features">
 <div class="container">
@@ -123,6 +128,7 @@
 </div>
 </div>
 </section>
+
 <!-- Mission Section -->
 <section class="mission" id="mission">
 <div class="container">
@@ -132,13 +138,14 @@
 </div>
 </div>
 </section>
+
 <!-- Team Section -->
 <section class="team" id="team">
 <div class="container">
 <h2 class="section-title">Team</h2>
 <div class="team-grid">
 <div class="team-member" onclick="openTeamModal('jordan')">
-<img alt="Headshot of Jordan Stone" class="team-photo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDgiIGZpbGw9IiNGQUY1RkYiLz4KPHN2ZyB4PSIyNCIgeT0iMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiI+CjxwYXRoIGQ9Im0yMCAyMS12LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiLz4KPC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5KUzwvdGV4dD48L3N2Zz4KPC9zdmc+';" src="./assets/jordan-stone.jpg"/>
+<img alt="Headshot of Jordan Stone" class="team-photo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDgiIGZpbGw9IiNGQUY1RkYiLz4KPHN2ZyB4PSIyNCIgeT0iMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiI+CjxwYXRoIGQ9Im0yMCAyMS12LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiLz4KPC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5KUzwvdGV4dD48L3N2Zz4KPC9zdmc+';" src="assets/jordan-stone.jpg"/>
 <h3>Jordan Stone</h3>
 <p class="role">Founder (CEO/CTO)</p>
 <div class="team-links">
@@ -147,7 +154,7 @@
 </div>
 </div>
 <div class="team-member" onclick="openTeamModal('yousef')">
-<img alt="Headshot of Yousef Abu-Salah" class="team-photo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDgiIGZpbGw9IiNGQUY1RkYiLz4KPHN2ZyB4PSIyNCIgeT0iMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiI+CjxwYXRoIGQ9Im0yMCAyMS12LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiLz4KPC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5ZQVM8L3RleHQ+PC9zdmc+CjwvYXNnPg==';" src="./assets/yousef-abu-salah.jpg"/>
+<img alt="Headshot of Yousef Abu-Salah" class="team-photo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDgiIGZpbGw9IiNGQUY1RkYiLz4KPHN2ZyB4PSIyNCIgeT0iMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiI+CjxwYXRoIGQ9Im0yMCAyMS12LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiLz4KPC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5ZQVM8L3RleHQ+PC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5ZQVM8L3RleHQ+PC9zdmc+CjwvYXNnPg==';" src="assets/yousef-abu-salah.jpg"/>
 <h3>Yousef Abu Salah</h3>
 <p class="role">Chief Design Officer (CDO)</p>
 <div class="team-links">
@@ -156,7 +163,7 @@
 </div>
 </div>
 <div class="team-member" onclick="openTeamModal('harpreet')">
-<img alt="Headshot of Harpreet Singh" class="team-photo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDgiIGZpbGw9IiNGQUY1RkYiLz4KPHN2ZyB4PSIyNCIgeT0iMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiI+CjxwYXRoIGQ9Im0yMCAyMS12LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiLz4KPC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5IUzwvdGV4dD48L3N2Zz4KPC9zdmc+';" src="./assets/harpreet-singh.jpg"/>
+<img alt="Headshot of Harpreet Singh" class="team-photo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDgiIGZpbGw9IiNGQUY1RkYiLz4KPHN2ZyB4PSIyNCIgeT0iMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiI+CjxwYXRoIGQ9Im0yMCAyMS12LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiLz4KPC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5IUzwvdGV4dD48L3N2Zz4KPC9zdmc+';" src="assets/harpreet-singh.jpg"/>
 <h3>Harpreet Singh</h3>
 <p class="role">Chief Financial Officer (CFO)</p>
 <div class="team-links">
@@ -165,7 +172,7 @@
 </div>
 </div>
 <div class="team-member" onclick="openTeamModal('smith')">
-<img alt="Headshot of Smith Patel" class="team-photo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDgiIGZpbGw9IiNGQUY1RkYiLz4KPHN2ZyB4PSIyNCIgeT0iMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiI+CjxwYXRoIGQ9Im0yMCAyMS12LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiLz4KPC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5TUDY8L3RleHQ+PC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5TUDY8L3RleHQ+PC9zdmc+CjwvYXNnPg==';" src="./assets/smith-patel.jpg"/>
+<img alt="Headshot of Smith Patel" class="team-photo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDgiIGZpbGw9IiNGQUY1RkYiLz4KPHN2ZyB4PSIyNCIgeT0iMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiI+CjxwYXRoIGQ9Im0yMCAyMS12LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiLz4KPC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5TUDY8L3RleHQ+PC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5TUDY8L3RleHQ+PC9zdmc+CjwvQXNnPg==';" src="assets/smith-patel.jpg"/>
 <h3>Smith Patel</h3>
 <p class="role">Chief Operating Officer (COO)</p>
 <div class="team-links">
@@ -176,6 +183,7 @@
 </div>
 </div>
 </section>
+
 <!-- FAQ Section -->
 <section class="faq" id="faq">
 <div class="container">
@@ -204,6 +212,7 @@
 </div>
 </div>
 </section>
+
 <!-- Footer -->
 <footer id="contact">
 <div class="container">
@@ -214,8 +223,10 @@
 </div>
 </footer>
 </div>
+
 <!-- Modal backdrop -->
 <div class="modal-backdrop" onclick="closeAllModals()"></div>
+
 <!-- Team Modal -->
 <div aria-hidden="true" class="modal" id="team-modal">
 <div class="modal-card team-modal-content">
@@ -227,6 +238,7 @@
 </div>
 </div>
 </div>
+
 <!-- Beta Modal -->
 <div aria-hidden="true" class="modal" id="beta-modal">
 <div class="modal-card">
@@ -243,12 +255,13 @@
 <label for="email">Email*</label>
 <input id="email" name="email" placeholder="you@example.com" required="" type="email"/>
 </div>
-<button class="btn-primary" type="submit">Request Invite</button>
-<div class="success-msg" id="beta-success"></div>
-<div class="error-msg" id="beta-error"></div>
+<button class="btn-primary" type="submit" id="submit-btn">Request Invite</button>
+<div class="success-msg" id="beta-success" style="display: none;"></div>
+<div class="error-msg" id="beta-error" style="display: none;"></div>
 </form>
 </div>
 </div>
+
 <div class="sketches-container">
     <!-- LEFT SIDE PLANETS -->
     <div class="sketch sketch-planet left-1 float-up">
@@ -337,10 +350,6 @@
         <div class="docking-ports"></div>
     </div>
 </div>
-
-
-
-
 
 <script src="assets/js/main.js"></script>
 </body>

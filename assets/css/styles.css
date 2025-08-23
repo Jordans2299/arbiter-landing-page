@@ -2043,3 +2043,45 @@ section {
     transition: transform 0.3s ease-out !important;
 }
 
+/* Legal pages */
+body.legal {
+    padding: 4rem 0;
+    color: black;
+}
+
+body.legal main.container {
+    max-width: 800px;
+    padding: 0 1.5rem;
+}
+
+body.legal h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    /* color: var(--purple); */
+    font-weight: 300;
+}
+
+body.legal ol {
+    margin-left: 1.5rem;
+}
+
+body.legal li {
+    margin-bottom: 1rem;
+}
+
+body.legal a {
+    color: var(--purple);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+body.legal a:hover {
+    color: var(--purple-dark);
+    text-decoration: underline;
+}
+.footer-links {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}

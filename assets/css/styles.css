@@ -2046,6 +2046,7 @@ section {
 /* Legal pages */
 body.legal {
     padding: 4rem 0;
+    color: black;
 }
 
 body.legal main.container {
@@ -2056,7 +2057,7 @@ body.legal main.container {
 body.legal h1 {
     text-align: center;
     margin-bottom: 2rem;
-    color: var(--purple);
+    /* color: var(--purple); */
     font-weight: 300;
 }
 
@@ -2078,4 +2079,9 @@ body.legal a:hover {
     color: var(--purple-dark);
     text-decoration: underline;
 }
-
+.footer-links {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}

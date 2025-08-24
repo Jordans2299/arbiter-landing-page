@@ -2,7 +2,7 @@
 
 This repository contains the **public marketing site** for Arbiter, a private AI assistant that runs locally on user devices. The site presents the product vision, features, team, and FAQ, and provides calls to action for beta participation.
 
-Live site: **[https://ykabusalah.github.io/arbiter-concept/](https://ykabusalah.github.io/arbiter-concept/)**
+Live site: **[https://www.askarbiter.ai/](https://askarbiter.ai)**
 
 ---
 

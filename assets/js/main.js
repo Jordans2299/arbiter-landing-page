@@ -38,7 +38,7 @@ const teamData = {
         name: "Jordan Stone",
         role: "CEO/CTO",
         photo: "./assets/jordan-stone.jpg",
-        bio: "Jordan is a full-stack software engineer with a strong foundation in mobile and backend development, holding a Computer Science degree from Washington University in St. Louis. He has experience building and optimizing production-grade iOS applications and scalable backend systems. Jordan is deeply passionate about building AI technologies that prioritize user privacy and long-term sustainability.",
+        bio: "Jordan, a Computer Science graduate from Washington University in St. Louis,  is a full-stack software engineer with expertise in mobile and backend development. He has built production-grade applications and scalable backend systems.",
         social: {
             linkedin: "https://www.linkedin.com/in/jordan-stone-051a25142/",
             email: "jordan@askarbiter.ai",
@@ -50,7 +50,7 @@ const teamData = {
         name: "Yousef Abu Salah",
         role: "CDO",
         photo: "./assets/yousef-abu-salah.jpg",
-        bio: "Yousef leads design at Arbiter, bringing a passion for creating intuitive, accessible user experiences. His vision ensures that powerful AI capabilities remain approachable and human-centered, making advanced technology accessible to users regardless of their technical background.",
+        bio: "Yousef, a Vanderbilt graduate in Computer Science and Cognitive Science, leads design at Arbiter with a focus on intuitive, accessible user experiences. His previous work on AI product development ensures that AI technologies remain approachable and human-centered.",
         social: {
             linkedin: "https://www.linkedin.com/in/ykabusalah",
             email: "yousef@askarbiter.ai",
@@ -62,7 +62,7 @@ const teamData = {
         name: "Harpreet Singh",
         role: "CFO",
         photo: "./assets/harpreet-singh.jpg",
-        bio: "Harpreet is a Harvard graduate who brings consulting expertise and diverse perspectives to Arbiter's financial strategy. His background in consulting provides valuable insights that help guide our business decisions and ensure sustainable growth while maintaining our commitment to user privacy and data ownership.",
+        bio: "Harpreet, a Harvard Computer Science graduate, brings a blend of technical expertise and consulting experience to Arbiter’s financial strategy. He has advised on technology and AI initiatives as a consultant, providing insights that shape business decisions and drive sustainable growth.",
         social: {
             linkedin: "https://www.linkedin.com/in/harpreet-singh-4937b3163/",
             email: "harpreet@askarbiter.ai"
@@ -72,7 +72,7 @@ const teamData = {
         name: "Smith Patel",
         role: "CMO",
         photo: "./assets/smith-patel.jpg",
-        bio: "Smith brings operational excellence and strategic insight to Arbiter. With an engineering background from Mississippi State and a passion for technology and innovation, Smith ensures that our vision translates into practical, scalable solutions that serve our users effectively.",
+        bio: "Smith, an engineering graduate from Mississippi State, brings operational excellence and strategic insight to Arbiter. His engineering background informs his operational work, enabling him to translate vision into practical, scalable solutions that support long-term growth.",
         social: {
             linkedin: "https://www.linkedin.com/in/smith-patel-eit-a-m-asce-0b955714a/",
             email: "smith@askarbiter.ai"

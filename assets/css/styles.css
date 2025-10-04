@@ -676,11 +676,19 @@
             border: 1px dashed var(--purple-lighter);
         }
 
-        .slide img {
+        .slide-image {
             width: 100%;
-            height: 500px;
-            object-fit: contain;
-            border-radius: 8px;
+            /* height: 500px; */
+            overflow: hidden;
+            /* border-radius: 8px;
+            padding: 10px; */
+        }
+
+        .slide img {
+            width: fit-content;
+            height: 100%;
+            border-radius: 1rem;
+            /* object-fit: contain; */
         }
 
         .slideshow-controls {
@@ -1407,6 +1415,11 @@
         }
 
         @media (max-width: 480px) {
+            .download-btn-row {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
             .container {
                 padding: 0 1rem;
             }
@@ -1491,6 +1504,11 @@
 /* Tweak for small screens */
 @media (max-width: 768px) {
   .team-member { min-height: 300px; }
+  .download-btn-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
 }
 
 
@@ -2001,6 +2019,47 @@ section {
     bottom: 15%;
     left: 50%;
     transform: translateX(-50%);
+}
+.download-btn-row {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 10px;
+}
+.btn-appstore {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: black;
+  color: white;
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  text-decoration: none;
+  transition: background 0.2s ease-in-out;
+}
+
+.btn-appstore:hover {
+  background-color: #333;
+}
+
+.btn-appstore i {
+  font-size: 2rem;
+}
+
+.btn-appstore-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 0.7;
+}
+
+.btn-appstore-text .small-text {
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.btn-appstore-text .big-text {
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
 /* Animations */

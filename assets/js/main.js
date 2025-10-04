@@ -36,7 +36,7 @@ const db = firebase.firestore();
 const teamData = {
     jordan: {
         name: "Jordan Stone",
-        role: "Founder (CEO/CTO)",
+        role: "CEO/CTO",
         photo: "./assets/jordan-stone.jpg",
         bio: "Jordan is a full-stack software engineer with a strong foundation in mobile and backend development, holding a Computer Science degree from Washington University in St. Louis. He has experience building and optimizing production-grade iOS applications and scalable backend systems. Jordan is deeply passionate about building AI technologies that prioritize user privacy and long-term sustainability.",
         social: {
@@ -48,7 +48,7 @@ const teamData = {
     },
     yousef: {
         name: "Yousef Abu Salah",
-        role: "Chief Design Officer (CDO)",
+        role: "CDO",
         photo: "./assets/yousef-abu-salah.jpg",
         bio: "Yousef leads design at Arbiter, bringing a passion for creating intuitive, accessible user experiences. His vision ensures that powerful AI capabilities remain approachable and human-centered, making advanced technology accessible to users regardless of their technical background.",
         social: {
@@ -60,7 +60,7 @@ const teamData = {
     },
     harpreet: {
         name: "Harpreet Singh",
-        role: "Chief Financial Officer (CFO)",
+        role: "CFO",
         photo: "./assets/harpreet-singh.jpg",
         bio: "Harpreet is a Harvard graduate who brings consulting expertise and diverse perspectives to Arbiter's financial strategy. His background in consulting provides valuable insights that help guide our business decisions and ensure sustainable growth while maintaining our commitment to user privacy and data ownership.",
         social: {
@@ -70,7 +70,7 @@ const teamData = {
     },
     smith: {
         name: "Smith Patel",
-        role: "Chief Operating Officer (COO)",
+        role: "CMO",
         photo: "./assets/smith-patel.jpg",
         bio: "Smith brings operational excellence and strategic insight to Arbiter. With an engineering background from Mississippi State and a passion for technology and innovation, Smith ensures that our vision translates into practical, scalable solutions that serve our users effectively.",
         social: {
@@ -101,6 +101,10 @@ const slideData = [
     {
         title: "Flexible Model Management", 
         text: "Easily switch between AI models and adjust settings like temperature for different conversation styles."
+    },
+    {
+        title: "Choose From Wide Range of Models",
+        text: "Select from various AI models tailored to different tasks and preferences."
     },
 ];
 

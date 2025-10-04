@@ -1,361 +1,446 @@
 <!DOCTYPE html>
 
 <html lang="en">
+
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Arbiter - Private AI on Your Device</title>
-<link rel="stylesheet" href="assets/css/styles.css">
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Arbiter - Private AI on Your Device</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/1c37cb57ef.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
-<!-- Floating sketches container -->
+    <!-- Floating sketches container -->
 
-<!-- Main content -->
-<div class="main-content">
-<!-- Navigation -->
-<nav>
-<div class="nav-container">
-<a class="logo" href="#">
-    <div class="logo-icon"><img src="assets/newlogo.png" alt="Logo" class="logo-img">
-    </div><span>Arbiter</span>
-</a>
+    <!-- Main content -->
+    <div class="main-content">
+        <!-- Navigation -->
+        <nav>
+            <div class="nav-container">
+                <a class="logo" href="#">
+                    <div class="logo-icon"><img src="assets/newlogo.png" alt="Logo" class="logo-img">
+                    </div><span>Arbiter</span>
+                </a>
 
-<ul class="nav-links">
-<li><a href="#features">Features</a></li>
-<li><a href="#mission">Mission</a></li>
-<li><a href="#team">Team</a></li>
-<li><a href="#faq">FAQ</a></li>
-<li><a href="#contact">Contact</a></li>
-</ul>
-</div>
-</nav>
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#mission">Mission</a></li>
+                    <li><a href="#team">Team</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
 
-<!-- Hero Section -->
-<section class="hero">
-<div class="container">
-<div class="hero-content">
-<h1>A.I. designed for you, only for you.</h1>
-<p class="tagline">
-                        Run powerful language models locally. Keep your conversations private. 
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>A.I. designed for you, only for you.</h1>
+                    <p class="tagline">
+                        Run powerful language models locally. Keep your conversations private.
                         Switch between models without reinstalling.
                     </p>
-<div class="beta-section">
-<label class="beta-label">Join the TestFlight Beta</label>
-<div style="display:flex;justify-content:center;margin-top:10px;">
-<button class="btn-primary" onclick="openBetaModal()" type="button">Request Invite</button>
-</div>
-</div>
-<div class="slideshow-section">
-<h3 style="color: var(--purple); margin-bottom: 1rem;">See Arbiter in Action</h3>
-<div class="slideshow-container">
-<div class="slideshow-wrapper">
-<div class="slides" id="slides">
-<div class="slide">
-<img alt="AI Chat Interface showing poetry conversation" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="assets/screenshots/screenshot-1.png"/>
-<div class="slide-placeholder" style="display:none;">Screenshot 1: Learn Something New</div>
-</div>
-<div class="slide">
-<img alt="Technical conversation with keyboard visible" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="assets/screenshots/screenshot-5.jpg"/>
-<div class="slide-placeholder" style="display:none;">Screenshot 2: Creative AI Conversations</div>
-</div>
-<div class="slide">
-<img alt="Screen showing all locally saved chats" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="assets/screenshots/screenshot-3.jpg"/>
-<div class="slide-placeholder" style="display:none;">Screenshot 3: Model Settings</div>
-</div>
-<div class="slide">
-<img alt="Code generation showing merge sort algorithm" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="assets/screenshots/screenshot-4.png"/>
-<div class="slide-placeholder" style="display:none;">Screenshot 4: Code Generation</div>
-</div>
-<div class="slide">
-<img alt="Settings screen with model selection" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" src="assets/screenshots/screenshot-2.png"/>
-<div class="slide-placeholder" style="display:none;">Screenshot 5: Model Settings</div>
-</div>
-</div>
-<button class="slideshow-controls prev" onclick="changeSlide(-1)">‹</button>
-<button class="slideshow-controls next" onclick="changeSlide(1)">›</button>
-</div>
-<div class="slideshow-dots">
-<span class="dot active" onclick="goToSlide(0)"></span>
-<span class="dot" onclick="goToSlide(1)"></span>
-<span class="dot" onclick="goToSlide(2)"></span>
-<span class="dot" onclick="goToSlide(3)"></span>
-<span class="dot" onclick="goToSlide(4)"></span>
-</div>
-<div class="slideshow-caption">
-<div class="caption-title" id="caption-title">Creative AI Conversations</div>
-<div class="caption-text" id="caption-text">Engage in creative writing, poetry, and artistic projects with AI models running locally on your device.</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
+                    <div class="beta-section">
+                        <label class="beta-label">Start using Arbiter today </label>
+                        <div class="download-btn-row">
+                            <button class="btn-primary" onclick="openBetaModal()" type="button">Join TestFlight
+                                Beta</button>
+                            <a class="btn-appstore"
+                                href="https://apps.apple.com/us/app/arbiter-offline-private-ai/id6747954532"
+                                target="_blank" rel="noopener noreferrer">
+                                <i class="fab fa-apple"></i>
+                                <div class="btn-appstore-text">
+                                    <span class="small-text">Download on the</span><br />
+                                    <span class="big-text">App Store</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="slideshow-section">
+                        <h3 style="color: var(--purple); margin-bottom: 1rem;">See Arbiter in Action</h3>
+                        <div class="slideshow-container">
+                            <div class="slideshow-wrapper">
+                                <div class="slides" id="slides">
+                                    <div class="slide">
+                                        <div class="slide-image">
+                                            <img alt="AI Chat Interface showing poetry conversation"
+                                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                                src="assets/screenshots/1.png" />
+                                            <div class="slide-placeholder" style="display:none;">Screenshot 1: Learn
+                                                Something New</div>
+                                        </div>
+                                    </div>
+                                    <div class="slide">
+                                        <div class="slide-image">
+                                            <img alt="Technical conversation with keyboard visible"
+                                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                                src="assets/screenshots/2.png" />
+                                        </div> 
+                                        <div class="slide-placeholder" style="display:none;">Screenshot 2: Creative AI
+                                            Conversations</div>
+                                    </div>
+                                    <div class="slide">
+                                        <div class="slide-image">
+                                            <img alt="Screen showing all locally saved chats"
+                                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                                src="assets/screenshots/3.png" />
+                                        </div>
+                                        <div class="slide-placeholder" style="display:none;">Screenshot 3: Save
+                                            Conversations</div>
+                                    </div>
+                                    <div class="slide">
+                                        <div class="slide-image">
+                                            <img alt="Code generation showing merge sort algorithm"
+                                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                                src="assets/screenshots/4.png" />
+                                        </div>
+                                        <div class="slide-placeholder" style="display:none;">Screenshot 4: Code
+                                            Generation</div>
+                                    </div>
+                                    <div class="slide">
+                                        <div class="slide-image">
+                                            <img alt="Settings screen with model selection"
+                                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                                src="assets/screenshots/5.png" />
+                                        </div>
+                                        <div class="slide-placeholder" style="display:none;">Screenshot 5: Model
+                                            Settings</div>
+                                    </div>
+                                    <div class="slide">
+                                        <div class="slide-image">
+                                            <img alt="Settings screen with model selection"
+                                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                                src="assets/screenshots/6.png" />
+                                        </div>
+                                        <div class="slide-placeholder" style="display:none;">Screenshot 6: Choose Your
+                                            Model</div>
+                                    </div>
+                                </div>
+                                <button class="slideshow-controls prev" onclick="changeSlide(-1)">‹</button>
+                                <button class="slideshow-controls next" onclick="changeSlide(1)">›</button>
+                            </div>
+                            <div class="slideshow-dots">
+                                <span class="dot active" onclick="goToSlide(0)"></span>
+                                <span class="dot" onclick="goToSlide(1)"></span>
+                                <span class="dot" onclick="goToSlide(2)"></span>
+                                <span class="dot" onclick="goToSlide(3)"></span>
+                                <span class="dot" onclick="goToSlide(4)"></span>
+                                <span class="dot" onclick="goToSlide(5)"></span>
+                            </div>
+                            <div class="slideshow-caption">
+                                <div class="caption-title" id="caption-title">Creative AI Conversations</div>
+                                <div class="caption-text" id="caption-text">Engage in creative writing, poetry, and
+                                    artistic projects with AI models running locally on your device.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-<!-- Features Section -->
-<section class="features" id="features">
-<div class="container">
-<h2 class="section-title">Key Features</h2>
-<div class="features-grid">
-<div class="feature">
-<h3>Flexible Model Management</h3>
-<p>Download and switch between on-device AI models like LLaMA and Whisper. Add new models without reinstalling the app.</p>
-</div>
-<div class="feature">
-<h3>Private, Persistent Conversations</h3>
-<p>All chats are stored locally for full privacy and ownership. Conversations are searchable and exportable.</p>
-</div>
-<div class="feature">
-<h3>Hybrid Inference Engine</h3>
-<p>Run AI entirely on-device by default for speed and privacy, with the option to switch to cloud APIs for more power.</p>
-</div>
-<div class="feature">
-<h3>Real-Time Search Augmentation</h3>
-<p>Integrate fresh web results directly into your conversations for up-to-the-minute insights and updates.</p>
-</div>
-<div class="feature">
-<h3>Multimodal Input &amp; Accessibility</h3>
-<p>Speak to Arbiter with voice-to-text, and soon listen with text-to-speech—ideal for accessibility and multitasking.</p>
-</div>
-<div class="feature">
-<h3>Open Source Foundation</h3>
-<p>Built on open standards and protocols. Contribute to the future of private AI or build your own extensions.</p>
-</div>
-</div>
-</div>
-</section>
+        <!-- Features Section -->
+        <section class="features" id="features">
+            <div class="container">
+                <h2 class="section-title">Key Features</h2>
+                <div class="features-grid">
 
-<!-- Mission Section -->
-<section class="mission" id="mission">
-<div class="container">
-<h2 class="section-title">Our Mission</h2>
-<div class="mission-content">
-<p>Arbiter is redefining the future of AI chat. We believe in empowering individuals and organizations with tools that offer choice, control, and clarity. By running AI locally and giving users ownership of their data, Arbiter puts privacy and power back into your hands.</p>
-</div>
-</div>
-</section>
+                    <div class="feature">
+                        <h3>On-Device AI</h3>
+                        <p>Run advanced AI models directly on your iPhone, even offline. No servers or internet
+                            connection required.</p>
+                    </div>
 
-<!-- Team Section -->
-<section class="team" id="team">
-<div class="container">
-<h2 class="section-title">Team</h2>
-<div class="team-grid">
-<div class="team-member" onclick="openTeamModal('jordan')">
-<img alt="Headshot of Jordan Stone" class="team-photo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDgiIGZpbGw9IiNGQUY1RkYiLz4KPHN2ZyB4PSIyNCIgeT0iMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiI+CjxwYXRoIGQ9Im0yMCAyMS12LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiLz4KPC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5KUzwvdGV4dD48L3N2Zz4KPC9zdmc+';" src="assets/jordan-stone.jpg"/>
-<h3>Jordan Stone</h3>
-<p class="role">Founder (CEO/CTO)</p>
-<div class="team-links">
-<a href="#" onclick="event.stopPropagation()">LinkedIn</a>
-<a href="mailto:jordan@askarbiter.ai" onclick="event.stopPropagation()">Email</a>
-</div>
-</div>
-<div class="team-member" onclick="openTeamModal('yousef')">
-<img alt="Headshot of Yousef Abu-Salah" class="team-photo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDgiIGZpbGw9IiNGQUY1RkYiLz4KPHN2ZyB4PSIyNCIgeT0iMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiI+CjxwYXRoIGQ9Im0yMCAyMS12LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiLz4KPC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5ZQVM8L3RleHQ+PC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5ZQVM8L3RleHQ+PC9zdmc+CjwvYXNnPg==';" src="assets/yousef-abu-salah.jpg"/>
-<h3>Yousef Abu Salah</h3>
-<p class="role">Chief Design Officer (CDO)</p>
-<div class="team-links">
-<a href="#" onclick="event.stopPropagation()">LinkedIn</a>
-<a href="mailto:yousef@askarbiter.ai" onclick="event.stopPropagation()">Email</a>
-</div>
-</div>
-<div class="team-member" onclick="openTeamModal('harpreet')">
-<img alt="Headshot of Harpreet Singh" class="team-photo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDgiIGZpbGw9IiNGQUY1RkYiLz4KPHN2ZyB4PSIyNCIgeT0iMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiI+CjxwYXRoIGQ9Im0yMCAyMS12LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiLz4KPC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5IUzwvdGV4dD48L3N2Zz4KPC9zdmc+';" src="assets/harpreet-singh.jpg"/>
-<h3>Harpreet Singh</h3>
-<p class="role">Chief Financial Officer (CFO)</p>
-<div class="team-links">
-<a href="#" onclick="event.stopPropagation()">LinkedIn</a>
-<a href="mailto:harpreet@askarbiter.ai" onclick="event.stopPropagation()">Email</a>
-</div>
-</div>
-<div class="team-member" onclick="openTeamModal('smith')">
-<img alt="Headshot of Smith Patel" class="team-photo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDgiIGZpbGw9IiNGQUY1RkYiLz4KPHN2ZyB4PSIyNCIgeT0iMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiI+CjxwYXRoIGQ9Im0yMCAyMS12LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiLz4KPC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5TUDY8L3RleHQ+PC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5TUDY8L3RleHQ+PC9zdmc+CjwvQXNnPg==';" src="assets/smith-patel.jpg"/>
-<h3>Smith Patel</h3>
-<p class="role">Chief Operating Officer (COO)</p>
-<div class="team-links">
-<a href="#" onclick="event.stopPropagation()">LinkedIn</a>
-<a href="mailto:smith@askarbiter.ai" onclick="event.stopPropagation()">Email</a>
-</div>
-</div>
-</div>
-</div>
-</section>
+                    <div class="feature">
+                        <h3>Privacy by Design</h3>
+                        <p>Your conversations never leave your device. Arbiter collects no data, no accounts, and no
+                            cloud logging.</p>
+                    </div>
 
-<!-- FAQ Section -->
-<section class="faq" id="faq">
-<div class="container">
-<h2 class="section-title">FAQ</h2>
-<div class="faq-list">
-<div class="faq-item">
-<h3 class="faq-question">Is my data private?</h3>
-<p class="faq-answer">Yes. Everything is processed and stored on your device. Your chats and files never leave your phone unless you explicitly choose to share them. We do not store, log, or sell your data. Your information stays 100% under your control.</p>
-</div>
-<div class="faq-item">
-<h3 class="faq-question">Do I need an internet connection to use the app?</h3>
-<p class="faq-answer">No. Once installed, the app works entirely offline. You can use it on airplanes, in remote areas, or without Wi-Fi, while still getting fast and responsive answers.</p>
-</div>
-<div class="faq-item">
-<h3 class="faq-question">How does offline AI work?</h3>
-<p class="faq-answer">The app uses optimized large language models (LLMs) that run locally on your device's processor. These models are pre-downloaded and don't require server access, which means your requests are processed instantly without sending them to the cloud.</p>
-</div>
-<div class="faq-item">
-<h3 class="faq-question">What devices are supported?</h3>
-<p class="faq-answer">Currently, the app supports modern iPhones and iPads running iOS 16 or later, with best performance on devices equipped with Apple Silicon chips (A14 Bionic or newer). Most models will require a device with more than 4 GB of RAM.</p>
-</div>
-<div class="faq-item">
-<h3 class="faq-question">What AI models are available?</h3>
-<p class="faq-answer">You can choose from a range of open-source LLMs. The app supports switching models at any time so you can balance speed, accuracy, and device performance.</p>
-</div>
-</div>
-</div>
-</section>
+                    <div class="feature">
+                        <h3>Flexible Model Management</h3>
+                        <p>Download lightweight open-source models like Gemma, LLaMA, or TinyLlama. Switch between them
+                            to balance speed, accuracy, and memory use.</p>
+                    </div>
 
-<!-- Footer -->
-<footer id="contact">
-<div class="container">
-<div class="footer-content">
-<a class="footer-contact" href="mailto:hello@askarbiter.ai">hello@askarbiter.ai</a>
-<div class="footer-links">
-<a class="footer-contact" href="/">Home</a>
-<a class="footer-contact" href="privacy/">Privacy</a>
-<a class="footer-contact" href="/terms/">Terms</a>
-</div>
-<p class="footer-copyright">© 2025 Arbiter Technologies. All rights reserved.</p>
-</div>
-</div>
-</footer>
-</div>
+                    <div class="feature">
+                        <h3>Customizable Experience</h3>
+                        <p>Choose your preferred model, manage downloads, and adjust settings to match your workflow and
+                            device.</p>
+                    </div>
 
-<!-- Modal backdrop -->
-<div class="modal-backdrop" onclick="closeAllModals()"></div>
+                    <div class="feature">
+                        <h3>Persistent Conversations</h3>
+                        <p>Chats are securely stored on-device under your control, so you can revisit them anytime
+                            without losing context.</p>
+                    </div>
 
-<!-- Team Modal -->
-<div aria-hidden="true" class="modal" id="team-modal">
-<div class="modal-card team-modal-content">
-<div class="modal-header">
-<button class="modal-close" onclick="closeTeamModal()">×</button>
-</div>
-<div id="team-modal-body">
-<!-- Content will be populated by JavaScript -->
-</div>
-</div>
-</div>
+                    <div class="feature">
+                        <h3>No Hidden Costs</h3>
+                        <p>By running AI locally, Arbiter avoids expensive cloud fees — giving you sustainable
+                            performance without subscriptions.</p>
+                    </div>
 
-<!-- Beta Modal -->
-<div aria-hidden="true" class="modal" id="beta-modal">
-<div class="modal-card">
-<div class="modal-header">
-<h3 class="modal-title">Join the TestFlight Beta</h3>
-<button class="modal-close" onclick="closeBetaModal()">×</button>
-</div>
-<form class="beta-form" id="beta-form" onsubmit="handleFormSubmit(event)">
-<div class="form-group">
-<label for="full_name">Name*</label>
-<input id="full_name" name="full_name" placeholder="Your full name" required="" type="text"/>
-</div>
-<div class="form-group">
-<label for="email">Email*</label>
-<input id="email" name="email" placeholder="you@example.com" required="" type="email"/>
-</div>
-<button class="btn-primary" type="submit" id="submit-btn">Request Invite</button>
-<div class="success-msg" id="beta-success" style="display: none;"></div>
-<div class="error-msg" id="beta-error" style="display: none;"></div>
-</form>
-</div>
-</div>
+                </div>
+            </div>
+        </section>
 
-<div class="sketches-container">
-    <!-- LEFT SIDE PLANETS -->
-    <div class="sketch sketch-planet left-1 float-up">
-        <div class="planet-surface gas-giant">
-            <div class="gas-bands"></div>
-            <div class="storm-spot"></div>
-        </div>
-    </div>
-    
-    <div class="sketch sketch-planet left-2 float-down" style="animation-delay: 0.8s;">
-        <div class="planet-surface rocky-planet">
-            <div class="crater crater-1"></div>
-            <div class="crater crater-2"></div>
-        </div>
-    </div>
-    
-    <div class="sketch sketch-planet left-3 float-up" style="animation-delay: 1.5s;">
-        <div class="planet-surface ice-planet"></div>
-        <div class="planet-ring"></div>
-    </div>
-    
-    <div class="sketch asteroid-belt left-4 float-down" style="animation-delay: 2.2s;">
-        <div class="asteroid asteroid-1"></div>
-        <div class="asteroid asteroid-2"></div>
-        <div class="asteroid asteroid-3"></div>
-    </div>
+        </section>
 
-    <div class="sketch sketch-planet left-5 float-up" style="animation-delay: 0.3s;">
-        <div class="planet-surface desert-planet">
-            <div class="sand-dunes"></div>
-        </div>
-    </div>
+        <!-- Mission Section -->
+        <section class="mission" id="mission">
+            <div class="container">
+                <h2 class="section-title">Our Mission</h2>
+                <div class="mission-content">
+                    <p>Arbiter is redefining the future of AI chat. We believe in empowering individuals and
+                        organizations with tools that offer choice, control, and clarity. By running AI locally and
+                        giving users ownership of their data, Arbiter puts privacy and power back into your hands.</p>
+                </div>
+            </div>
+        </section>
 
-    <!-- RIGHT SIDE PLANETS -->
-    <div class="sketch sketch-planet right-1 float-down" style="animation-delay: 0.5s;">
-        <div class="planet-surface lava-planet">
-            <div class="lava-flows"></div>
-            <div class="volcanic-activity"></div>
-        </div>
-    </div>
-    
-    <div class="sketch sketch-planet right-2 float-up" style="animation-delay: 1.2s;">
-        <div class="planet-surface ocean-planet">
-            <div class="continent continent-1"></div>
-            <div class="continent continent-2"></div>
-        </div>
-        <div class="small-moon"></div>
-    </div>
-    
-    <div class="sketch sketch-planet right-3 float-down" style="animation-delay: 1.9s;">
-        <div class="planet-surface purple-giant">
-            <div class="atmospheric-layers"></div>
-        </div>
-        <div class="planet-ring diagonal-ring"></div>
+        <!-- Team Section -->
+        <section class="team" id="team">
+            <div class="container">
+                <h2 class="section-title">Team</h2>
+                <div class="team-grid">
+                    <div class="team-member" onclick="openTeamModal('jordan')">
+                        <img alt="Headshot of Jordan Stone" class="team-photo"
+                            onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDgiIGZpbGw9IiNGQUY1RkYiLz4KPHN2ZyB4PSIyNCIgeT0iMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiI+CjxwYXRoIGQ9Im0yMCAyMS12LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiLz4KPC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5KUzwvdGV4dD48L3N2Zz4KPC9zdmc+';"
+                            src="assets/jordan-stone.jpg" />
+                        <h3>Jordan Stone</h3>
+                        <p class="role">Engineering</p>
+                        <div class="team-links">
+                            <a href="#" onclick="event.stopPropagation()">LinkedIn</a>
+                            <a href="mailto:jordan@askarbiter.ai" onclick="event.stopPropagation()">Email</a>
+                        </div>
+                    </div>
+                    <div class="team-member" onclick="openTeamModal('yousef')">
+                        <img alt="Headshot of Yousef Abu-Salah" class="team-photo"
+                            onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDgiIGZpbGw9IiNGQUY1RkYiLz4KPHN2ZyB4PSIyNCIgeT0iMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiI+CjxwYXRoIGQ9Im0yMCAyMS12LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiLz4KPC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5ZQVM8L3RleHQ+PC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5ZQVM8L3RleHQ+PC9zdmc+CjwvYXNnPg==';"
+                            src="assets/yousef-abu-salah.jpg" />
+                        <h3>Yousef Abu Salah</h3>
+                        <p class="role">Design</p>
+                        <div class="team-links">
+                            <a href="#" onclick="event.stopPropagation()">LinkedIn</a>
+                            <a href="mailto:yousef@askarbiter.ai" onclick="event.stopPropagation()">Email</a>
+                        </div>
+                    </div>
+                    <div class="team-member" onclick="openTeamModal('harpreet')">
+                        <img alt="Headshot of Harpreet Singh" class="team-photo"
+                            onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDgiIGZpbGw9IiNGQUY1RkYiLz4KPHN2ZyB4PSIyNCIgeT0iMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiI+CjxwYXRoIGQ9Im0yMCAyMS12LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiLz4KPC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5IUzwvdGV4dD48L3N2Zz4KPC9zdmc+';"
+                            src="assets/harpreet-singh.jpg" />
+                        <h3>Harpreet Singh</h3>
+                        <p class="role">Finance</p>
+                        <div class="team-links">
+                            <a href="#" onclick="event.stopPropagation()">LinkedIn</a>
+                            <a href="mailto:harpreet@askarbiter.ai" onclick="event.stopPropagation()">Email</a>
+                        </div>
+                    </div>
+                    <div class="team-member" onclick="openTeamModal('smith')">
+                        <img alt="Headshot of Smith Patel" class="team-photo"
+                            onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDgiIGZpbGw9IiNGQUY1RkYiLz4KPHN2ZyB4PSIyNCIgeT0iMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiI+CjxwYXRoIGQ9Im0yMCAyMS12LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiLz4KPC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5TUDY8L3RleHQ+PC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5TUDY8L3RleHQ+PC9zdmc+CjwvQXNnPg==';"
+                            src="assets/smith-patel.jpg" />
+                        <h3>Smith Patel</h3>
+                        <p class="role">Marketing</p>
+                        <div class="team-links">
+                            <a href="#" onclick="event.stopPropagation()">LinkedIn</a>
+                            <a href="mailto:smith@askarbiter.ai" onclick="event.stopPropagation()">Email</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq" id="faq">
+            <div class="container">
+                <h2 class="section-title">FAQ</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <h3 class="faq-question">Is my data private?</h3>
+                        <p class="faq-answer">Yes. Everything is processed and stored on your device. Your chats and
+                            files never leave your phone unless you explicitly choose to share them. We do not store,
+                            log, or sell your data. Your information stays 100% under your control.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3 class="faq-question">Do I need an internet connection to use the app?</h3>
+                        <p class="faq-answer">No. Once installed, the app works entirely offline. You can use it on
+                            airplanes, in remote areas, or without Wi-Fi, while still getting fast and responsive
+                            answers.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3 class="faq-question">How does offline AI work?</h3>
+                        <p class="faq-answer">The app uses optimized large language models (LLMs) that run locally on
+                            your device's processor. These models are pre-downloaded and don't require server access,
+                            which means your requests are processed instantly without sending them to the cloud.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3 class="faq-question">What devices are supported?</h3>
+                        <p class="faq-answer">Currently, the app supports modern iPhones and iPads running iOS 16 or
+                            later, with best performance on devices equipped with Apple Silicon chips (A14 Bionic or
+                            newer). Most models will require a device with more than 4 GB of RAM.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3 class="faq-question">What AI models are available?</h3>
+                        <p class="faq-answer">You can choose from a range of open-source LLMs. The app supports
+                            switching models at any time so you can balance speed, accuracy, and device performance.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer id="contact">
+            <div class="container">
+                <div class="footer-content">
+                    <a class="footer-contact" href="mailto:hello@askarbiter.ai">hello@askarbiter.ai</a>
+                    <div class="footer-links">
+                        <a class="footer-contact" href="/">Home</a>
+                        <a class="footer-contact" href="privacy/">Privacy</a>
+                        <a class="footer-contact" href="/terms/">Terms</a>
+                    </div>
+                    <p class="footer-copyright">© 2025 Arbiter Technologies. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
     </div>
 
-    <div class="sketch sketch-planet right-4 float-up" style="animation-delay: 2.6s;">
-        <div class="planet-surface forest-planet">
-            <div class="landmass landmass-1"></div>
-            <div class="landmass landmass-2"></div>
+    <!-- Modal backdrop -->
+    <div class="modal-backdrop" onclick="closeAllModals()"></div>
+
+    <!-- Team Modal -->
+    <div aria-hidden="true" class="modal" id="team-modal">
+        <div class="modal-card team-modal-content">
+            <div class="modal-header">
+                <button class="modal-close" onclick="closeTeamModal()">×</button>
+            </div>
+            <div id="team-modal-body">
+                <!-- Content will be populated by JavaScript -->
+            </div>
         </div>
     </div>
 
-    <div class="sketch binary-system right-5 float-down" style="animation-delay: 0.9s;">
-        <div class="planet-surface twin-1"></div>
-        <div class="planet-surface twin-2"></div>
-        <div class="orbital-path"></div>
-    </div>
-
-    <!-- CENTER SCATTERED OBJECTS -->
-    <div class="sketch comet center-1 float-up" style="animation-delay: 3.2s;">
-        <div class="comet-core"></div>
-        <div class="comet-tail"></div>
-    </div>
-
-    <div class="sketch sketch-planet center-2 float-down" style="animation-delay: 1.7s;">
-        <div class="planet-surface crystal-planet">
-            <div class="crystal-formation crystal-1"></div>
-            <div class="crystal-formation crystal-2"></div>
+    <!-- Beta Modal -->
+    <div aria-hidden="true" class="modal" id="beta-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title">Join the TestFlight Beta</h3>
+                <button class="modal-close" onclick="closeBetaModal()">×</button>
+            </div>
+            <form class="beta-form" id="beta-form" onsubmit="handleFormSubmit(event)">
+                <div class="form-group">
+                    <label for="full_name">Name*</label>
+                    <input id="full_name" name="full_name" placeholder="Your full name" required="" type="text" />
+                </div>
+                <div class="form-group">
+                    <label for="email">Email*</label>
+                    <input id="email" name="email" placeholder="you@example.com" required="" type="email" />
+                </div>
+                <button class="btn-primary" type="submit" id="submit-btn">Request Invite</button>
+                <div class="success-msg" id="beta-success" style="display: none;"></div>
+                <div class="error-msg" id="beta-error" style="display: none;"></div>
+            </form>
         </div>
     </div>
 
-    <div class="sketch space-station center-3 float-up" style="animation-delay: 2.4s;">
-        <div class="station-core"></div>
-        <div class="station-ring"></div>
-        <div class="docking-ports"></div>
-    </div>
-</div>
+    <div class="sketches-container">
+        <!-- LEFT SIDE PLANETS -->
+        <div class="sketch sketch-planet left-1 float-up">
+            <div class="planet-surface gas-giant">
+                <div class="gas-bands"></div>
+                <div class="storm-spot"></div>
+            </div>
+        </div>
 
-<script src="assets/js/main.js"></script>
+        <div class="sketch sketch-planet left-2 float-down" style="animation-delay: 0.8s;">
+            <div class="planet-surface rocky-planet">
+                <div class="crater crater-1"></div>
+                <div class="crater crater-2"></div>
+            </div>
+        </div>
+
+        <div class="sketch sketch-planet left-3 float-up" style="animation-delay: 1.5s;">
+            <div class="planet-surface ice-planet"></div>
+            <div class="planet-ring"></div>
+        </div>
+
+        <div class="sketch asteroid-belt left-4 float-down" style="animation-delay: 2.2s;">
+            <div class="asteroid asteroid-1"></div>
+            <div class="asteroid asteroid-2"></div>
+            <div class="asteroid asteroid-3"></div>
+        </div>
+
+        <div class="sketch sketch-planet left-5 float-up" style="animation-delay: 0.3s;">
+            <div class="planet-surface desert-planet">
+                <div class="sand-dunes"></div>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE PLANETS -->
+        <div class="sketch sketch-planet right-1 float-down" style="animation-delay: 0.5s;">
+            <div class="planet-surface lava-planet">
+                <div class="lava-flows"></div>
+                <div class="volcanic-activity"></div>
+            </div>
+        </div>
+
+        <div class="sketch sketch-planet right-2 float-up" style="animation-delay: 1.2s;">
+            <div class="planet-surface ocean-planet">
+                <div class="continent continent-1"></div>
+                <div class="continent continent-2"></div>
+            </div>
+            <div class="small-moon"></div>
+        </div>
+
+        <div class="sketch sketch-planet right-3 float-down" style="animation-delay: 1.9s;">
+            <div class="planet-surface purple-giant">
+                <div class="atmospheric-layers"></div>
+            </div>
+            <div class="planet-ring diagonal-ring"></div>
+        </div>
+
+        <div class="sketch sketch-planet right-4 float-up" style="animation-delay: 2.6s;">
+            <div class="planet-surface forest-planet">
+                <div class="landmass landmass-1"></div>
+                <div class="landmass landmass-2"></div>
+            </div>
+        </div>
+
+        <div class="sketch binary-system right-5 float-down" style="animation-delay: 0.9s;">
+            <div class="planet-surface twin-1"></div>
+            <div class="planet-surface twin-2"></div>
+            <div class="orbital-path"></div>
+        </div>
+
+        <!-- CENTER SCATTERED OBJECTS -->
+        <div class="sketch comet center-1 float-up" style="animation-delay: 3.2s;">
+            <div class="comet-core"></div>
+            <div class="comet-tail"></div>
+        </div>
+
+        <div class="sketch sketch-planet center-2 float-down" style="animation-delay: 1.7s;">
+            <div class="planet-surface crystal-planet">
+                <div class="crystal-formation crystal-1"></div>
+                <div class="crystal-formation crystal-2"></div>
+            </div>
+        </div>
+
+        <div class="sketch space-station center-3 float-up" style="animation-delay: 2.4s;">
+            <div class="station-core"></div>
+            <div class="station-ring"></div>
+            <div class="docking-ports"></div>
+        </div>
+    </div>
+
+    <script src="assets/js/main.js"></script>
 </body>
+
 </html>

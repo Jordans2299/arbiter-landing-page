@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Arbiter - Meet the Team</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="icon" href="favicon.png" type="image/png" sizes="32x32" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/1c37cb57ef.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="main-content">
+        <nav>
+            <div class="nav-container">
+                <a class="logo" href="/">
+                    <div class="logo-icon"><img src="assets/newlogo.png" alt="Logo" class="logo-img">
+                    </div><span>Arbiter</span>
+                </a>
+
+                <ul class="nav-links">
+                    <li><a href="/#features">Features</a></li>
+                    <li><a href="/#mission">Mission</a></li>
+                    <li><a href="/#faq">FAQ</a></li>
+                    <li><a href="/#contact">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <section class="team-hero">
+            <div class="container">
+                <p class="footer-kicker">Team</p>
+                <h1>Meet the people building Arbiter</h1>
+                <p class="tagline">Explore the founders and leaders shaping the privacy-first AI experience.</p>
+            </div>
+        </section>
+
+        <section class="team" id="team">
+            <div class="container">
+                <h2 class="section-title">Team</h2>
+                <div class="team-grid">
+                    <div class="team-member" onclick="openTeamModal('jordan')">
+                        <img alt="Headshot of Jordan Stone" class="team-photo"
+                            onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDgiIGZpbGw9IiNGQUY1RkYiLz4KPHN2ZyB4PSIyNCIgeT0iMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiI+CjxwYXRoIGQ9Im0yMCAyMS12LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiLz4KPC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5KUzwvdGV4dD48L3N2Zz4KPC9zdmc+';"
+                            src="assets/jordan-stone.jpg" />
+                        <h3>Jordan Stone</h3>
+                        <p class="role">Engineering</p>
+                        <div class="team-links">
+                            <a href="https://www.linkedin.com/in/jordan-stone-051a25142/" onclick="event.stopPropagation()"
+                                target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                            <a href="mailto:jordan@askarbiter.ai" onclick="event.stopPropagation()">Email</a>
+                        </div>
+                    </div>
+                    <div class="team-member" onclick="openTeamModal('yousef')">
+                        <img alt="Headshot of Yousef Abu-Salah" class="team-photo"
+                            onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDgiIGZpbGw9IiNGQUY1RkYiLz4KPHN2ZyB4PSIyNCIgeT0iMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiI+CjxwYXRoIGQ9Im0yMCAyMS12LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiLz4KPC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5ZQVM8L3RleHQ+PC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5ZQVM8L3RleHQ+PC9zdmc+CjwvYXNnPg==';"
+                            src="assets/yousef-abu-salah.jpg" />
+                        <h3>Yousef Abu Salah</h3>
+                        <p class="role">Design</p>
+                        <div class="team-links">
+                            <a href="https://www.linkedin.com/in/ykabusalah" onclick="event.stopPropagation()" target="_blank"
+                                rel="noopener noreferrer">LinkedIn</a>
+                            <a href="mailto:yousef@askarbiter.ai" onclick="event.stopPropagation()">Email</a>
+                        </div>
+                    </div>
+                    <div class="team-member" onclick="openTeamModal('harpreet')">
+                        <img alt="Headshot of Harpreet Singh" class="team-photo"
+                            onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDgiIGZpbGw9IiNGQUY1RkYiLz4KPHN2ZyB4PSIyNCIgeT0iMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiI+CjxwYXRoIGQ9Im0yMCAyMS12LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiLz4KPC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5IUzwvdGV4dD48L3N2Zz4KPC9zdmc+';"
+                            src="assets/harpreet-singh.jpg" />
+                        <h3>Harpreet Singh</h3>
+                        <p class="role">Finance</p>
+                        <div class="team-links">
+                            <a href="https://www.linkedin.com/in/harpreet-singh-4937b3163/" onclick="event.stopPropagation()"
+                                target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                            <a href="mailto:harpreet@askarbiter.ai" onclick="event.stopPropagation()">Email</a>
+                        </div>
+                    </div>
+                    <div class="team-member" onclick="openTeamModal('smith')">
+                        <img alt="Headshot of Smith Patel" class="team-photo"
+                            onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCA5NiA5NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iNDgiIGN5PSI0OCIgcj0iNDgiIGZpbGw9IiNGQUY1RkYiLz4KPHN2ZyB4PSIyNCIgeT0iMjQiIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiI+CjxwYXRoIGQ9Im0yMCAyMS12LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiLz4KPC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5TUDY8L3RleHQ+PC9zdmc+CjxzdmcgZmlsbD0iIzZCNzI4MCIgZm9udC1zaXplPSIxMnB4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgeD0iMjQiIHk9Ijc2Ij48dGV4dD5TUDY8L3RleHQ+PC9zdmc+CjwvQXNnPg==';"
+                            src="assets/smith-patel.jpg" />
+                        <h3>Smith Patel</h3>
+                        <p class="role">Marketing</p>
+                        <div class="team-links">
+                            <a href="https://www.linkedin.com/in/smith-patel-eit-a-m-asce-0b955714a/"
+                                onclick="event.stopPropagation()" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                            <a href="mailto:smith@askarbiter.ai" onclick="event.stopPropagation()">Email</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer id="contact">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-main">
+                        <a class="footer-contact" href="mailto:hello@askarbiter.ai">hello@askarbiter.ai</a>
+                        <div class="footer-links">
+                            <a class="footer-contact" href="/">Home</a>
+                            <a class="footer-contact" href="privacy/">Privacy</a>
+                            <a class="footer-contact" href="/terms/">Terms</a>
+                        </div>
+                    </div>
+                    <div class="footer-team-card">
+                        <div class="footer-team-copy">
+                            <p class="footer-kicker">Meet the people building Arbiter</p>
+                            <h3>See the team behind the product</h3>
+                            <p>Learn more about our founders, their roles, and the expertise guiding Arbiter.</p>
+                        </div>
+                        <a class="footer-team-link" href="/team.html">Visit the Team page</a>
+                    </div>
+                    <p class="footer-copyright">© 2025 Arbiter Technologies. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div class="modal-backdrop" onclick="closeAllModals()"></div>
+
+    <!-- Team Modal -->
+    <div aria-hidden="true" class="modal" id="team-modal">
+        <div class="modal-card team-modal-content">
+            <div class="modal-header">
+                <button class="modal-close" onclick="closeTeamModal()">×</button>
+            </div>
+            <div id="team-modal-body">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <div class="sketches-container">
+        <!-- LEFT SIDE PLANETS -->
+        <div class="sketch sketch-planet left-1 float-up">
+            <div class="planet-surface gas-giant">
+                <div class="gas-bands"></div>
+                <div class="storm-spot"></div>
+            </div>
+        </div>
+
+        <div class="sketch sketch-planet left-2 float-down" style="animation-delay: 0.8s;">
+            <div class="planet-surface rocky-planet">
+                <div class="crater crater-1"></div>
+                <div class="crater crater-2"></div>
+            </div>
+        </div>
+
+        <div class="sketch sketch-planet left-3 float-up" style="animation-delay: 1.5s;">
+            <div class="planet-surface ice-planet"></div>
+            <div class="planet-ring"></div>
+        </div>
+
+        <div class="sketch asteroid-belt left-4 float-down" style="animation-delay: 2.2s;">
+            <div class="asteroid asteroid-1"></div>
+            <div class="asteroid asteroid-2"></div>
+            <div class="asteroid asteroid-3"></div>
+        </div>
+
+        <div class="sketch sketch-planet left-5 float-up" style="animation-delay: 0.3s;">
+            <div class="planet-surface desert-planet">
+                <div class="sand-dunes"></div>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE PLANETS -->
+        <div class="sketch sketch-planet right-1 float-down" style="animation-delay: 0.5s;">
+            <div class="planet-surface lava-planet">
+                <div class="lava-flows"></div>
+                <div class="volcanic-activity"></div>
+            </div>
+        </div>
+
+        <div class="sketch sketch-planet right-2 float-up" style="animation-delay: 1.2s;">
+            <div class="planet-surface ocean-planet">
+                <div class="continent continent-1"></div>
+                <div class="continent continent-2"></div>
+            </div>
+            <div class="small-moon"></div>
+        </div>
+
+        <div class="sketch sketch-planet right-3 float-down" style="animation-delay: 1.9s;">
+            <div class="planet-surface purple-giant">
+                <div class="atmospheric-layers"></div>
+            </div>
+            <div class="planet-ring diagonal-ring"></div>
+        </div>
+
+        <div class="sketch sketch-planet right-4 float-up" style="animation-delay: 2.6s;">
+            <div class="planet-surface forest-planet">
+                <div class="landmass landmass-1"></div>
+                <div class="landmass landmass-2"></div>
+            </div>
+        </div>
+
+        <div class="sketch binary-system right-5 float-down" style="animation-delay: 0.9s;">
+            <div class="planet-surface twin-1"></div>
+            <div class="planet-surface twin-2"></div>
+            <div class="orbital-path"></div>
+        </div>
+
+        <!-- CENTER SCATTERED OBJECTS -->
+        <div class="sketch comet center-1 float-up" style="animation-delay: 3.2s;">
+            <div class="comet-core"></div>
+            <div class="comet-tail"></div>
+        </div>
+
+        <div class="sketch sketch-planet center-2 float-down" style="animation-delay: 1.7s;">
+            <div class="planet-surface crystal-planet">
+                <div class="crystal-formation crystal-1"></div>
+                <div class="crystal-formation crystal-2"></div>
+            </div>
+        </div>
+
+        <div class="sketch space-station center-3 float-up" style="animation-delay: 2.4s;">
+            <div class="station-core"></div>
+            <div class="station-ring"></div>
+            <div class="docking-ports"></div>
+        </div>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>

@@ -595,6 +595,24 @@
             line-height: 1.5;
         }
 
+        .team-hero {
+            padding: 8rem 0 4rem;
+            background: var(--purple-lightest);
+        }
+
+        .team-hero .container {
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .team-hero h1 {
+            margin-bottom: 1rem;
+        }
+
+        .team-hero .tagline {
+            margin-bottom: 0;
+        }
+
         /* Beta Form */
         .beta-section {
             margin-bottom: 3rem;
@@ -1223,15 +1241,24 @@
         footer {
             padding: 4rem 0;
             border-top: 1px solid var(--border-light);
-            text-align: center;
+            text-align: left;
             background: var(--white);
         }
 
         .footer-content {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
             gap: 1.5rem;
+            text-align: left;
+        }
+
+        .footer-main {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.75rem;
+            width: 100%;
         }
 
         .footer-contact {
@@ -1243,6 +1270,56 @@
 
         .footer-contact:hover {
             color: var(--purple-dark);
+        }
+
+        .footer-team-card {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-light);
+            background: var(--purple-lightest);
+            box-shadow: 0 10px 30px rgba(107, 70, 193, 0.08);
+        }
+
+        .footer-team-copy h3 {
+            font-size: 1.25rem;
+            margin: 0.25rem 0;
+            color: var(--purple-dark);
+        }
+
+        .footer-team-copy p {
+            color: var(--gray-medium);
+            margin: 0;
+        }
+
+        .footer-kicker {
+            color: var(--purple);
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .footer-team-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #fff;
+            background: var(--purple);
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s ease, transform 0.2s ease;
+            width: fit-content;
+        }
+
+        .footer-team-link:hover {
+            background: var(--purple-dark);
+            transform: translateY(-1px);
         }
 
         .footer-copyright {
@@ -2143,5 +2220,5 @@ body.legal a:hover {
     display: flex;
     gap: 1.5rem;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
 }

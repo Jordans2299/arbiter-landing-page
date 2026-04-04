@@ -83,25 +83,25 @@
                                 <div class="slide">
                                     <img alt="AI Chat Interface showing poetry conversation"
                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                                        src="assets/screenshots/1.png" />
+                                        src="assets/screenshots/s1.png" />
                                     <div class="slide-placeholder" style="display:none;">Screenshot 1: Learn Something New</div>
                                 </div>
                                 <div class="slide">
                                     <img alt="Technical conversation with keyboard visible"
                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                                        src="assets/screenshots/2.png" />
+                                        src="assets/screenshots/s2.png" />
                                     <div class="slide-placeholder" style="display:none;">Screenshot 2: Creative AI Conversations</div>
                                 </div>
                                 <div class="slide">
                                     <img alt="Screen showing all locally saved chats"
                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                                        src="assets/screenshots/3.png" />
+                                        src="assets/screenshots/s3.png" />
                                     <div class="slide-placeholder" style="display:none;">Screenshot 3: Save Conversations</div>
                                 </div>
                                 <div class="slide">
                                     <img alt="Code generation showing merge sort algorithm"
                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                                        src="assets/screenshots/4.png" />
+                                        src="assets/screenshots/s4.png" />
                                     <div class="slide-placeholder" style="display:none;">Screenshot 4: Code Generation</div>
                                 </div>
                                 <div class="slide">
@@ -113,7 +113,7 @@
                                 <div class="slide">
                                     <img alt="Settings screen with model selection"
                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                                        src="assets/screenshots/6.png" />
+                                        src="assets/screenshots/s6.png" />
                                     <div class="slide-placeholder" style="display:none;">Screenshot 6: Choose Your Model</div>
                                 </div>
                             </div>
@@ -139,6 +139,35 @@
         </div><!-- /.container -->
     </section>
 
+    <!-- Problem Section -->
+    <section class="problem">
+        <div class="container">
+            <span class="section-label fade-section">The problem with AI today</span>
+            <h2 class="section-title fade-section">Why cloud AI falls short</h2>
+            <div class="problem-grid">
+
+                <div class="problem-card fade-section">
+                    <div class="problem-icon"><i class="fas fa-server"></i></div>
+                    <h3>Your data leaves your device</h3>
+                    <p>Every prompt you send to a cloud AI is processed on someone else's servers, logged, stored, and potentially used to train future models.</p>
+                </div>
+
+                <div class="problem-card fade-section">
+                    <div class="problem-icon"><i class="fas fa-wifi"></i></div>
+                    <h3>Requires internet to function</h3>
+                    <p>Cloud AI stops the moment your connection drops. On a flight, in a dead zone, or on a slow network, you are left without assistance.</p>
+                </div>
+
+                <div class="problem-card fade-section">
+                    <div class="problem-icon"><i class="fas fa-credit-card"></i></div>
+                    <h3>Expensive and metered</h3>
+                    <p>Premium AI is locked behind monthly subscriptions and per-query fees. Your usage is tracked, throttled, and billed at every turn.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
     <!-- Features Section -->
     <section class="features" id="features">
         <div class="container">
@@ -148,40 +177,90 @@
 
                 <div class="feature fade-section">
                     <div class="feature-icon"><i class="fas fa-microchip"></i></div>
-                    <h3>On-Device AI</h3>
-                    <p>Run advanced AI models directly on your iPhone, even offline. No servers or internet connection required.</p>
+                    <h3>Fully On-Device AI</h3>
+                    <p>Powered by MLX and GGUF frameworks, Arbiter runs open-source models directly on your iPhone's Apple Silicon. No API calls, no server round-trips. Works on airplane mode and in areas with no signal.</p>
                 </div>
 
                 <div class="feature fade-section">
-                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
-                    <h3>Privacy by Design</h3>
-                    <p>Your conversations never leave your device. Arbiter collects no data, no accounts, and no cloud logging.</p>
+                    <div class="feature-icon"><i class="fas fa-globe"></i></div>
+                    <h3>Live Web Search</h3>
+                    <p>Combine on-device inference with live web results. Arbiter pulls up-to-date information from the web and reasons over it locally, so your searches stay private while your answers stay current.</p>
                 </div>
 
                 <div class="feature fade-section">
                     <div class="feature-icon"><i class="fas fa-sliders-h"></i></div>
                     <h3>Flexible Model Management</h3>
-                    <p>Download lightweight open-source models like Gemma, LLaMA, or TinyLlama. Switch between them to balance speed, accuracy, and memory use.</p>
+                    <p>Download and switch between quantized open-source models: Gemma, LLaMA, Mistral, and more. Balance speed vs. intelligence, manage storage, and tune performance to your device. You own the models.</p>
                 </div>
 
                 <div class="feature fade-section">
-                    <div class="feature-icon"><i class="fas fa-paint-brush"></i></div>
-                    <h3>Customizable Experience</h3>
-                    <p>Choose your preferred model, manage downloads, and adjust settings to match your workflow and device.</p>
+                    <div class="feature-icon"><i class="fas fa-file-alt"></i></div>
+                    <h3>File Upload &amp; Context</h3>
+                    <p>Drop in PDFs, notes, or documents and ask questions about them. Arbiter summarizes and reasons over your files entirely on-device. Your private knowledge assistant, zero cloud required.</p>
                 </div>
 
                 <div class="feature fade-section">
-                    <div class="feature-icon"><i class="fas fa-comments"></i></div>
-                    <h3>Persistent Conversations</h3>
-                    <p>Chats are securely stored on-device under your control, so you can revisit them anytime without losing context.</p>
+                    <div class="feature-icon"><i class="fas fa-microphone"></i></div>
+                    <h3>Siri &amp; iOS Integration</h3>
+                    <p>Trigger Arbiter hands-free via Siri Shortcuts using App Intents. Ask questions by voice and get spoken or text responses, all private and built into your iOS workflow.</p>
                 </div>
 
                 <div class="feature fade-section">
-                    <div class="feature-icon"><i class="fas fa-dollar-sign"></i></div>
-                    <h3>No Hidden Costs</h3>
-                    <p>By running AI locally, Arbiter avoids expensive cloud fees — giving you sustainable performance without subscriptions.</p>
+                    <div class="feature-icon"><i class="fas fa-image"></i></div>
+                    <h3>Image Understanding</h3>
+                    <p>Upload photos directly into your conversations. Arbiter can describe, analyze, and answer questions about your images, processing everything on your device with no data sent to the cloud.</p>
                 </div>
 
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="comparison">
+        <div class="container">
+            <span class="section-label fade-section">See the difference</span>
+            <h2 class="section-title fade-section">Arbiter vs. Cloud AI</h2>
+            <div class="comparison-table fade-section">
+                <div class="comparison-header">
+                    <div class="col-feature"></div>
+                    <div class="col-arbiter">Arbiter</div>
+                    <div class="col-cloud">Cloud AI</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="col-feature">Runs locally on device</div>
+                    <div class="col-arbiter check">&#10003;</div>
+                    <div class="col-cloud cross">&#10007;</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="col-feature">Works offline</div>
+                    <div class="col-arbiter check">&#10003;</div>
+                    <div class="col-cloud cross">&#10007;</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="col-feature">Data leaves your device</div>
+                    <div class="col-arbiter check">Never</div>
+                    <div class="col-cloud cross">Always</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="col-feature">Account required</div>
+                    <div class="col-arbiter check">No</div>
+                    <div class="col-cloud cross">Yes</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="col-feature">Custom model selection</div>
+                    <div class="col-arbiter check">&#10003;</div>
+                    <div class="col-cloud neutral">Limited</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="col-feature">Subscription fee</div>
+                    <div class="col-arbiter check">None</div>
+                    <div class="col-cloud cross">Required</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="col-feature">Full privacy</div>
+                    <div class="col-arbiter check">&#10003;</div>
+                    <div class="col-cloud neutral">Partial</div>
+                </div>
             </div>
         </div>
     </section>
@@ -192,9 +271,7 @@
             <span class="section-label fade-section">Why we built this</span>
             <h2 class="section-title fade-section">Our Mission</h2>
             <div class="mission-content fade-section">
-                <p>Arbiter is redefining the future of AI chat. We believe in empowering individuals and
-                    organizations with tools that offer choice, control, and clarity. By running AI locally and
-                    giving users ownership of their data, Arbiter puts privacy and power back into your hands.</p>
+                <p>Arbiter is redefining the future of AI chat. We believe in empowering individuals and organizations with tools that offer choice, control, and clarity. By running AI locally and giving users ownership of their data, Arbiter puts privacy and power back into your hands.</p>
             </div>
         </div>
     </section>

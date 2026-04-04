@@ -1,4 +1,29 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Hamburger menu
+  const hamburger = document.getElementById("hamburger");
+  const mobileNav = document.getElementById("mobile-nav");
+
+  if (hamburger && mobileNav) {
+    hamburger.addEventListener("click", () => {
+      const isOpen = hamburger.classList.contains("open");
+      hamburger.classList.toggle("open");
+      mobileNav.classList.toggle("open");
+      hamburger.setAttribute("aria-expanded", String(!isOpen));
+      mobileNav.setAttribute("aria-hidden", String(isOpen));
+      document.body.style.overflow = isOpen ? "" : "hidden";
+    });
+
+    mobileNav.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        hamburger.classList.remove("open");
+        mobileNav.classList.remove("open");
+        hamburger.setAttribute("aria-expanded", "false");
+        mobileNav.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+      });
+    });
+  }
+
   // Scroll-triggered fade-in for all .fade-section elements
   const observer = new IntersectionObserver(
     (entries) => {

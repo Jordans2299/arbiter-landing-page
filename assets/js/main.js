@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Scroll-triggered fade-in for all .fade-section elements
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -8,11 +9,29 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
     },
-    { threshold: 0.1 },
+    { threshold: 0.08, rootMargin: "0px 0px -40px 0px" },
   );
 
-  document.querySelectorAll(".fade-section").forEach((section) => {
-    observer.observe(section);
+  document.querySelectorAll(".fade-section").forEach((el) => {
+    observer.observe(el);
+  });
+
+  // FAQ accordion
+  document.querySelectorAll(".faq-question").forEach((question) => {
+    question.addEventListener("click", () => {
+      const item = question.closest(".faq-item");
+      const isOpen = item.classList.contains("open");
+
+      // Close all open items
+      document.querySelectorAll(".faq-item.open").forEach((openItem) => {
+        openItem.classList.remove("open");
+      });
+
+      // Toggle the clicked one
+      if (!isOpen) {
+        item.classList.add("open");
+      }
+    });
   });
 });
 

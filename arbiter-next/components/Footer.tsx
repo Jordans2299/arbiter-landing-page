@@ -1,0 +1,29 @@
+import Link from "next/link";
+
+export default function Footer() {
+  return (
+    <footer id="contact">
+      <div className="container">
+        <div className="footer-content">
+          <a className="footer-contact" href="mailto:hello@askarbiter.ai">
+            hello@askarbiter.ai
+          </a>
+          <div className="footer-links">
+            <Link className="footer-contact" href="/">
+              Home
+            </Link>
+            <Link className="footer-contact" href="/privacy">
+              Privacy
+            </Link>
+            <Link className="footer-contact" href="/terms">
+              Terms
+            </Link>
+          </div>
+          <p className="footer-copyright">
+            &copy; 2025 Arbiter Technologies. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}

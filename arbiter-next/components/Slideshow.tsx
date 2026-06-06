@@ -1,8 +1,16 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import Image from "next/image";
 
-const slideData = [
+interface Slide {
+  src: string | null;
+  alt: string;
+  title: string;
+  text: string;
+}
+
+const iosSlides: Slide[] = [
   {
     src: "/screenshots/s1.png",
     alt: "AI Chat Interface showing poetry conversation",
@@ -41,16 +49,46 @@ const slideData = [
   },
 ];
 
+const macosSlides: Slide[] = [
+  {
+    src: null,
+    alt: "MLX model chat on Mac",
+    title: "Powerful MLX Models on Mac",
+    text: "Run larger language models optimized for Apple Silicon. Take advantage of your Mac's memory and GPU for faster, smarter responses.",
+  },
+  {
+    src: null,
+    alt: "Model server interface",
+    title: "Serve Models to Your Devices",
+    text: "Turn your Mac into a private AI server. Share loaded MLX models with your iPhone and other devices over your local network.",
+  },
+  {
+    src: null,
+    alt: "Model catalog on Mac",
+    title: "Full Model Catalog",
+    text: "Browse and install from 44+ GGUF and MLX models including Gemma, Llama, DeepSeek, Qwen, and Mistral families, all optimized for Apple Silicon.",
+  },
+  {
+    src: null,
+    alt: "OpenAI-compatible API server",
+    title: "OpenAI-Compatible Local API",
+    text: "Expose your loaded model as a local API endpoint. Connect any OpenAI-compatible client, IDE plugin, or tool to your private server.",
+  },
+];
+
 export default function Slideshow() {
+  const [platform, setPlatform] = useState<"ios" | "macos">("ios");
   const [current, setCurrent] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const slides = platform === "ios" ? iosSlides : macosSlides;
 
   const startTimer = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % slideData.length);
+      setCurrent((prev) => (prev + 1) % (platform === "ios" ? iosSlides.length : macosSlides.length));
     }, 5000);
-  }, []);
+  }, [platform]);
 
   const stopTimer = useCallback(() => {
     if (intervalRef.current) {
@@ -60,6 +98,7 @@ export default function Slideshow() {
   }, []);
 
   useEffect(() => {
+    setCurrent(0);
     startTimer();
 
     const handleVisibilityChange = () => {
@@ -72,13 +111,13 @@ export default function Slideshow() {
       stopTimer();
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [startTimer, stopTimer]);
+  }, [platform, startTimer, stopTimer]);
 
   function changeSlide(direction: number) {
     setCurrent((prev) => {
       let next = prev + direction;
-      if (next >= slideData.length) next = 0;
-      else if (next < 0) next = slideData.length - 1;
+      if (next >= slides.length) next = 0;
+      else if (next < 0) next = slides.length - 1;
       return next;
     });
     startTimer();
@@ -89,13 +128,30 @@ export default function Slideshow() {
     startTimer();
   }
 
-  const slide = slideData[current];
+  const slide = slides[current];
 
   return (
     <div className="slideshow-section">
-      <h3 style={{ color: "var(--accent)" }}>See Arbiter in Action</h3>
+      <div className="platform-toggle">
+        <button
+          className={platform === "ios" ? "active" : ""}
+          onClick={() => setPlatform("ios")}
+        >
+          <i className="fab fa-apple"></i> iPhone &amp; iPad
+        </button>
+        <button
+          className={platform === "macos" ? "active" : ""}
+          onClick={() => setPlatform("macos")}
+        >
+          <i className="fas fa-laptop"></i> Mac
+          <span className="coming-soon-badge">Coming Soon</span>
+        </button>
+      </div>
+      <h3 style={{ color: "var(--accent)" }}>
+        {platform === "ios" ? "See Arbiter on iPhone" : "See Arbiter on Mac"}
+      </h3>
       <div
-        className="slideshow-container"
+        className={`slideshow-container ${platform === "macos" ? "slideshow-container--macos" : ""}`}
         onMouseEnter={stopTimer}
         onMouseLeave={startTimer}
       >
@@ -104,10 +160,25 @@ export default function Slideshow() {
             className="slides"
             style={{ transform: `translateX(${-current * 100}%)` }}
           >
-            {slideData.map((s, i) => (
-              <div className="slide" key={i}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={s.src} alt={s.alt} />
+            {slides.map((s, i) => (
+              <div className="slide" key={`${platform}-${i}`}>
+                {s.src ? (
+                  <Image
+                    src={s.src}
+                    alt={s.alt}
+                    width={platform === "ios" ? 230 : 500}
+                    height={platform === "ios" ? 500 : 340}
+                    style={
+                      platform === "ios"
+                        ? { width: "auto", height: "500px" }
+                        : { width: "100%", height: "auto", maxHeight: "380px", objectFit: "contain" }
+                    }
+                  />
+                ) : (
+                  <div className="slide-placeholder">
+                    <span>{s.alt}</span>
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -125,7 +196,7 @@ export default function Slideshow() {
           </button>
         </div>
         <div className="slideshow-dots">
-          {slideData.map((_, i) => (
+          {slides.map((_, i) => (
             <span
               key={i}
               className={`dot ${i === current ? "active" : ""}`}

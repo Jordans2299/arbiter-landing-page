@@ -1,20 +1,14 @@
-"use client";
-
 import Slideshow from "./Slideshow";
 
 export default function Hero() {
-  function openBetaModal() {
-    window.dispatchEvent(new Event("open-beta-modal"));
-  }
-
   return (
     <section className="hero">
       <div className="container">
         <div className="hero-content">
           <h1>A.I. designed for you, only for you.</h1>
           <p className="tagline">
-            Run powerful language models locally. Keep your conversations
-            private. Switch between models without reinstalling.
+            Run powerful language models locally on iPhone and Mac. Keep your
+            conversations private. Your devices, your models, your data.
           </p>
           <div className="beta-section">
             <label className="beta-label">Start using Arbiter today</label>
@@ -31,13 +25,6 @@ export default function Hero() {
                   <span className="big-text">App Store</span>
                 </div>
               </a>
-              <button
-                className="btn-primary"
-                onClick={openBetaModal}
-                type="button"
-              >
-                Join TestFlight Beta
-              </button>
             </div>
           </div>
 

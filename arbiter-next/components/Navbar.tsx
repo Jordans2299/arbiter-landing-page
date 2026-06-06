@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,7 +24,7 @@ export default function Navbar() {
         <div className="nav-container">
           <a className="logo" href="#">
             <div className="logo-icon">
-              <img src="/newlogo.png" alt="Logo" className="logo-img" />
+              <Image src="/newlogo.png" alt="Logo" className="logo-img" width={36} height={36} priority />
             </div>
             <span>Arbiter</span>
           </a>

@@ -3,9 +3,9 @@ import FadeSection from "./FadeSection";
 const features = [
   {
     icon: "fas fa-microchip",
-    title: "Fully On-Device AI",
+    title: "On-Device AI",
     description:
-      "Powered by MLX and GGUF frameworks, Arbiter runs open-source models directly on your iPhone's Apple Silicon. No API calls, no server round-trips. Works on airplane mode and in areas with no signal.",
+      "Run open-source models directly on your iPhone or Mac using both GGUF and MLX frameworks on either platform. Chat offline, analyze images with vision models, and keep everything on your hardware. No API calls, no server round-trips.",
   },
   {
     icon: "fas fa-globe",
@@ -15,27 +15,45 @@ const features = [
   },
   {
     icon: "fas fa-sliders-h",
-    title: "Flexible Model Management",
+    title: "44+ Model Catalog",
     description:
-      "Download and switch between quantized open-source models: Gemma, LLaMA, Mistral, and more. Balance speed vs. intelligence, manage storage, and tune performance to your device. You own the models.",
+      "Browse, download, and switch between 44+ models from families like Gemma, Llama, DeepSeek, Qwen, Mistral, and Phi. Both GGUF and MLX formats run on iPhone and Mac, with 9 vision and 10 reasoning models available.",
   },
   {
     icon: "fas fa-file-alt",
-    title: "File Upload & Context",
+    title: "Files & Smart Context",
     description:
-      "Drop in PDFs, notes, or documents and ask questions about them. Arbiter summarizes and reasons over your files entirely on-device. Your private knowledge assistant, zero cloud required.",
+      "Drop in PDFs or text files and ask questions about them. Arbiter manages context windows intelligently across models with different limits, summarizing older messages to keep conversations flowing.",
+  },
+  {
+    icon: "fas fa-brain",
+    title: "Apple Foundation Models",
+    description:
+      "On devices with Apple Intelligence, use Apple’s on-device Foundation Models with zero downloads. Available on iOS 26 and macOS 26, integrated directly into Arbiter’s chat experience.",
+  },
+  {
+    icon: "fas fa-network-wired",
+    title: "Local Network Models",
+    description:
+      "Connect your iPhone to a Mac, PC, or any device running LM Studio, Ollama, or Arbiter’s own server over local Wi-Fi. Run larger models on powerful hardware and chat from your phone.",
+  },
+  {
+    icon: "fas fa-server",
+    title: "Mac as Model Server",
+    description:
+      "Turn your Mac into a private AI server. Load an MLX model and expose it as an OpenAI-compatible API. Share it with your iPhone or any compatible client on your network.",
   },
   {
     icon: "fas fa-microphone",
-    title: "Siri & iOS Integration",
+    title: "Siri & System Integration",
     description:
-      "Trigger Arbiter hands-free via Siri Shortcuts using App Intents. Ask questions by voice and get spoken or text responses, all private and built into your iOS workflow.",
+      "Trigger Arbiter hands-free via Siri Shortcuts using App Intents. Ask questions by voice and get spoken or text responses, all private and built into your Apple workflow.",
   },
   {
-    icon: "fas fa-image",
-    title: "Image Understanding",
+    icon: "fas fa-user-cog",
+    title: "Roles & Personalization",
     description:
-      "Upload photos directly into your conversations. Arbiter can describe, analyze, and answer questions about your images, processing everything on your device with no data sent to the cloud.",
+      "Choose from 10 built-in assistant roles like Coding Helper, Translator, Meal Planner, and Study Buddy. Fine-tune warmth, enthusiasm, emoji usage, and response detail to match your style.",
   },
 ];
 

@@ -6,6 +6,8 @@ const rows = [
   { feature: "Data leaves your device", arbiter: "Never", cloud: "Always", arbiterClass: "check", cloudClass: "cross" },
   { feature: "Account required", arbiter: "No", cloud: "Yes", arbiterClass: "check", cloudClass: "cross" },
   { feature: "Custom model selection", arbiter: "✓", cloud: "Limited", arbiterClass: "check", cloudClass: "neutral" },
+  { feature: "Scale via local network", arbiter: "✓", cloud: "N/A", arbiterClass: "check", cloudClass: "neutral" },
+  { feature: "Use your own hardware as server", arbiter: "✓", cloud: "✗", arbiterClass: "check", cloudClass: "cross" },
   { feature: "Subscription fee", arbiter: "None", cloud: "Required", arbiterClass: "check", cloudClass: "cross" },
   { feature: "Full privacy", arbiter: "✓", cloud: "Partial", arbiterClass: "check", cloudClass: "neutral" },
 ];

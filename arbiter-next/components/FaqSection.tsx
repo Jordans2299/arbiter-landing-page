@@ -7,27 +7,42 @@ const faqs = [
   {
     question: "Is my data private?",
     answer:
-      "Yes. Everything is processed and stored on your device. Your chats and files never leave your phone unless you explicitly choose to share them. We do not store, log, or sell your data. Your information stays 100% under your control.",
+      "Yes. Everything is processed and stored on your device. Your chats and files never leave your phone or Mac unless you explicitly choose to share them. This applies across iPhone and Mac — whether running models locally or serving them on your network, data never touches external servers.",
   },
   {
     question: "Do I need an internet connection to use the app?",
     answer:
-      "No. Once installed, the app works entirely offline. You can use it on airplanes, in remote areas, or without Wi-Fi, while still getting fast and responsive answers.",
+      "No. Once a model is installed, the app works entirely offline. You can use it on airplanes, in remote areas, or without Wi-Fi, while still getting fast and responsive answers.",
   },
   {
     question: "How does offline AI work?",
     answer:
-      "The app uses optimized large language models (LLMs) that run locally on your device's processor. These models are pre-downloaded and don't require server access, which means your requests are processed instantly without sending them to the cloud.",
+      "Arbiter uses optimized open-source models that run locally on your device’s Apple Silicon processor. Both GGUF and MLX model formats are supported on iPhone and Mac. Models are pre-downloaded and don’t require server access, so your requests are processed instantly without sending anything to the cloud.",
   },
   {
     question: "What devices are supported?",
     answer:
-      "Currently, the app supports modern iPhones and iPads running iOS 16 or later, with best performance on devices equipped with Apple Silicon chips (A14 Bionic or newer). Most models will require a device with more than 4 GB of RAM.",
+      "Arbiter runs on iPhones and iPads with iOS 16 or later, with best performance on devices with A14 Bionic or newer and at least 6 GB of RAM. The macOS app supports Apple Silicon Macs (M1 or later) and can run larger MLX models. macOS support is coming soon.",
   },
   {
     question: "What AI models are available?",
     answer:
-      "You can choose from a range of open-source LLMs. The app supports switching models at any time so you can balance speed, accuracy, and device performance.",
+      "Arbiter offers 44+ models across families including Gemma, Llama, DeepSeek, Qwen, Mistral, Phi, and Granite. The catalog includes 24 GGUF and 20 MLX models, all usable on both iPhone and Mac, plus 9 vision-capable models and 10 reasoning models. On supported devices, Apple’s Foundation Model is also available.",
+  },
+  {
+    question: "What is Apple Foundation Model support?",
+    answer:
+      "Starting with iOS 26 and macOS 26, Arbiter integrates Apple’s on-device Foundation Models through Apple Intelligence. These models run natively on your device at no additional cost, providing another option alongside open-source models with zero downloads required.",
+  },
+  {
+    question: "Can I use my Mac as a server for my iPhone?",
+    answer:
+      "Yes. The macOS app includes a Serve Model feature that creates an OpenAI-compatible local API server. Your iPhone can connect to your Mac over Wi-Fi using automatic Bonjour discovery, letting you run larger models on your Mac while chatting from your phone.",
+  },
+  {
+    question: "Can I connect to other local AI servers?",
+    answer:
+      "Yes. Beyond Arbiter’s own Mac server, you can connect your iPhone to any local machine running LM Studio, Ollama, or any OpenAI-compatible API server on your local network. Configure the host and port and you’re connected.",
   },
 ];
 

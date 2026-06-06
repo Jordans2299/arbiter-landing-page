@@ -20,7 +20,7 @@ export default function Footer() {
             </Link>
           </div>
           <p className="footer-copyright">
-            &copy; 2025 Arbiter Technologies. All rights reserved.
+            &copy; 2026 Arbiter Technologies. All rights reserved.
           </p>
         </div>
       </div>

@@ -6,7 +6,6 @@ import ComparisonSection from "@/components/ComparisonSection";
 import MissionSection from "@/components/MissionSection";
 import FaqSection from "@/components/FaqSection";
 import Footer from "@/components/Footer";
-import BetaModal from "@/components/BetaModal";
 import FloatingPlanets from "@/components/FloatingPlanets";
 
 export default function Home() {
@@ -22,7 +21,6 @@ export default function Home() {
         <FaqSection />
         <Footer />
       </div>
-      <BetaModal />
       <FloatingPlanets />
     </>
   );

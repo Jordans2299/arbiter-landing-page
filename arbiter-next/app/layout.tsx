@@ -18,7 +18,7 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: "Arbiter - Private AI on Your Device",
   description:
-    "Run powerful language models locally. Keep your conversations private. Switch between models without reinstalling.",
+    "Run powerful language models locally on iPhone and Mac. Private AI with 44+ models, local network serving, and Apple Intelligence support.",
   icons: {
     icon: [
       { url: "/favicon.png", type: "image/png", sizes: "32x32" },
@@ -36,7 +36,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${fraunces.variable} ${dmSans.variable}`}>
-      <body style={{ fontFamily: "var(--font-body)" }}>
+      <body style={{ fontFamily: "var(--font-body)" }} suppressHydrationWarning>
         {children}
         <Script
           src="https://kit.fontawesome.com/1c37cb57ef.js"

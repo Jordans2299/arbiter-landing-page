@@ -112,6 +112,9 @@ section {
 .features-grid .feature:nth-child(4) { transition-delay: 0.21s; }
 .features-grid .feature:nth-child(5) { transition-delay: 0.28s; }
 .features-grid .feature:nth-child(6) { transition-delay: 0.35s; }
+.features-grid .feature:nth-child(7) { transition-delay: 0.42s; }
+.features-grid .feature:nth-child(8) { transition-delay: 0.49s; }
+.features-grid .feature:nth-child(9) { transition-delay: 0.56s; }
 
 /* Staggered FAQ items */
 .faq-item:nth-child(1) { transition-delay: 0.00s; }
@@ -119,6 +122,9 @@ section {
 .faq-item:nth-child(3) { transition-delay: 0.12s; }
 .faq-item:nth-child(4) { transition-delay: 0.18s; }
 .faq-item:nth-child(5) { transition-delay: 0.24s; }
+.faq-item:nth-child(6) { transition-delay: 0.30s; }
+.faq-item:nth-child(7) { transition-delay: 0.36s; }
+.faq-item:nth-child(8) { transition-delay: 0.42s; }
 
 /* ----------------------------------------------------------
    3. FLOATING PLANET SKETCHES
@@ -421,6 +427,19 @@ h1 {
   flex-wrap: wrap;
 }
 
+/* Coming Soon badge (reused in hero + slideshow) */
+.coming-soon-badge {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: var(--accent);
+  color: white;
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
 /* App Store — slightly more prominent (solid) */
 .btn-appstore {
   display: inline-flex;
@@ -486,6 +505,47 @@ h1 {
 }
 .btn-primary:active { transform: translateY(0); }
 
+/* Coming-soon variant (macOS button) */
+.btn-appstore--coming-soon {
+  opacity: 0.5;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ----------------------------------------------------------
+   8b. PLATFORM TOGGLE (slideshow)
+   ---------------------------------------------------------- */
+.platform-toggle {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: 1.25rem;
+}
+.platform-toggle button {
+  padding: 0.55rem 1.2rem;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: inherit;
+}
+.platform-toggle button:first-child {
+  border-right: 1px solid var(--border);
+}
+.platform-toggle button.active {
+  background: var(--accent-dim);
+  color: var(--accent-text);
+}
+.platform-toggle button:hover:not(.active) {
+  background: rgba(139, 92, 246, 0.06);
+}
+
 /* ----------------------------------------------------------
    9. SLIDESHOW — phone-proportioned, images fill width
    ---------------------------------------------------------- */
@@ -536,24 +596,41 @@ h1 {
 
 .slide-placeholder {
   width: 100%;
-  height: 480px;
+  height: 340px;
   background: linear-gradient(135deg, var(--card) 0%, var(--surface) 100%);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-muted);
+  color: var(--accent-text);
   font-style: italic;
-  font-size: 0.9rem;
-  border-radius: 0;
+  font-size: 0.95rem;
+  text-align: center;
+  padding: 2rem;
 }
 
-/* Original sizing — height-constrained, natural width */
+/* Height-constrained, natural width — inline styles handle width/height for next/image */
 .slide img {
   height: 500px;
   width: auto;
   border-radius: 1rem;
   display: block;
 }
+
+/* macOS slideshow variant — wider for landscape screenshots */
+.slideshow-container--macos {
+  max-width: 600px;
+}
+.slideshow-container--macos .slide img {
+  height: auto;
+  width: 100%;
+  max-height: 380px;
+}
+.slideshow-container--macos .slide-placeholder {
+  height: 340px;
+}
+
 
 /* Slideshow nav controls */
 .slideshow-controls {
@@ -1205,7 +1282,8 @@ footer {
   .btn-primary, .btn-appstore { width: 100%; justify-content: center; }
 
   /* Slideshow — smaller image, tighter padding */
-  .slideshow-container { max-width: 100%; border-radius: var(--radius-md); }
+  .slideshow-container,
+  .slideshow-container--macos { max-width: 100%; border-radius: var(--radius-md); }
   .slide { padding: 1rem; }
   .slide img { height: 340px; }
 
@@ -1249,4 +1327,111 @@ footer {
   .slide img { height: 300px; }
   .comparison-header,
   .comparison-row { grid-template-columns: 1fr 65px 65px; padding: 0.65rem 0.75rem; }
+}
+
+/* ----------------------------------------------------------
+   19. LEGAL PAGES (Privacy, Terms) — clean light theme
+   ---------------------------------------------------------- */
+.legal-page {
+  background: #FAFAFA;
+  color: #1a1a2e;
+  min-height: 100vh;
+}
+
+.legal-page nav {
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid #e5e5e5;
+}
+.legal-page .logo { color: #1a1a2e; }
+.legal-page .logo:hover { color: var(--accent); }
+.legal-page .nav-links a { color: #555; }
+.legal-page .nav-links a:hover { color: #1a1a2e; }
+.legal-page .hamburger span { background: #1a1a2e; }
+
+.legal-page .mobile-nav {
+  background: rgba(255, 255, 255, 0.97);
+  border-bottom: 1px solid #e5e5e5;
+}
+.legal-page .mobile-nav ul li { border-color: #e5e5e5; }
+.legal-page .mobile-nav ul a { color: #1a1a2e; }
+.legal-page .mobile-nav ul a:hover { color: var(--accent); }
+
+.legal-header {
+  padding: 7rem 0 2.5rem;
+  text-align: center;
+  border-bottom: 1px solid #e5e5e5;
+  background: #fff;
+}
+.legal-header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 700;
+  font-style: italic;
+  color: #1a1a2e;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+.legal-header .legal-updated {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.legal-body {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 3rem 2.5rem 5rem;
+}
+
+.legal-body h2 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin: 2.5rem 0 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+.legal-body h2:first-child { margin-top: 0; }
+
+.legal-body p {
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: #444;
+  margin-bottom: 1rem;
+}
+
+.legal-body ul {
+  padding-left: 1.25rem;
+  margin-bottom: 1rem;
+}
+.legal-body ul li {
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: #444;
+  margin-bottom: 0.4rem;
+}
+
+.legal-body a {
+  color: var(--accent);
+  text-decoration: none;
+}
+.legal-body a:hover {
+  text-decoration: underline;
+}
+
+.legal-body strong {
+  color: #1a1a2e;
+  font-weight: 600;
+}
+
+.legal-page footer {
+  background: #fff;
+  border-top: 1px solid #e5e5e5;
+}
+.legal-page .footer-contact { color: #888; }
+.legal-page .footer-contact:hover { color: var(--accent); }
+.legal-page .footer-copyright { color: #bbb; }
+
+@media (max-width: 600px) {
+  .legal-body { padding: 2rem 1.25rem 3rem; }
+  .legal-header { padding: 5.5rem 1.25rem 2rem; }
 }

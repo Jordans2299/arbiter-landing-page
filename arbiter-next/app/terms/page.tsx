@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Terms of Service – Arbiter",
   description:
-    "Terms of service for Arbiter, a local AI chat app for iPhone.",
+    "Terms of service for Arbiter, a private local AI assistant for iPhone and Mac.",
   openGraph: {
     title: "Terms of Service – Arbiter",
     type: "website",
@@ -16,142 +17,143 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <>
-      <main className="container" style={{ paddingTop: "3rem", paddingBottom: "3rem" }}>
-        <section>
-          <p>
-            These Terms govern your use of Arbiter (&quot;the App&quot;). By
-            using the App, you agree to these Terms.
-          </p>
+    <div className="legal-page">
+      <Navbar />
 
-          <ol>
-            <li>
-              <strong>What Arbiter does</strong>
-              <br />
-              Arbiter is an iOS app that runs AI models locally on your device.
-              You can select bundled models or download additional models from
-              third‑party sources.
-            </li>
-            <li>
-              <strong>Your responsibilities</strong>
-              <br />
-              <ul>
-                <li>
-                  <strong>Lawful use.</strong> You&apos;ll use Arbiter in
-                  compliance with applicable laws and the licenses for any
-                  models you download.
-                </li>
-                <li>
-                  <strong>Model licenses &amp; content.</strong> Third‑party
-                  models and datasets may have their own licenses and
-                  restrictions; you&apos;re responsible for reviewing and
-                  complying with them.
-                </li>
-                <li>
-                  <strong>Backups.</strong> Your chats and models are stored on
-                  your device. Maintain any backups you need.
-                </li>
-              </ul>
-            </li>
-            <li>
-              <strong>Third‑party links &amp; content</strong>
-              <br />
-              The App may link to third parties (e.g., Hugging Face). We
-              don&apos;t control or endorse third‑party sites, content, or
-              models and aren&apos;t responsible for them.
-            </li>
-            <li>
-              <strong>No professional advice</strong>
-              <br />
-              Outputs from AI models may be incorrect or misleading and are
-              provided &quot;as is&quot; for informational purposes only. Arbiter
-              does not provide professional advice.
-            </li>
-            <li>
-              <strong>Acceptable use</strong>
-              <br />
-              Don&apos;t use the App to violate laws, infringe rights, or
-              produce/distribute harmful content. We may restrict or terminate
-              access for violations.
-            </li>
-            <li>
-              <strong>Ownership</strong>
-              <br />
-              We (or our licensors) own the App and its code. You retain rights
-              to your own content. Third‑party models are owned by their
-              respective licensors.
-            </li>
-            <li>
-              <strong>Disclaimers</strong>
-              <br />
-              THE APP IS PROVIDED &quot;AS IS&quot; AND &quot;AS
-              AVAILABLE&quot; WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR
-              IMPLIED, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR
-              PURPOSE, AND NON‑INFRINGEMENT. We do not warrant uninterrupted or
-              error‑free operation or the accuracy of model outputs.
-            </li>
-            <li>
-              <strong>Limitation of liability</strong>
-              <br />
-              TO THE MAXIMUM EXTENT PERMITTED BY LAW, WE SHALL NOT BE LIABLE
-              FOR INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR
-              PUNITIVE DAMAGES, OR ANY LOSS OF DATA, PROFITS, OR REVENUE, EVEN
-              IF ADVISED OF THE POSSIBILITY. OUR TOTAL LIABILITY FOR ANY CLAIMS
-              RELATING TO THE APP SHALL NOT EXCEED THE AMOUNT YOU PAID FOR THE
-              APP (IF ANY) IN THE 12 MONTHS BEFORE THE CLAIM.
-            </li>
-            <li>
-              <strong>Indemnity</strong>
-              <br />
-              You will indemnify and hold us harmless from claims arising from
-              your misuse of the App, violation of these Terms, or infringement
-              of third‑party rights.
-            </li>
-            <li>
-              <strong>Changes</strong>
-              <br />
-              We may update these Terms. We&apos;ll update the &quot;Last
-              updated&quot; date and may provide in‑app notice for material
-              changes. Continued use means you accept the updated Terms.
-            </li>
-            <li>
-              <strong>Governing law</strong>
-              <br />
-              These Terms are governed by the laws of your principal place of
-              business, excluding conflict‑of‑laws rules.
-            </li>
-            <li>
-              <strong>Contact</strong>
-              <br />
-              Questions about these Terms?{" "}
-              <a href="mailto:hello@askarbiter.ai">hello@askarbiter.ai</a>
-            </li>
-          </ol>
-        </section>
-      </main>
-      <footer id="contact">
+      <header className="legal-header">
         <div className="container">
-          <div className="footer-content">
-            <a className="footer-contact" href="mailto:hello@askarbiter.ai">
-              hello@askarbiter.ai
-            </a>
-            <div className="footer-links">
-              <Link className="footer-contact" href="/">
-                Home
-              </Link>
-              <Link className="footer-contact" href="/privacy">
-                Privacy
-              </Link>
-              <Link className="footer-contact" href="/terms">
-                Terms
-              </Link>
-            </div>
-            <p className="footer-copyright">
-              &copy; 2025 Arbiter Technologies. All rights reserved.
-            </p>
-          </div>
+          <h1>Terms of Service</h1>
+          <p className="legal-updated">Last updated: June 6, 2026</p>
         </div>
-      </footer>
-    </>
+      </header>
+
+      <main className="legal-body">
+        <p>
+          These Terms govern your use of Arbiter (&ldquo;the App&rdquo;),
+          including Arbiter for iOS and Arbiter for macOS. By using the App, you
+          agree to these Terms.
+        </p>
+
+        <h2>1. What Arbiter Does</h2>
+        <p>
+          Arbiter is a private AI assistant for iPhone and Mac that runs
+          open-source language models locally on your device. You can download
+          models from third-party sources, connect to local-network model
+          servers, use Apple&rsquo;s Foundation Models on supported devices, and
+          optionally enable web search for current information.
+        </p>
+
+        <h2>2. Your Responsibilities</h2>
+        <ul>
+          <li>
+            <strong>Lawful use.</strong> You will use Arbiter in compliance with
+            applicable laws and the licenses for any models you download or
+            connect to.
+          </li>
+          <li>
+            <strong>Model licenses and content.</strong> Third-party models and
+            datasets may have their own licenses and restrictions. You are
+            responsible for reviewing and complying with them.
+          </li>
+          <li>
+            <strong>Local network use.</strong> If you serve models from your Mac
+            or connect to local-network servers, you are responsible for securing
+            your network and controlling access to your devices.
+          </li>
+          <li>
+            <strong>Backups.</strong> Your chats, models, and files are stored on
+            your device. Maintain any backups you need.
+          </li>
+        </ul>
+
+        <h2>3. Third-Party Links and Content</h2>
+        <p>
+          The App may link to or interact with third parties, including Hugging
+          Face for model downloads and user-configured local servers. We do not
+          control or endorse third-party sites, content, or models and are not
+          responsible for them.
+        </p>
+
+        <h2>4. No Professional Advice</h2>
+        <p>
+          Outputs from AI models may be incorrect, incomplete, or misleading and
+          are provided &ldquo;as is&rdquo; for informational purposes only.
+          Arbiter does not provide medical, legal, financial, or other
+          professional advice. Do not rely on model outputs for decisions that
+          require professional judgment.
+        </p>
+
+        <h2>5. Acceptable Use</h2>
+        <p>
+          Do not use the App to violate laws, infringe rights, or produce or
+          distribute harmful content. We reserve the right to restrict or
+          terminate access for violations of these Terms.
+        </p>
+
+        <h2>6. Tips and Purchases</h2>
+        <p>
+          Arbiter offers optional tips through Apple&rsquo;s StoreKit. These are
+          voluntary and non-refundable except as required by applicable law or
+          Apple&rsquo;s refund policies. Tips do not unlock additional features.
+        </p>
+
+        <h2>7. Ownership</h2>
+        <p>
+          We (or our licensors) own the App and its code. You retain rights to
+          your own content, including chats, files, and images you create or
+          import. Third-party models are owned by their respective licensors
+          under their own license terms.
+        </p>
+
+        <h2>8. Disclaimers</h2>
+        <p>
+          THE APP IS PROVIDED &ldquo;AS IS&rdquo; AND &ldquo;AS
+          AVAILABLE&rdquo; WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED,
+          INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
+          NON-INFRINGEMENT. We do not warrant uninterrupted or error-free
+          operation, the accuracy of model outputs, or the availability or
+          quality of third-party models or servers.
+        </p>
+
+        <h2>9. Limitation of Liability</h2>
+        <p>
+          TO THE MAXIMUM EXTENT PERMITTED BY LAW, WE SHALL NOT BE LIABLE FOR
+          INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE
+          DAMAGES, OR ANY LOSS OF DATA, PROFITS, OR REVENUE, EVEN IF ADVISED OF
+          THE POSSIBILITY. OUR TOTAL LIABILITY FOR ANY CLAIMS RELATING TO THE
+          APP SHALL NOT EXCEED THE AMOUNT YOU PAID FOR THE APP (IF ANY) IN THE
+          12 MONTHS BEFORE THE CLAIM.
+        </p>
+
+        <h2>10. Indemnity</h2>
+        <p>
+          You will indemnify and hold us harmless from claims arising from your
+          misuse of the App, violation of these Terms, or infringement of
+          third-party rights.
+        </p>
+
+        <h2>11. Changes</h2>
+        <p>
+          We may update these Terms. We will update the &ldquo;Last
+          updated&rdquo; date at the top and may provide in-app notice for
+          material changes. Continued use of the App after changes take effect
+          constitutes acceptance of the updated Terms.
+        </p>
+
+        <h2>12. Governing Law</h2>
+        <p>
+          These Terms are governed by the laws of your principal place of
+          residence, excluding conflict-of-laws rules.
+        </p>
+
+        <h2>13. Contact</h2>
+        <p>
+          Questions about these Terms? Email us at{" "}
+          <a href="mailto:hello@askarbiter.ai">hello@askarbiter.ai</a>.
+        </p>
+      </main>
+
+      <Footer />
+    </div>
   );
 }

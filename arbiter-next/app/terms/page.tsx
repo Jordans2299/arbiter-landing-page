@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <div className="legal-page">
+    <>
       <Navbar />
 
       <header className="legal-header">
@@ -154,6 +154,6 @@ export default function TermsPage() {
       </main>
 
       <Footer />
-    </div>
+    </>
   );
 }

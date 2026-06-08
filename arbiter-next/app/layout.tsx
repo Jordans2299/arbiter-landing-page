@@ -37,6 +37,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${fraunces.variable} ${dmSans.variable}`}>
       <body style={{ fontFamily: "var(--font-body)" }} suppressHydrationWarning>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var t=localStorage.getItem("arbiter-theme");if(t==="light")document.documentElement.setAttribute("data-theme","light")})()`,
+          }}
+        />
         {children}
         <Script
           src="https://kit.fontawesome.com/1c37cb57ef.js"

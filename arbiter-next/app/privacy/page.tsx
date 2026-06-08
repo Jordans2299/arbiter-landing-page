@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="legal-page">
+    <>
       <Navbar />
 
       <header className="legal-header">
@@ -179,6 +179,6 @@ export default function PrivacyPage() {
       </main>
 
       <Footer />
-    </div>
+    </>
   );
 }

@@ -114,7 +114,7 @@ export default function DocumentationPage() {
                 <tr>
                   <td>iOS</td>
                   <td>iOS 16, A14 Bionic, 6 GB RAM</td>
-                  <td>iPhone 15 Pro or later</td>
+                  <td>iPhone 13 Pro or later; more RAM for larger models</td>
                 </tr>
                 <tr>
                   <td>macOS</td>
@@ -134,7 +134,7 @@ export default function DocumentationPage() {
           <section id="model-formats" className="docs-section">
             <h2>2. Understanding Model Formats</h2>
             <p>
-              Arbiter supports three model runtime paths. Each has different
+              Arbiter supports four model runtime paths. Each has different
               tradeoffs around compatibility, performance, and setup.
             </p>
 
@@ -185,7 +185,7 @@ export default function DocumentationPage() {
               </li>
               <li>
                 <strong>Server support:</strong> The macOS model server feature
-                requires an MLX model to be loaded.
+                serves installed MLX models.
               </li>
               <li>
                 <strong>Best for:</strong> Larger models on Mac, vision tasks,
@@ -215,13 +215,38 @@ export default function DocumentationPage() {
               </li>
             </ul>
 
+            <h3>Remote OpenAI-Compatible Servers</h3>
+            <p>
+              Arbiter can also use models served by another device on your
+              local network. This includes Arbiter for macOS, LM Studio,
+              Ollama-style servers, and other OpenAI-compatible endpoints.
+              Remote models appear in the picker as <code>remote:model-id</code>.
+            </p>
+            <ul>
+              <li>
+                <strong>Compatibility:</strong> Works on iOS and macOS when
+                the server exposes OpenAI-style model and chat endpoints.
+              </li>
+              <li>
+                <strong>Performance:</strong> Lets an iPhone use larger models
+                running on a nearby Mac or PC while keeping prompts inside the
+                user&rsquo;s own network.
+              </li>
+              <li>
+                <strong>Best for:</strong> Larger local-network models,
+                desktop-hosted MLX models, and development workflows that
+                expect an OpenAI-compatible API.
+              </li>
+            </ul>
+
             <div className="docs-callout">
               <strong>Which format should I pick?</strong> If you are on iPhone
               and want a fast, compact model, start with a recommended GGUF
               model. If you have a Mac with 16+ GB of RAM and want to explore
               larger or vision-capable models, try MLX. If your device supports
               Apple Intelligence, the Foundation Model is available with no
-              downloads at all.
+              downloads at all. If the best model is running on another
+              computer, connect to it as a remote server.
             </div>
           </section>
 
@@ -229,7 +254,7 @@ export default function DocumentationPage() {
           <section id="model-catalog" className="docs-section">
             <h2>3. Model Catalog &amp; Downloads</h2>
             <p>
-              Arbiter ships with a curated catalog of 44+ models spanning
+              Arbiter ships with a curated catalog of 44 models spanning
               multiple families: Gemma, Llama, DeepSeek, Qwen, Mistral,
               Phi, Granite, and others. The catalog includes 24 GGUF models,
               20 MLX models, 9 vision-capable models, and 10 reasoning models.
@@ -288,6 +313,13 @@ export default function DocumentationPage() {
               This is especially relevant on iPhones with 6 GB RAM where larger
               models may crash during inference.
             </p>
+            <p>
+              Recommendations are device-aware. Arbiter considers minimum and
+              maximum memory guidance from the catalog, avoids tight-memory
+              models during onboarding, and adjusts recommendations for devices
+              such as 8 GB iPhones that can run stronger models than the
+              smallest phone-friendly defaults.
+            </p>
 
             <h3>Deleting Models</h3>
             <p>
@@ -335,7 +367,7 @@ export default function DocumentationPage() {
               </li>
               <li>
                 Larger models (4 to 8 GB) perform best on Mac or high-RAM
-                iPhones (iPhone 15 Pro and later).
+                iPhones.
               </li>
               <li>
                 Sustained generation on iPhone can trigger thermal throttling.
@@ -656,12 +688,21 @@ export default function DocumentationPage() {
                 In Arbiter, go to <strong>Settings &rarr; Remote Server</strong>.
               </li>
               <li>
+                Choose <strong>Arbiter Server</strong> for another Arbiter app
+                on your network, or <strong>Third-Party Server</strong> for
+                LM Studio, Ollama, or another OpenAI-compatible server.
+              </li>
+              <li>
                 Enter the server&rsquo;s <strong>host</strong> (IP address or
-                hostname) and <strong>port</strong>.
+                hostname) and <strong>port</strong>. Arbiter Server defaults to
+                port <code>8080</code>; third-party OpenAI-compatible servers
+                default to <code>1234</code>.
               </li>
               <li>
                 Tap <strong>Test Connection</strong>. Arbiter queries{" "}
-                <code>/v1/models</code> to discover available models.
+                <code>/v1/models</code> to discover available models and, when
+                supported, <code>/v1/active_model</code> to identify the
+                server&rsquo;s current model.
               </li>
               <li>
                 Select a remote model. It appears in the model picker as{" "}
@@ -683,9 +724,22 @@ export default function DocumentationPage() {
             <h3>Bonjour Discovery (iOS &rarr; Mac)</h3>
             <p>
               When Arbiter for macOS is serving a model, it advertises itself
-              on the local network via Bonjour (<code>_arbiter._tcp</code>).
+              on the local network via Bonjour (<code>_arbiter._tcp</code>) with
+              host and port metadata.
               Arbiter for iOS can automatically discover nearby Mac servers
-              without manual IP entry.
+              without manual IP entry. Discovery runs in a timed search window
+              and falls back to manual host and port entry when local network
+              permission or Wi-Fi configuration blocks discovery.
+            </p>
+
+            <h3>Remote Model Switching</h3>
+            <p>
+              Arbiter-compatible servers can expose <code>/v1/active_model</code>.
+              When available, Arbiter can show the active model and request a
+              model switch before chatting. Third-party servers that only
+              support <code>/v1/models</code> and{" "}
+              <code>/v1/chat/completions</code> still work for normal remote
+              chat.
             </p>
 
             <h3>Privacy</h3>
@@ -723,6 +777,12 @@ export default function DocumentationPage() {
                 empty model lists, and HTTP failures.
               </li>
               <li>
+                <strong>Diagnostics:</strong>{" "}Remote connection screens
+                include expandable diagnostics and copyable debug logs. These
+                are useful when comparing Bonjour discovery, manual host/port
+                entry, and the server&rsquo;s own connection details.
+              </li>
+              <li>
                 <strong>Firewall:</strong>{" "}Make sure your Mac&rsquo;s firewall
                 allows incoming connections on the configured port.
               </li>
@@ -733,7 +793,7 @@ export default function DocumentationPage() {
           <section id="mac-server" className="docs-section">
             <h2>10. Running a Model Server (macOS)</h2>
             <p>
-              Arbiter for macOS can expose a loaded MLX model as an
+              Arbiter for macOS can expose an installed MLX model as an
               OpenAI-compatible local API server. This turns your Mac into a
               private inference endpoint for your iPhone, other apps, IDE
               plugins, or any client that speaks the OpenAI chat completions
@@ -742,9 +802,13 @@ export default function DocumentationPage() {
 
             <h3>Starting the Server</h3>
             <ol>
-              <li>Open Arbiter for macOS and load an MLX model.</li>
+              <li>Open Arbiter for macOS and install at least one MLX model.</li>
               <li>
                 Navigate to the <strong>Serve Model</strong> section.
+              </li>
+              <li>
+                Choose the installed MLX model you want the server to expose.
+                Arbiter can load the selected model before serving.
               </li>
               <li>
                 Tap <strong>Start Server</strong>. The default port is 8080,
@@ -781,7 +845,22 @@ export default function DocumentationPage() {
                 <tr>
                   <td><code>/v1/models</code></td>
                   <td>GET</td>
-                  <td>Lists the currently loaded model.</td>
+                  <td>
+                    Lists installed MLX models and identifies the currently
+                    loaded model.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>/v1/active_model</code></td>
+                  <td>GET</td>
+                  <td>Returns the server&rsquo;s active loaded model.</td>
+                </tr>
+                <tr>
+                  <td><code>/v1/active_model</code></td>
+                  <td>POST</td>
+                  <td>
+                    Requests a model switch to another installed MLX model.
+                  </td>
                 </tr>
                 <tr>
                   <td><code>/v1/chat/completions</code></td>
@@ -806,7 +885,9 @@ export default function DocumentationPage() {
             <h3>Using with Other Clients</h3>
             <p>
               The server includes CORS headers and follows the OpenAI chat
-              completions format, so you can point other tools at it:
+              completions format, so you can point other tools at it. The
+              Serve Model screen also shows copyable connection values,
+              external API details, connected clients, and diagnostics.
             </p>
             <pre className="docs-code">
 {`# List available models
@@ -825,8 +906,9 @@ curl http://192.168.1.x:8080/v1/chat/completions \\
             <h3>Limitations</h3>
             <ul>
               <li>
-                The server requires a loaded MLX model. GGUF models cannot be
-                served.
+                The server serves installed MLX models. GGUF models can still
+                run in local chat, but they cannot be served over the macOS API
+                yet.
               </li>
               <li>
                 One generation at a time. If a request is in progress,
@@ -998,70 +1080,146 @@ curl http://192.168.1.x:8080/v1/chat/completions \\
           <section id="context-management" className="docs-section">
             <h2>14. Context Management</h2>
             <p>
-              Different models have different context window sizes, which is
-              the maximum number of tokens they can process in a single prompt.
-              Arbiter manages this automatically so conversations stay usable
-              as they grow.
+              Different models have different context window sizes, and
+              devices have different memory ceilings. Arbiter manages both:
+              it fits each conversation into the model&rsquo;s token window and,
+              for on-device MLX models, keeps prompts below the memory level
+              that could cause iOS to terminate the app.
             </p>
 
-            <h3>How It Works</h3>
+            <h3>Context Stages</h3>
             <ul>
               <li>
-                <strong>Full history:</strong> When the conversation is short
-                enough, all messages are sent to the model.
+                <strong>Full:</strong> The conversation is below the soft
+                threshold, so Arbiter sends the full history unchanged.
               </li>
               <li>
-                <strong>Approaching limit:</strong> Arbiter warns you when
-                context usage is getting high.
+                <strong>Approaching:</strong> The prompt is above the soft
+                threshold but still inside the safe input budget. Arbiter can
+                warn you and, when useful, prepare a summary in the background.
               </li>
               <li>
-                <strong>Hybrid mode:</strong> Older messages are summarized in
-                the background. The model receives a summary of earlier context
-                plus the most recent messages in full.
+                <strong>Hybrid:</strong> The full conversation no longer fits
+                safely. Arbiter drops older turns, keeps recent turns in full,
+                optionally prepends a saved summary, and always preserves the
+                current user message.
               </li>
               <li>
-                <strong>Exceeded:</strong> If the prompt cannot safely fit even
-                with summarization, Arbiter shows an error and suggests
-                starting a new chat.
+                <strong>Exceeded:</strong> The required prompt still cannot fit
+                after trimming. Arbiter shows an error instead of sending a
+                request that is likely to fail or crash.
               </li>
             </ul>
 
-            <h3>Context Budgets by Model Type</h3>
+            <p>
+              Arbiter reserves output space before deciding how much input can
+              be sent. The effective input budget is{" "}
+              <code>maxContextTokens - reservedResponseTokens</code>, and the
+              soft threshold is that safe budget multiplied by a model-specific
+              fraction. This leaves room for the reply and starts trimming
+              before the hard limit.
+            </p>
+
+            <h3>Context Budgets by Runtime</h3>
             <table className="docs-table">
               <thead>
                 <tr>
                   <th>Model Type</th>
-                  <th>Default Context</th>
+                  <th>Max Context</th>
+                  <th>Response Reserve</th>
+                  <th>Recent Turns Kept</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>GGUF (fallback)</td>
-                  <td>~2,048 tokens</td>
+                  <td>GGUF</td>
+                  <td>2,048 tokens</td>
+                  <td>512 tokens</td>
+                  <td>6</td>
                 </tr>
                 <tr>
                   <td>MLX</td>
                   <td>
-                    Dynamic, read from the model&rsquo;s{" "}
-                    <code>config.json</code>
+                    Read from <code>config.json</code>, then capped by device
+                    memory
                   </td>
+                  <td>1,024 tokens, clamped to fit the model</td>
+                  <td>8</td>
                 </tr>
                 <tr>
                   <td>Apple Foundation</td>
-                  <td>Framework-defined</td>
+                  <td>4,096 tokens</td>
+                  <td>1,024 tokens</td>
+                  <td>8</td>
                 </tr>
                 <tr>
                   <td>Remote server</td>
-                  <td>Larger assumed context</td>
+                  <td>32,768 tokens</td>
+                  <td>4,096 tokens</td>
+                  <td>50</td>
+                </tr>
+                <tr>
+                  <td>Unknown fallback</td>
+                  <td>4,096 tokens</td>
+                  <td>1,024 tokens</td>
+                  <td>8</td>
                 </tr>
               </tbody>
             </table>
 
+            <h3>MLX Memory Caps</h3>
+            <p>
+              Some MLX models advertise very large trained context lengths,
+              such as 131,072 tokens, but an iPhone cannot always hold the
+              required KV cache and temporary prefill tensors in memory.
+              Arbiter therefore converts available device RAM into a safer
+              token cap and uses the smaller of the model&rsquo;s trained length
+              and the memory-derived cap.
+            </p>
+            <p>
+              The cap accounts for model weights, a 500 MB activation reserve,
+              KV-cache bytes per token from the model geometry, and extra
+              prefill memory for vision-loaded MLX models. This is why a vision
+              model may enter hybrid mode much earlier than its advertised
+              context length suggests: the memory ceiling can be stricter than
+              the token window.
+            </p>
+
+            <h3>Token Estimation</h3>
+            <p>
+              Arbiter estimates tokens without running a tokenizer on every
+              prompt. The estimate is script-aware: Latin text is counted at
+              roughly 3.5 characters per token, CJK and similar dense scripts
+              closer to one token per character, and expansive scripts such as
+              Hindi or Thai more conservatively. This prevents translation and
+              multilingual chats from being under-counted by several times.
+            </p>
+
+            <h3>Summaries and Files</h3>
+            <p>
+              When a conversation enters hybrid mode, Arbiter can summarize
+              older messages after the active response finishes and store that
+              summary with the chat. Future turns can then include a compact
+              summary plus recent messages instead of repeatedly sending the
+              entire history. File attachments can also be represented by
+              stored summaries in follow-up turns to reduce context pressure.
+            </p>
+
+            <h3>Reasoning and Search</h3>
+            <p>
+              Reasoning-capable models receive a larger output allowance when
+              thinking mode is enabled, because the thinking trace uses reply
+              tokens before the final answer. For search-grounded prompts,
+              Arbiter disables thinking so smaller models do not spend their
+              budget repeatedly reasoning over injected search snippets.
+            </p>
+
             <div className="docs-callout">
               <strong>Tip:</strong> If you notice the model losing track of
               earlier parts of the conversation, it is likely in hybrid mode.
-              Start a new chat for topics that need precise recall of earlier
-              messages.
+              Arbiter will keep recent turns and summaries, but start a new
+              chat for topics that require precise recall of every earlier
+              message.
             </div>
           </section>
 

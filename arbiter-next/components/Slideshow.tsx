@@ -23,7 +23,7 @@ const iosSlides: Slide[] = [
     darkSrc: "/screenshots/dark/model_list.PNG",
     lightSrc: "/screenshots/light/model_list.PNG",
     alt: "Model catalog with filters and search",
-    title: "44+ Models to Choose From",
+    title: "44 Models to Choose From",
     text: "Browse GGUF and MLX models from Gemma, Llama, DeepSeek, Qwen, and more. Filter by format, capability, and size.",
   },
   {
@@ -51,32 +51,46 @@ const iosSlides: Slide[] = [
 
 const macosSlides: Slide[] = [
   {
-    darkSrc: "/screenshots/dark/serve_model.png",
-    lightSrc: "/screenshots/light/serve_model.png",
-    alt: "macOS Serve Model interface",
-    title: "Serve Models to Your Devices",
-    text: "Turn your Mac into a private AI server. Share loaded MLX models with your iPhone and other devices over your local network.",
+    darkSrc: "/screenshots/dark/welcome_macOS_dark.png",
+    lightSrc: null,
+    alt: "Arbiter welcome screen on macOS",
+    title: "Arbiter on Mac",
+    text: "Use the same private AI workflow on macOS, with a wider desktop interface built for Apple Silicon.",
   },
   {
-    darkSrc: "",
+    darkSrc: "/screenshots/dark/normal_chat_macOS_dark.png",
     lightSrc: null,
-    alt: "MLX model chat on Mac",
+    alt: "Local AI chat running in Arbiter for macOS",
     title: "Powerful MLX Models on Mac",
     text: "Run larger language models optimized for Apple Silicon. Take advantage of your Mac's memory and GPU for faster, smarter responses.",
   },
   {
-    darkSrc: "",
+    darkSrc: "/screenshots/dark/choose_model_macOS_dark.png",
     lightSrc: null,
-    alt: "Model catalog on Mac",
+    alt: "Model catalog and model selection on macOS",
     title: "Full Model Catalog",
-    text: "Browse and install from 44+ GGUF and MLX models including Gemma, Llama, DeepSeek, Qwen, and Mistral families, all optimized for Apple Silicon.",
+    text: "Browse and install from 44 GGUF and MLX models including Gemma, Llama, DeepSeek, Qwen, and Mistral families.",
   },
   {
-    darkSrc: "",
+    darkSrc: "/screenshots/dark/coding_macOS_dark.png",
     lightSrc: null,
-    alt: "OpenAI-compatible API server",
+    alt: "Coding assistant conversation in Arbiter for macOS",
+    title: "Coding and Desk Work",
+    text: "Use Arbiter for coding help, drafting, research, and longer desktop conversations without sending local chats to a cloud account.",
+  },
+  {
+    darkSrc: "/screenshots/dark/image_chat_macOS_dark.png",
+    lightSrc: null,
+    alt: "Vision model analyzing an image in Arbiter for macOS",
+    title: "Vision on Mac",
+    text: "Ask vision-capable MLX models about images and screenshots from the same local-first chat interface.",
+  },
+  {
+    darkSrc: "/screenshots/dark/serve_model_macOS_dark.png",
+    lightSrc: null,
+    alt: "macOS Serve Model interface",
     title: "OpenAI-Compatible Local API",
-    text: "Expose your loaded model as a local API endpoint. Connect any OpenAI-compatible client, IDE plugin, or tool to your private server.",
+    text: "Turn your Mac into a private AI server. Serve installed MLX models to your iPhone or any OpenAI-compatible client on your local network.",
   },
 ];
 
@@ -171,7 +185,6 @@ export default function Slideshow() {
           onClick={() => setPlatform("macos")}
         >
           <i className="fas fa-laptop"></i> Mac
-          <span className="coming-soon-badge">Coming Soon</span>
         </button>
       </div>
       <h3 style={{ color: "var(--accent)" }}>
@@ -195,11 +208,11 @@ export default function Slideshow() {
                     <Image
                       src={src}
                       alt={s.alt}
-                      width={isWide ? 500 : 230}
-                      height={isWide ? 340 : 500}
+                      width={isWide ? 700 : 230}
+                      height={isWide ? 455 : 500}
                       style={
                         isWide
-                          ? { width: "100%", height: "auto", maxHeight: "380px", objectFit: "contain" }
+                          ? { width: "100%", height: "auto", maxHeight: "430px", objectFit: "contain" }
                           : { width: "auto", height: "500px" }
                       }
                     />

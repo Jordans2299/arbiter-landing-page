@@ -22,12 +22,12 @@ const faqs = [
   {
     question: "What devices are supported?",
     answer:
-      "Arbiter runs on iPhones and iPads with iOS 16 or later, with best performance on devices with A14 Bionic or newer and at least 6 GB of RAM. The macOS app supports Apple Silicon Macs (M1 or later) and can run larger MLX models. macOS support is coming soon.",
+      "Arbiter runs on iPhones and iPads with iOS 16 or later, with best performance on devices with A14 Bionic or newer and at least 6 GB of RAM. Arbiter for macOS is available on Apple Silicon Macs (M1 or later) and can run larger MLX models.",
   },
   {
     question: "What AI models are available?",
     answer:
-      "Arbiter offers 44+ models across families including Gemma, Llama, DeepSeek, Qwen, Mistral, Phi, and Granite. The catalog includes 24 GGUF and 20 MLX models, all usable on both iPhone and Mac, plus 9 vision-capable models and 10 reasoning models. On supported devices, Apple’s Foundation Model is also available.",
+      "Arbiter offers 44 models across families including Gemma, Llama, DeepSeek, Qwen, Mistral, Phi, and Granite. The catalog includes 24 GGUF and 20 MLX models, all usable on both iPhone and Mac, plus 9 vision-capable models and 10 reasoning models. On supported devices, Apple’s Foundation Model is also available.",
   },
   {
     question: "What is Apple Foundation Model support?",

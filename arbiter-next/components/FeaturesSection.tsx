@@ -15,9 +15,9 @@ const features = [
   },
   {
     icon: "fas fa-sliders-h",
-    title: "44+ Model Catalog",
+    title: "44 Model Catalog",
     description:
-      "Browse, download, and switch between 44+ models from families like Gemma, Llama, DeepSeek, Qwen, Mistral, and Phi. Both GGUF and MLX formats run on iPhone and Mac, with 9 vision and 10 reasoning models available.",
+      "Browse, download, and switch between 44 models from families like Gemma, Llama, DeepSeek, Qwen, Mistral, and Phi. Both GGUF and MLX formats run on iPhone and Mac, with 9 vision and 10 reasoning models available.",
   },
   {
     icon: "fas fa-file-alt",
@@ -41,7 +41,7 @@ const features = [
     icon: "fas fa-server",
     title: "Mac as Model Server",
     description:
-      "Turn your Mac into a private AI server. Load an MLX model and expose it as an OpenAI-compatible API. Share it with your iPhone or any compatible client on your network.",
+      "Turn your Mac into a private AI server. Serve installed MLX models through an OpenAI-compatible API and share them with your iPhone or any compatible client on your network.",
   },
   {
     icon: "fas fa-microphone",

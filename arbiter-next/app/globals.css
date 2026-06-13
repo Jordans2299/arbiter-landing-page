@@ -552,7 +552,7 @@ h1 {
   flex-wrap: wrap;
 }
 
-/* Coming Soon badge (reused in hero + slideshow) */
+/* Small status badge */
 .coming-soon-badge {
   font-size: 0.6rem;
   text-transform: uppercase;
@@ -745,15 +745,15 @@ h1 {
 
 /* macOS slideshow variant — wider for landscape screenshots */
 .slideshow-container--macos {
-  max-width: 600px;
+  max-width: 720px;
 }
 .slideshow-container--macos .slide img {
   height: auto;
   width: 100%;
-  max-height: 380px;
+  max-height: 430px;
 }
 .slideshow-container--macos .slide-placeholder {
-  height: 340px;
+  height: 430px;
 }
 
 

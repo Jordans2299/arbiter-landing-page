@@ -1,5 +1,7 @@
 # Arbiter Product Overview
 
+Last updated from the current codebase and development chat on June 12, 2026.
+
 ## Executive Summary
 
 Arbiter is a privacy-first AI assistant for Apple devices. Its core promise is simple: useful AI without requiring an account, cloud chat history, or paid hosted inference. Users can run compact open-source models directly on their iPhone or Mac, connect to larger local-network models running on a computer, or use Apple's Foundation Model on eligible Apple Intelligence devices.
@@ -9,7 +11,7 @@ The product is designed for people who want modern AI assistance while keeping c
 Arbiter currently exists as two related apps:
 
 - **Arbiter for iOS:** A mobile, private AI chat app focused on on-device use, camera/photo input for vision models, file summarization, web search when enabled, Siri/Shortcuts support, and local chat history.
-- **Arbiter for macOS:** A desktop companion and full chat app that can run local models, connect to remote OpenAI-compatible servers, and serve a loaded local MLX model over the user's local network through an OpenAI-compatible API.
+- **Arbiter for macOS:** A desktop companion and full chat app that can run local models, connect to remote OpenAI-compatible servers, and serve installed local MLX models over the user's local network through an OpenAI-compatible API.
 
 ## Value Proposition
 
@@ -28,6 +30,19 @@ Core value pillars:
 - **Everyday utility:** Arbiter supports brainstorming, coding help, proofreading, translation, study help, travel planning, meal planning, image understanding, file summarization, and current-information lookup when search is enabled.
 
 ## Current Feature Inventory
+
+### Recent Changes Reflected in This Version
+
+The current codebase includes a stronger local-network workflow than the previous documentation described:
+
+- Remote Server settings now distinguish **Arbiter Server** connections from **Third-Party Server** connections.
+- Nearby Arbiter server discovery now uses Bonjour TXT metadata for direct host/port resolution, with a timed search window and visible diagnostics.
+- Remote connections can query and change a server's active model through `/v1/active_model`.
+- The macOS Serve Model screen now lets users choose from installed MLX models before starting the server.
+- The macOS server can list installed MLX models and lazy-load the requested installed model for serving.
+- Remote connection and server screens include copyable diagnostics/debug logs.
+- Model recommendation logic now uses both `minMemory` and `maxMemory`, avoids tight-fit models during onboarding recommendations, and adjusts phone-size scoring for 8 GB devices.
+- The app version in the project has moved to `0.2.02` / `0.2.02-local`, and the local build icon target now uses `AppIconLocal`.
 
 ### Private Local Chat
 
@@ -82,6 +97,9 @@ Current catalog features include:
 - Searchable model list.
 - Filters for installed, MLX, GGUF, recommended, Llama, vision, and reasoning models.
 - Sorting by recommended fit, installed first, size, alphabetical order, and popularity.
+- Device-aware recommendations based on RAM fit, model size, and manifest memory ranges.
+- Onboarding recommendations avoid incompatible and tight-memory models.
+- Some recommended manifest entries now include `maxMemory` so smaller models are not over-recommended on devices that can comfortably run stronger options.
 - Hugging Face links for model pages.
 - Download progress tracking.
 - Installed model detection at launch.
@@ -113,13 +131,20 @@ Arbiter can connect to OpenAI-compatible local servers on the user's network. Th
 
 Remote server support includes:
 
+- A connection source selector for Arbiter Server versus Third-Party Server workflows.
 - Manual host and port configuration.
-- Default local server workflows for apps such as LM Studio or Ollama-style servers.
+- Default port handling for Arbiter Server (`8080`) and third-party OpenAI-compatible servers (`1234`).
+- Setup instructions tailored to Arbiter-to-Arbiter connections versus apps such as LM Studio or Ollama-style servers.
 - `GET /v1/models` model discovery.
+- `GET /v1/active_model` active model discovery when the server supports it.
+- `POST /v1/active_model` active model switching when the server supports it.
 - `POST /v1/chat/completions` streaming chat support.
 - Remote model selection stored as `remote:<model-id>`.
+- Remote model display names collapse repository-style IDs to the final path component for readability.
 - Connection test flow with specific error handling for timeouts, refused connections, empty model lists, HTTP errors, and decoding failures.
-- iOS discovery of nearby Arbiter computers through Bonjour/local network browsing.
+- iOS and macOS discovery of nearby Arbiter computers through Bonjour/local network browsing.
+- Manual fallback entry when automatic discovery is unavailable or permission-limited.
+- Connection diagnostics that can be expanded, copied, and cleared from the settings screen.
 
 The remote model path gives users a private network option: prompts can stay inside the home or office network while using models too large for the phone.
 
@@ -130,16 +155,22 @@ The macOS app includes a "Serve Model" feature. When an MLX model is loaded, the
 Server features include:
 
 - Start/stop server controls.
+- Installed MLX model picker for choosing the model to serve.
+- Automatic loading of the selected installed MLX model before serving.
 - Configurable port, defaulting to 8080.
 - Localhost and local-network base URLs.
-- Bonjour service advertisement as `_arbiter._tcp`.
-- `GET /v1/models`.
+- Bonjour service advertisement as `_arbiter._tcp` with TXT host/port metadata for easier client discovery.
+- `GET /v1/models`, returning installed MLX models and the currently loaded model.
+- `GET /v1/active_model`.
+- `POST /v1/active_model`.
 - `POST /v1/chat/completions`.
 - Server-sent event streaming compatible with OpenAI-style chat completion clients.
 - CORS headers for browser/client compatibility.
 - Connected client list.
 - Active loaded model display.
-- Copyable curl examples for listing models and sending chat requests.
+- Copyable connection values and external API details.
+- Copyable server diagnostics/debug logs.
+- Clear error messaging for invalid ports, ports already in use, missing installed MLX models, and model-load failures.
 - Busy-state handling so a single loaded model is not asked to generate multiple responses concurrently.
 
 This turns Arbiter for macOS into both a local AI client and a small private model server for an iPhone, another app, or any OpenAI-compatible client on the same network.
@@ -196,26 +227,123 @@ Current search behavior:
 
 Search is best described as an optional internet-backed feature layered on top of Arbiter's local-first experience.
 
-### Context Management and Reliability
+### Context and Memory Management
 
-Arbiter includes a staged context-window system to keep conversations usable across models with different context limits.
+Arbiter runs models with wildly different context limits (2K to 130K+ tokens) on devices with hard, unforgiving memory ceilings. On iPhone, exceeding that ceiling does not produce a graceful error — the operating system terminates the entire app (a "jetsam" kill). The context system therefore has two jobs that are often confused but are genuinely separate:
 
-The context manager supports:
+1. **Fit the conversation into the model's context window** (a token-count problem).
+2. **Keep the process under the device's memory ceiling** (a bytes problem).
 
-- Full-history mode for small conversations.
-- Approaching-limit warning state.
-- Hybrid mode that keeps a summary plus recent turns.
-- Exceeded-limit errors when the prompt cannot safely fit.
-- Model-specific context budgets:
-  - GGUF fallback: 2048 token context with response reserve.
-  - MLX dynamic context from `config.json` when available.
-  - Apple Foundation fallback.
-  - Remote server profile with larger assumed context.
-- Background conversation summarization for older messages.
-- Deferred summarization to avoid conflicting with active local generation.
-- User-facing warnings when context is nearing limits.
+A budget that is correct for (1) can still get the app killed by (2). The system below addresses both, and the distinction drives most of the design.
 
-The app also includes timeout handling, model-load states, local engine unload/reload behavior, remote streaming task cancellation, MLX memory cache clearing around generation, and file/search error flows.
+#### Staged context window
+
+`ContextWindowManager.assemble()` classifies every outgoing prompt into one of four stages by comparing estimated input tokens against the model's budget:
+
+- **Full** — total tokens ≤ the soft threshold. Send the entire history unchanged.
+- **Approaching** — above the soft threshold but ≤ the safe input budget. Still send everything, but surface a one-time UI warning and (in hybrid-eligible cases) begin preparing a summary.
+- **Hybrid** — above the safe input budget. Drop the oldest turns, optionally prepend a conversation summary, and always preserve the current user turn. If the current turn alone is too large, it is truncated from the front (the tail usually holds the actual question; the head is often a pasted file excerpt).
+- **Exceeded** — even the minimal required turn does not fit. Raise a user-facing error rather than sending a prompt guaranteed to fail.
+
+`safeInputBudget = maxContextTokens − reservedResponseTokens`, and `softThreshold = safeInputBudget × softThresholdFraction`. The reserve guarantees room for the model's reply inside the same window; the soft fraction creates a buffer so trimming and background summarization begin *before* the hard limit.
+
+#### Per-model-type budgets
+
+The budget and its source differ by runtime. Selection happens in `ChatViewModel.currentContextConfig`:
+
+| Model type | Max context | Response reserve | Soft fraction | Recent turns kept | Source of the number |
+|---|---|---|---|---|---|
+| **GGUF (llama.cpp)** | 2,048 | 512 | 0.65 | 6 | Hardcoded. SwiftLlama is configured with `maxTokenCount: 2048`, so the budget must match that hard cap. |
+| **MLX (on-device)** | `max_position_embeddings` from `config.json`, then **capped by device memory** | 1,024 (clamped to ≤ ½ of max) | 0.65 | 8 | Read from the model's own config at load, then reduced by the memory math below. |
+| **Apple Foundation** | 4,096 | 1,024 | 0.65 | 8 | Conservative fixed profile (Apple does not expose the window). |
+| **Remote server** | 32,768 | 4,096 | 0.85 | 50 | Context is managed server-side, so the profile is generous and the soft fraction high. |
+| **Fallbacks** | 4,096 (MLX) / 4,096 (Foundation) | 1,024 | 0.65 | 8 | Used when `config.json` can't be read or the model context is unknown. |
+
+The MLX row is the interesting one. The model *advertises* a trained context length — gemma-4-e2b claims **131,072 tokens** — but no phone can hold a 131K-token KV cache in memory. Taken at face value, that number sets the soft warning threshold around 84K tokens, which is unreachable: the app is killed for memory long before the warning could ever fire. The memory cap below exists to bring that number back down to what the hardware can actually survive, so the *token* budget and the *memory* ceiling line up.
+
+#### Token estimation (script-aware)
+
+Token counts are estimated from text without invoking the tokenizer on the hot path (`ContextWindowManager.estimateTokens`). The estimate is weighted per Unicode scalar because a flat "characters ÷ 3.5" ratio only holds for Latin-script text:
+
+```
+tokens ≈ ceil( latinChars / 3.5  +  denseChars × 1  +  expansiveChars × 2 )
+```
+
+- **Latin and most scripts:** ~3.5 characters per token.
+- **Dense (CJK ideographs, kana, Hangul):** ~1 token per character.
+- **Expansive (Devanagari and other Indic scripts, Thai, Lao):** ~2 tokens per character.
+
+**Why this matters:** the Language Translator role routinely fills the conversation with the target language. With the old flat ratio, a Chinese or Hindi chat under-counted real tokens by **3–7×** — so the budget math believed a conversation was small while the model saw it as large, and no warning fired before trouble. `assemble()` also accepts an optional exact `tokenCounter` closure for callers that want true tokenizer counts; the script-aware estimate is the default.
+
+#### Memory-derived cap (the core math)
+
+For MLX models, `memoryCappedContextTokens()` converts the device's RAM into a token ceiling. The model is asked how many bytes one context token actually costs, and the available memory is divided by that:
+
+```
+usableBytes      = deviceMemoryGB × 1e9 × 0.65
+availableForKV   = usableBytes − modelWeightBytes − 500 MB headroom
+bytesPerToken    = kvBytesPerToken + unchunkedPrefillBytesPerToken
+contextCap       = availableForKV / bytesPerToken      (floored at 1,024 tokens)
+```
+
+The model is then given `min(trainedContextLength, contextCap)`.
+
+**`kvBytesPerToken`** is computed from `config.json` geometry — the KV cache stores a key and a value vector per layer per token, in fp16:
+
+```
+kvBytesPerToken = numLayers × numKVHeads × headDim × 2 (K+V) × 2 bytes (fp16)
+```
+
+For gemma-4-e2b (35 layers, 1 KV head, head dim 256): `35 × 1 × 256 × 2 × 2 = 35,840 bytes/token`.
+
+**Assumptions, and why each errs conservative:**
+
+- **0.65 usable fraction** — iOS grants an app roughly 60–70% of physical RAM before jetsam; the rest is the OS, other processes, and slack. Taking the low end leaves margin.
+- **500 MB activation headroom** — a flat reserve for per-layer activations, the framebuffer, and general app memory that isn't weights or KV cache.
+- **fp16 KV across all layers** — gemma uses sliding-window attention on most layers, so its real KV footprint is smaller than this full-dense estimate. Over-counting here yields a *smaller, safer* context.
+- **`deviceMemoryGB`** is physical RAM rounded up to the nearest 0.5 GB (`ProcessInfo.physicalMemory`), so an "8 GB" phone that reports ~7.7 GB is treated as 8.0.
+
+#### The VLM prefill spike (why the cap needed a second term)
+
+The KV cache is the *steady-state* cost, but it is not what was killing long translator chats. The MLX vision-language model path (`VLMModelFactory`) does not chunk prefill — when processing a prompt of length `S`, it evaluates the entire prompt in a single forward pass and materializes a `[1, S, vocab]` logits tensor plus comparable activation temporaries. For gemma-4's **262,144-token vocabulary**, that transient is roughly:
+
+```
+unchunkedPrefillBytesPerToken ≈ vocabSize × 8  ≈  262,144 × 8  ≈  2.1 MB per prompt token
+```
+
+This term applies **only to vision-loaded models** (the `VLMModelFactory` path); text-only models load through `LLMModelFactory`, which chunks prefill and does not exhibit this scaling. Because the KV cache and the prefill tensor occupy memory at the same instant, the two are summed into `bytesPerToken`.
+
+**Worked example — gemma-4-e2b on a 12 GB iPhone (the actual crash device):**
+
+```
+usableBytes     = 12 × 1e9 × 0.65            = 7.80 GB
+availableForKV  = 7.80 − 3.58 (weights) − 0.5 = 3.72 GB
+bytesPerToken   = 35,840 (KV) + 2,097,152 (prefill) = 2,132,992
+contextCap      = 3.72e9 / 2,132,992          ≈ 1,744 tokens
+```
+
+The crash reproduced deterministically at a **~2,400-token** prompt: the single-pass prefill needed well over 3 GB of transient memory against ~3.2 GB of free headroom, and the OS killed the app *during prefill, before the first token was generated*. With the prefill term included, the cap drops to ~1,700 tokens, so that conversation now enters **hybrid mode** (trim + summarize) instead of being sent whole and crashing. Without the prefill term — KV cost alone — the same device would have permitted ~104,000 tokens, which is why the earlier KV-only cap did not prevent the crash.
+
+This is a mitigation, not the root fix: the underlying issue is that the upstream VLM `prepare()` ignores its prefill-chunk-size parameter. The cleaner fix (in progress) is to route text-only conversations through the chunked `LLMModelFactory` and only load the VLM container when an image is actually present.
+
+#### Runtime memory back-pressure and instrumentation
+
+Beyond the static budget, the MLX engine applies live guards:
+
+- **GPU buffer-cache cap (20 MB), set once per process** — bounds MLX's reusable buffer pool so it cannot balloon across turns. It is applied a single time at first load and never reset, because resetting it to 0 on unload previously corrupted MLX state and crashed the next load.
+- **`Memory.memoryLimit` back-pressure** — on each load, MLX's allocator limit is set to `currentActiveMemory + 0.8 × processAvailableMemory`. Past that limit, MLX allocations *wait* for queued GPU work to drain instead of overshooting. (This helps with incremental growth but cannot save a single oversized allocation, which is why the prefill cap above is still required.)
+- **Cache flush around every generation** — `Memory.clearCache()` before and after each call so intermediate tensors from a prior turn don't pile onto the next prefill.
+- **Per-turn memory logging** (`[ARBITER_MLX_MEM]`) — process headroom and MLX active/cache/peak are logged before and after each generation, with peak reset per turn and breadcrumbs at prefill completion and every 25 decode tokens. When a memory kill happens, the last line printed pinpoints the phase (prefill vs. decode) and the spike size.
+
+#### Reasoning-mode interaction
+
+Reasoning ("thinking") models change the budget in two ways. Output token allowance is raised to **4,096** when thinking is enabled on a reasoning-tagged model, because the chain-of-thought trace alone can exhaust the default 2,048 reply reserve before the model reaches its answer. And for search-grounded prompts, thinking is force-disabled regardless of the user toggle — extracting an answer from injected snippets gains nothing from reasoning, and small models otherwise loop "verifying" the snippets until they run out of budget.
+
+#### Background summarization and reliability
+
+When a conversation enters hybrid mode without an existing summary, Arbiter queues a background summarization of the older messages and persists the result on the session, so future turns can carry a compact summary instead of full history. Summarization is **deferred until the active generation completes** — local engines run one task at a time, so summarizing mid-response would conflict. The summary path uses the Foundation Model when selected, otherwise the loaded local engine.
+
+The app also includes timeout handling, model-load states, local engine unload/reload behavior, remote streaming task cancellation, and file/search error flows. MLX load failures clear stale loaded-model IDs and all context-window metadata (context length, KV geometry, vocabulary) so the UI and server never treat a failed load as usable.
 
 ### Assistant Roles and Smart Suggestions
 
@@ -295,7 +423,7 @@ Key iOS strengths:
 - Upload PDF or text files for summarization.
 - Enable web search when current information is required.
 - Connect to larger local-network models running on a Mac or PC.
-- Discover nearby Arbiter Mac servers.
+- Discover nearby Arbiter Mac servers through Bonjour, or connect manually with host/port.
 - Use Siri/Shortcuts for hands-free questions.
 - Haptic feedback and mobile-specific input controls.
 - Local chat history, import, and export.
@@ -320,12 +448,14 @@ Key macOS strengths:
 
 - Run larger local models that are better suited to Mac memory and thermals, including MLX models and compatible GGUF models.
 - Use the same chat, model, file, search, personalization, and role systems as iOS.
-- Host a loaded MLX model as an OpenAI-compatible local API.
+- Host an installed MLX model as an OpenAI-compatible local API.
 - Share that model with iPhone or other clients on the same Wi-Fi network.
+- Select which installed MLX model the server should expose.
 - Show local and network API URLs.
-- Provide copyable curl examples.
+- Provide copyable connection details and API information.
 - Track connected clients.
 - Configure server port.
+- Inspect copyable server diagnostics and connection logs.
 - Use desktop-specific settings navigation and window layout.
 
 The macOS app is ideal for:
@@ -405,6 +535,23 @@ Arbiter uses network access only for explicit or support features:
 
 Core local chat with installed models does not require a cloud account.
 
+### Test Coverage
+
+The current test suite covers the core local model and chat support paths, including:
+
+- Model settings, assistant roles, role Codable/equality behavior, dynamic translator prompts, and translator language defaults.
+- Prompt example decoding.
+- Model manager lookups, reasoning flags, MLX/GGUF format inference, family inference, model size parsing, and manifest backward compatibility.
+- Remote server config URL normalization, IPv6 host formatting, remote model keys, and remote display names.
+- MLX engine initial state, no-model generation behavior, unload behavior, loading state tracking, and vision-path metadata.
+- Model disk path handling and MLX download storage helpers.
+- Context-window staging, token budgeting, summarization inclusion, and oversized-turn behavior.
+- Script-aware token estimation (Latin/CJK/Indic weighting) and the device-memory context cap, including the VLM unchunked-prefill term and `config.json` geometry parsing.
+- Chat view model initialization, message persistence, editing, cancellation, deletion, context warnings, file text extraction, and generated chat names.
+- Core Data persistence and app state session behavior.
+
+The full `ArbiterTests` suite was run successfully on iPhone 17 Simulator during this documentation update.
+
 ## Privacy Posture
 
 Arbiter's privacy model is local-first.
@@ -463,8 +610,10 @@ Important product limitations to communicate clearly:
 - Image input requires an MLX vision-capable model.
 - Web search is not offline and uses Arbiter's search endpoint.
 - Remote model privacy depends on the user's configured local server and network.
-- The macOS model server currently requires a loaded MLX model.
+- The macOS model server currently serves installed MLX models. GGUF models can still run in local chat but are not served over the Mac API yet.
 - The macOS server handles one generation at a time for the loaded model.
+- Server authentication/API keys are not implemented yet.
+- Bonjour discovery can depend on local network permission, Wi-Fi configuration, and whether host/port TXT metadata is available; manual host/port entry remains the fallback.
 - Apple Foundation Model support depends on OS version, Apple Intelligence availability, and device eligibility.
 
 ## Upcoming Features and Roadmap Candidates
@@ -524,7 +673,7 @@ Arbiter brings useful AI to your Apple devices without forcing your conversation
 
 ### Long Pitch
 
-Arbiter is built for users who want the power of modern AI with more control over privacy, cost, and model choice. Instead of relying on a hosted chatbot, Arbiter lets you download and run open-source models locally, choose the right model for your device, and keep conversations stored on your own hardware. On iPhone, Arbiter is a private assistant for chat, files, images, translation, coding, study, planning, and search-assisted questions. On Mac, Arbiter can run larger local models and serve a loaded MLX model over your local network through an OpenAI-compatible API, turning your Mac into a private AI backend for your phone and other tools.
+Arbiter is built for users who want the power of modern AI with more control over privacy, cost, and model choice. Instead of relying on a hosted chatbot, Arbiter lets you download and run open-source models locally, choose the right model for your device, and keep conversations stored on your own hardware. On iPhone, Arbiter is a private assistant for chat, files, images, translation, coding, study, planning, and search-assisted questions. On Mac, Arbiter can run larger local models and serve installed MLX models over your local network through an OpenAI-compatible API, turning your Mac into a private AI backend for your phone and other tools.
 
 ## Practical Use Cases
 
@@ -548,5 +697,6 @@ This document was prepared from:
 - `README.md`.
 - `Arbiter/Arbiter/models_manifest.json`.
 - Swift source files for chat, model management, MLX loading, model downloads, remote servers, macOS hosting, search, settings, personalization, shortcuts, StoreKit tips, and chat import/export.
+- The current worktree changes around remote server diagnostics, Bonjour TXT discovery, active-model switching, installed MLX serving, recommendation tuning, and updated Swift tests.
 
 Roadmap sections are labeled as candidates because the repository does not currently contain a formal public roadmap.

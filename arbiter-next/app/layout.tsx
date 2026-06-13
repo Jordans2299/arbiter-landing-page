@@ -18,7 +18,7 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: "Arbiter - Private AI on Your Device",
   description:
-    "Run powerful language models locally on iPhone and Mac. Private AI with 44+ models, local network serving, and Apple Intelligence support.",
+    "Run powerful language models locally on iPhone and Mac. Private AI with 44 models, local network serving, and Apple Intelligence support.",
   icons: {
     icon: [
       { url: "/favicon.png", type: "image/png", sizes: "32x32" },

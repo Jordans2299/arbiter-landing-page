@@ -32,6 +32,7 @@ export default function Navbar() {
           </Link>
           <ul className="nav-links">
             <li><a href="/#features">Features</a></li>
+            <li><Link href="/blog">Blog</Link></li>
             <li><a href="/#mission">Mission</a></li>
             <li><a href="/#faq">FAQ</a></li>
             <li><a href="/#contact">Contact</a></li>
@@ -62,6 +63,7 @@ export default function Navbar() {
       >
         <ul>
           <li><a href="/#features" onClick={closeMenu}>Features</a></li>
+          <li><Link href="/blog" onClick={closeMenu}>Blog</Link></li>
           <li><Link href="/documentation" onClick={closeMenu}>Docs</Link></li>
           <li><a href="/#mission" onClick={closeMenu}>Mission</a></li>
           <li><a href="/#faq" onClick={closeMenu}>FAQ</a></li>

@@ -1,6 +1,6 @@
 # Arbiter Product Overview
 
-Last updated from the current codebase and development chat on June 12, 2026.
+Last updated from the current codebase and development chat on June 29, 2026.
 
 ## Executive Summary
 
@@ -110,6 +110,58 @@ Current catalog features include:
 
 MLX downloads use a Hugging Face repository tree scan to download the required config, tokenizer, and weight files into Application Support under `MLXModels`, then load from that local directory. GGUF models are resolved through the app's model disk utilities.
 
+### Local Model Benchmarking
+
+Arbiter includes a 64-question on-device diagnostic for installed MLX and GGUF
+models. It records answer accuracy, category scores, generation speed, time to
+first token, duration, and process memory alongside the model and Apple hardware
+configuration. Completed results are saved locally, can be revisited through
+Benchmark History, and expose the individual questions and model answers by
+capability.
+
+Uploading is optional and separately confirmed for each result. The app removes
+all prompts, expected answers, and generated responses before sending model,
+device, score, speed, and memory measurements to a validated Firebase HTTPS
+Function. The function writes the individual upload into server-only Firestore
+collections; public clients cannot read or write the raw dataset. A separate
+Firestore trigger maintains public read-only model averages, model/device
+averages, and sanitized individual-run summaries for the Arbiter landing page.
+App Check support is included for the production enforcement rollout. See
+`BENCHMARKS.md` for methodology and the shared landing-page data contract, and
+`DEVELOPER.md` for Firebase operations.
+
+### Public Benchmark Dashboard
+
+The Arbiter landing page exposes benchmark results as a separate top-level tab.
+Its initial view is a searchable, filterable, sortable model leaderboard backed
+by real-time listeners to the public aggregate collections. It shows average
+overall and capability scores, run counts, generation speed, first-token
+latency, duration, and peak process RAM. Quality comparisons can span devices;
+performance comparisons use model/device aggregates and should require or
+clearly display a device filter.
+
+The dashboard supports model and device filters, minimum-run filtering, and
+sorting by overall or category score, generation speed, first-token latency,
+duration, process memory, submission count, and model name. Useful
+visualizations include a device-filtered quality-versus-speed scatter plot, an
+eight-category capability heatmap, and device-filtered performance bars.
+
+Selecting a model opens a detail view or expandable section that queries its
+most recent sanitized individual runs. Each row is timestamped with the server
+receipt time and can show model/version information, Apple hardware and OS,
+power and thermal conditions, overall and category scores, generation speed,
+latency, duration, and process RAM. The public record contains no client UUID,
+device identifier, account, chat, prompt, expected answer, generated response,
+or per-question content.
+
+Dashboard language calls these community-submitted Arbiter diagnostic results.
+Run counts are not unique-user or unique-device counts because Arbiter
+deliberately collects no persistent identity. Models with limited submissions
+should be labeled preliminary. The dashboard must not imply that the score is
+an official result for one of the source benchmark projects, and it must not
+label CPU/GPU utilization or total unified memory because those values are not
+currently measured.
+
 ### Apple Foundation Model Support
 
 Arbiter includes Apple Foundation Model support for eligible devices and OS versions.
@@ -133,6 +185,7 @@ Remote server support includes:
 
 - A connection source selector for Arbiter Server versus Third-Party Server workflows.
 - Manual host and port configuration.
+- HTTP and HTTPS protocol selection for manual third-party server connections.
 - Default port handling for Arbiter Server (`8080`) and third-party OpenAI-compatible servers (`1234`).
 - Setup instructions tailored to Arbiter-to-Arbiter connections versus apps such as LM Studio or Ollama-style servers.
 - `GET /v1/models` model discovery.
@@ -165,7 +218,6 @@ Server features include:
 - `POST /v1/active_model`.
 - `POST /v1/chat/completions`.
 - Server-sent event streaming compatible with OpenAI-style chat completion clients.
-- CORS headers for browser/client compatibility.
 - Connected client list.
 - Active loaded model display.
 - Copyable connection values and external API details.
@@ -217,19 +269,21 @@ Arbiter includes a user-controlled web search toggle for current information.
 Current search behavior:
 
 - Search is disabled by default and explicitly toggled in the chat input bar.
-- Search requests go to `https://search.askarbiter.ai`.
+- The app sends search requests to the hosted gateway at `https://search.askarbiter.ai`. The gateway keeps the provider credential server-side, uses the **Brave Search API** as the primary provider, and transparently falls back to hosted **SearXNG** when Brave is rate limited, down, timing out, returns nothing, or rejects the key.
+- The fallback is skipped when the device is fully offline, since the secondary provider would fail the same way and only add latency.
+- News-intent queries use Brave's dedicated news endpoint (and SearXNG's news category on fallback); query parameters such as freshness, safesearch, and language are mapped to each provider's own vocabulary.
 - The app requests JSON search results and injects a compact, token-aware result summary into the model prompt.
-- Results are sorted toward entries with useful snippets.
+- Results are sorted toward entries with useful snippets, and a short TTL cache avoids burning provider quota on repeated or similar queries.
 - Search payloads are capped and formatted to reduce context pressure on small models.
 - Prior assistant turns are trimmed for search-grounded prompts to avoid memory blowups on-device.
-- Search errors distinguish offline, timeout, 404, rate limit, server error, bad response, decoding failure, and no-results states.
+- Search errors distinguish offline, timeout, 404, gateway rate limit, server error, bad response, decoding failure, and no-results states. Provider credential failures stay server-side and trigger fallback rather than reaching the app.
 - Recoverable search errors can offer an offline retry path.
 
 Search is best described as an optional internet-backed feature layered on top of Arbiter's local-first experience.
 
 ### Context and Memory Management
 
-Arbiter runs models with wildly different context limits (2K to 130K+ tokens) on devices with hard, unforgiving memory ceilings. On iPhone, exceeding that ceiling does not produce a graceful error — the operating system terminates the entire app (a "jetsam" kill). The context system therefore has two jobs that are often confused but are genuinely separate:
+Arbiter runs models with wildly different context limits (2K to 130K+ tokens) on devices with hard, unforgiving memory ceilings. On iPhone, exceeding that ceiling does not produce a graceful error. The operating system terminates the entire app (a "jetsam" kill). The context system therefore has two jobs that are often confused but are genuinely separate:
 
 1. **Fit the conversation into the model's context window** (a token-count problem).
 2. **Keep the process under the device's memory ceiling** (a bytes problem).
@@ -240,10 +294,10 @@ A budget that is correct for (1) can still get the app killed by (2). The system
 
 `ContextWindowManager.assemble()` classifies every outgoing prompt into one of four stages by comparing estimated input tokens against the model's budget:
 
-- **Full** — total tokens ≤ the soft threshold. Send the entire history unchanged.
-- **Approaching** — above the soft threshold but ≤ the safe input budget. Still send everything, but surface a one-time UI warning and (in hybrid-eligible cases) begin preparing a summary.
-- **Hybrid** — above the safe input budget. Drop the oldest turns, optionally prepend a conversation summary, and always preserve the current user turn. If the current turn alone is too large, it is truncated from the front (the tail usually holds the actual question; the head is often a pasted file excerpt).
-- **Exceeded** — even the minimal required turn does not fit. Raise a user-facing error rather than sending a prompt guaranteed to fail.
+- **Full**: total tokens ≤ the soft threshold. Send the entire history unchanged.
+- **Approaching**: above the soft threshold but ≤ the safe input budget. Still send everything, but surface a one-time UI warning and (in hybrid-eligible cases) begin preparing a summary.
+- **Hybrid**: above the safe input budget. Drop the oldest turns, optionally prepend a conversation summary, and always preserve the current user turn. If the current turn alone is too large, it is truncated from the front (the tail usually holds the actual question; the head is often a pasted file excerpt).
+- **Exceeded**: even the minimal required turn does not fit. Raise a user-facing error rather than sending a prompt guaranteed to fail.
 
 `safeInputBudget = maxContextTokens − reservedResponseTokens`, and `softThreshold = safeInputBudget × softThresholdFraction`. The reserve guarantees room for the model's reply inside the same window; the soft fraction creates a buffer so trimming and background summarization begin *before* the hard limit.
 
@@ -259,7 +313,7 @@ The budget and its source differ by runtime. Selection happens in `ChatViewModel
 | **Remote server** | 32,768 | 4,096 | 0.85 | 50 | Context is managed server-side, so the profile is generous and the soft fraction high. |
 | **Fallbacks** | 4,096 (MLX) / 4,096 (Foundation) | 1,024 | 0.65 | 8 | Used when `config.json` can't be read or the model context is unknown. |
 
-The MLX row is the interesting one. The model *advertises* a trained context length — gemma-4-e2b claims **131,072 tokens** — but no phone can hold a 131K-token KV cache in memory. Taken at face value, that number sets the soft warning threshold around 84K tokens, which is unreachable: the app is killed for memory long before the warning could ever fire. The memory cap below exists to bring that number back down to what the hardware can actually survive, so the *token* budget and the *memory* ceiling line up.
+The MLX row is the interesting one. The model *advertises* a trained context length (gemma-4-e2b claims **131,072 tokens**), but no phone can hold a 131K-token KV cache in memory. Taken at face value, that number sets the soft warning threshold around 84K tokens, which is unreachable: the app is killed for memory long before the warning could ever fire. The memory cap below exists to bring that number back down to what the hardware can actually survive, so the *token* budget and the *memory* ceiling line up.
 
 #### Token estimation (script-aware)
 
@@ -273,7 +327,7 @@ tokens ≈ ceil( latinChars / 3.5  +  denseChars × 1  +  expansiveChars × 2 )
 - **Dense (CJK ideographs, kana, Hangul):** ~1 token per character.
 - **Expansive (Devanagari and other Indic scripts, Thai, Lao):** ~2 tokens per character.
 
-**Why this matters:** the Language Translator role routinely fills the conversation with the target language. With the old flat ratio, a Chinese or Hindi chat under-counted real tokens by **3–7×** — so the budget math believed a conversation was small while the model saw it as large, and no warning fired before trouble. `assemble()` also accepts an optional exact `tokenCounter` closure for callers that want true tokenizer counts; the script-aware estimate is the default.
+**Why this matters:** the Language Translator role routinely fills the conversation with the target language. With the old flat ratio, a Chinese or Hindi chat under-counted real tokens by **3–7×**, so the budget math believed a conversation was small while the model saw it as large, and no warning fired before trouble. `assemble()` also accepts an optional exact `tokenCounter` closure for callers that want true tokenizer counts; the script-aware estimate is the default.
 
 #### Memory-derived cap (the core math)
 
@@ -288,7 +342,7 @@ contextCap       = availableForKV / bytesPerToken      (floored at 1,024 tokens)
 
 The model is then given `min(trainedContextLength, contextCap)`.
 
-**`kvBytesPerToken`** is computed from `config.json` geometry — the KV cache stores a key and a value vector per layer per token, in fp16:
+**`kvBytesPerToken`** is computed from `config.json` geometry. The KV cache stores a key and a value vector per layer per token, in fp16:
 
 ```
 kvBytesPerToken = numLayers × numKVHeads × headDim × 2 (K+V) × 2 bytes (fp16)
@@ -298,14 +352,14 @@ For gemma-4-e2b (35 layers, 1 KV head, head dim 256): `35 × 1 × 256 × 2 × 2 
 
 **Assumptions, and why each errs conservative:**
 
-- **0.65 usable fraction** — iOS grants an app roughly 60–70% of physical RAM before jetsam; the rest is the OS, other processes, and slack. Taking the low end leaves margin.
-- **500 MB activation headroom** — a flat reserve for per-layer activations, the framebuffer, and general app memory that isn't weights or KV cache.
-- **fp16 KV across all layers** — gemma uses sliding-window attention on most layers, so its real KV footprint is smaller than this full-dense estimate. Over-counting here yields a *smaller, safer* context.
+- **0.65 usable fraction**: iOS grants an app roughly 60–70% of physical RAM before jetsam; the rest is the OS, other processes, and slack. Taking the low end leaves margin.
+- **500 MB activation headroom**: a flat reserve for per-layer activations, the framebuffer, and general app memory that isn't weights or KV cache.
+- **fp16 KV across all layers**: gemma uses sliding-window attention on most layers, so its real KV footprint is smaller than this full-dense estimate. Over-counting here yields a *smaller, safer* context.
 - **`deviceMemoryGB`** is physical RAM rounded up to the nearest 0.5 GB (`ProcessInfo.physicalMemory`), so an "8 GB" phone that reports ~7.7 GB is treated as 8.0.
 
 #### The VLM prefill spike (why the cap needed a second term)
 
-The KV cache is the *steady-state* cost, but it is not what was killing long translator chats. The MLX vision-language model path (`VLMModelFactory`) does not chunk prefill — when processing a prompt of length `S`, it evaluates the entire prompt in a single forward pass and materializes a `[1, S, vocab]` logits tensor plus comparable activation temporaries. For gemma-4's **262,144-token vocabulary**, that transient is roughly:
+The KV cache is the *steady-state* cost, but it is not what was killing long translator chats. The MLX vision-language model path (`VLMModelFactory`) does not chunk prefill. When processing a prompt of length `S`, it evaluates the entire prompt in a single forward pass and materializes a `[1, S, vocab]` logits tensor plus comparable activation temporaries. For gemma-4's **262,144-token vocabulary**, that transient is roughly:
 
 ```
 unchunkedPrefillBytesPerToken ≈ vocabSize × 8  ≈  262,144 × 8  ≈  2.1 MB per prompt token
@@ -313,7 +367,7 @@ unchunkedPrefillBytesPerToken ≈ vocabSize × 8  ≈  262,144 × 8  ≈  2.1 MB
 
 This term applies **only to vision-loaded models** (the `VLMModelFactory` path); text-only models load through `LLMModelFactory`, which chunks prefill and does not exhibit this scaling. Because the KV cache and the prefill tensor occupy memory at the same instant, the two are summed into `bytesPerToken`.
 
-**Worked example — gemma-4-e2b on a 12 GB iPhone (the actual crash device):**
+**Worked example (gemma-4-e2b on a 12 GB iPhone, the actual crash device):**
 
 ```
 usableBytes     = 12 × 1e9 × 0.65            = 7.80 GB
@@ -322,7 +376,7 @@ bytesPerToken   = 35,840 (KV) + 2,097,152 (prefill) = 2,132,992
 contextCap      = 3.72e9 / 2,132,992          ≈ 1,744 tokens
 ```
 
-The crash reproduced deterministically at a **~2,400-token** prompt: the single-pass prefill needed well over 3 GB of transient memory against ~3.2 GB of free headroom, and the OS killed the app *during prefill, before the first token was generated*. With the prefill term included, the cap drops to ~1,700 tokens, so that conversation now enters **hybrid mode** (trim + summarize) instead of being sent whole and crashing. Without the prefill term — KV cost alone — the same device would have permitted ~104,000 tokens, which is why the earlier KV-only cap did not prevent the crash.
+The crash reproduced deterministically at a **~2,400-token** prompt: the single-pass prefill needed well over 3 GB of transient memory against ~3.2 GB of free headroom, and the OS killed the app *during prefill, before the first token was generated*. With the prefill term included, the cap drops to ~1,700 tokens, so that conversation now enters **hybrid mode** (trim + summarize) instead of being sent whole and crashing. Without the prefill term (KV cost alone), the same device would have permitted ~104,000 tokens, which is why the earlier KV-only cap did not prevent the crash.
 
 This is a mitigation, not the root fix: the underlying issue is that the upstream VLM `prepare()` ignores its prefill-chunk-size parameter. The cleaner fix (in progress) is to route text-only conversations through the chunked `LLMModelFactory` and only load the VLM container when an image is actually present.
 
@@ -330,20 +384,82 @@ This is a mitigation, not the root fix: the underlying issue is that the upstrea
 
 Beyond the static budget, the MLX engine applies live guards:
 
-- **GPU buffer-cache cap (20 MB), set once per process** — bounds MLX's reusable buffer pool so it cannot balloon across turns. It is applied a single time at first load and never reset, because resetting it to 0 on unload previously corrupted MLX state and crashed the next load.
-- **`Memory.memoryLimit` back-pressure** — on each load, MLX's allocator limit is set to `currentActiveMemory + 0.8 × processAvailableMemory`. Past that limit, MLX allocations *wait* for queued GPU work to drain instead of overshooting. (This helps with incremental growth but cannot save a single oversized allocation, which is why the prefill cap above is still required.)
-- **Cache flush around every generation** — `Memory.clearCache()` before and after each call so intermediate tensors from a prior turn don't pile onto the next prefill.
-- **Per-turn memory logging** (`[ARBITER_MLX_MEM]`) — process headroom and MLX active/cache/peak are logged before and after each generation, with peak reset per turn and breadcrumbs at prefill completion and every 25 decode tokens. When a memory kill happens, the last line printed pinpoints the phase (prefill vs. decode) and the spike size.
+- **GPU buffer-cache cap (20 MB), set once per process**: bounds MLX's reusable buffer pool so it cannot balloon across turns. It is applied a single time at first load and never reset, because resetting it to 0 on unload previously corrupted MLX state and crashed the next load.
+- **`Memory.memoryLimit` back-pressure**: on each load, MLX's allocator limit is set to `currentActiveMemory + 0.8 × processAvailableMemory`. Past that limit, MLX allocations *wait* for queued GPU work to drain instead of overshooting. (This helps with incremental growth but cannot save a single oversized allocation, which is why the prefill cap above is still required.)
+- **Cache flush around every generation**: `Memory.clearCache()` before and after each call so intermediate tensors from a prior turn don't pile onto the next prefill.
+- **Per-turn memory logging** (`[ARBITER_MLX_MEM]`): process headroom and MLX active/cache/peak are logged before and after each generation, with peak reset per turn and breadcrumbs at prefill completion and every 25 decode tokens. When a memory kill happens, the last line printed pinpoints the phase (prefill vs. decode) and the spike size.
 
 #### Reasoning-mode interaction
 
-Reasoning ("thinking") models change the budget in two ways. Output token allowance is raised to **4,096** when thinking is enabled on a reasoning-tagged model, because the chain-of-thought trace alone can exhaust the default 2,048 reply reserve before the model reaches its answer. And for search-grounded prompts, thinking is force-disabled regardless of the user toggle — extracting an answer from injected snippets gains nothing from reasoning, and small models otherwise loop "verifying" the snippets until they run out of budget.
+Reasoning ("thinking") models change the budget in two ways. Output token allowance is raised to **4,096** when thinking is enabled on a reasoning-tagged model, because the chain-of-thought trace alone can exhaust the default 2,048 reply reserve before the model reaches its answer. And for search-grounded prompts, thinking is force-disabled regardless of the user toggle. Extracting an answer from injected snippets gains nothing from reasoning, and small models otherwise loop "verifying" the snippets until they run out of budget.
 
 #### Background summarization and reliability
 
-When a conversation enters hybrid mode without an existing summary, Arbiter queues a background summarization of the older messages and persists the result on the session, so future turns can carry a compact summary instead of full history. Summarization is **deferred until the active generation completes** — local engines run one task at a time, so summarizing mid-response would conflict. The summary path uses the Foundation Model when selected, otherwise the loaded local engine.
+When a conversation enters hybrid mode without an existing summary, Arbiter queues a background summarization of the older messages and persists the result on the session, so future turns can carry a compact summary instead of full history. Summarization is **deferred until the active generation completes**. Local engines run one task at a time, so summarizing mid-response would conflict. The summary path uses the Foundation Model when selected, otherwise the loaded local engine.
 
 The app also includes timeout handling, model-load states, local engine unload/reload behavior, remote streaming task cancellation, and file/search error flows. MLX load failures clear stale loaded-model IDs and all context-window metadata (context length, KV geometry, vocabulary) so the UI and server never treat a failed load as usable.
+
+### On-Device Memory and Retrieval (Embeddings)
+
+Arbiter now runs a local embedding model and a retrieval layer on top of it. This powers three related capabilities that all stay on the device: smarter file context, richer web search grounding, and a persistent memory that lets the assistant recall facts about the user across separate chats. Everything in this section is computed and stored locally. No content and no embeddings leave the device.
+
+#### Embedding engine
+
+A small text embedding model, `sentence-transformers/all-MiniLM-L6-v2` (roughly 22 MB, 384 dimensions), is loaded on the device through the MLX embedders path. It downloads from Hugging Face on first use and is cached permanently afterward. The engine is an actor that loads lazily the first time any feature needs it, so it adds no cost until embeddings are actually required. Vectors are L2 normalized, so cosine similarity reduces to a dot product, and a single shared instance serves file retrieval, search retrieval, and memory.
+
+#### File retrieval (document RAG)
+
+Uploaded PDF and text files are split into overlapping chunks by a document store and ranked against the user's question by a vector retriever when embeddings are available, or a keyword retriever as a fallback. A retrieval service selects how much of a file to include based on the available token budget.
+
+Chunked text and chunk embeddings are persisted to disk (under Application Support), keyed by the file's URL and modification date. Because both caches survive the in-memory singletons, reopening a chat, switching to another chat and back, or relaunching the app reuses the stored chunks and vectors instead of re-reading the file and re-running the embedding model. The chat-to-file association is unchanged (it lives in Core Data on each message), so the caches are derived data shared across chats while each chat still only sees the files actually attached to its own messages. Including the modification date in the cache key means editing a file transparently invalidates its stale entry and triggers a fresh chunk-and-embed.
+
+For files from earlier in a conversation, Arbiter builds a compact file registry of the most relevant excerpts and pins it so it survives context trimming, the same way a conversation summary is preserved. Two safeguards keep this from bloating the prompt:
+
+- **Relevance gating.** A previously uploaded file is only re-injected when its best matching chunk clears a similarity floor. An unrelated file (for example a tax document left over from earlier) is no longer forced into an off-topic question.
+- **Search exclusion.** When a live web search runs on the current turn, the file registry is skipped entirely. The search results are the grounding source for that turn, and stacking a file registry on top was a measurable cause of prefill memory spikes and out-of-memory terminations on small MLX models.
+
+#### Web search retrieval (search RAG)
+
+Web search results are chunked and stored so the assistant can keep a larger pool of search knowledge in memory and reuse it across follow-up questions without a new network call. The search store accumulates chunks from each search performed in a session.
+
+Two refinements keep grounding accurate and the prompt small:
+
+- **Fresh-result scoping.** The grounding injected right after a search is ranked against only that search's freshly fetched chunks, not the entire accumulated store. This prevents a new query from surfacing stale chunks from an earlier, unrelated search (for example a "breaking news today" query pulling leftover "today's date" results).
+- **Focused source set.** Retrieval keeps a handful of strong chunks capped to a small number of distinct sources, with a character ceiling. This reads better in the response and keeps the prefill compact.
+
+#### Persistent on-device memory
+
+Arbiter can learn durable facts about the user from conversations and recall them later. Memory is stored in Core Data as a dedicated entity with the fact text, its embedding, a type (fact, preference, or episode), the originating chat, timestamps, and an access count.
+
+Facts are captured continuously in the background:
+
+- **Real-time extraction after each exchange.** When an assistant response completes, Arbiter extracts durable facts from the user's message. A lightweight heuristic pass always runs (pure string matching on first-person statements such as "I am", "I prefer", "I work", "my name is") and needs no model call, so it works even on devices without Apple Intelligence. On eligible devices a Foundation Model pass runs as well for facts stated less explicitly. The model pass is skipped on questions, which carry no self-disclosure.
+- **Daily background pass.** Once every 24 hours, a scheduler re-reads recent sessions and runs the Foundation Model over the user's turns to catch anything the per-exchange pass missed.
+
+Every captured fact passes through two cleanups before it can be stored:
+
+- **Atomization.** A fact is shortened to its primary clause and capped in length. A run-on such as "I am a senior software engineer with experience on iOS apps and I am applying to startups, review my resume" is stored as "I am a senior software engineer". Short, atomic facts embed far more cleanly and retrieve far more reliably than long ones, where the key attribute is diluted among elaborations.
+- **Grounding.** A fact is rejected unless its asserted value (its head noun) actually appears in the user's own words. This is the decisive guard against the model confabulating an attribute out of a bare question, for example inventing "User is a nurse" from "What is my occupation". Checking the head noun specifically means an echoed query word (like "occupation") cannot fake grounding.
+
+Retrieval is deliberately conservative, because the embedding model's raw similarity scores compress into a narrow band on short personal statements. Several gates work together:
+
+- **Self-reference gate.** Stored facts are only injected when the current question is actually about the user (for example "what is my job", "how old am I"). General questions like a news lookup or a document summary do not pull in personal facts, which stops the assistant from steering unrelated answers toward the user's profile.
+- **Calibrated similarity threshold.** Within self-referential turns, facts are ranked by cosine similarity and injected only above a fixed threshold chosen empirically (by reproducing the embedding model and calibrating against the app's own scores) to separate genuine matches from the unrelated personal-identity questions that otherwise cluster nearby. An earlier keyword-overlap gate was removed because it blocked valid matches that used different words for the same concept, such as "job" versus "engineer".
+- **Junk filter and backfill.** Negations and assistant self-descriptions that may have slipped into the store are filtered out at retrieval time, and memories saved before the embedding model was available are backfilled with embeddings on first retrieval.
+
+When facts are injected, they are placed in the system prompt under a label that instructs the model to use them only when directly relevant and not to mention them otherwise. Duplicate facts are suppressed at save time by both a lexical word-overlap check and a semantic check that rejects a new fact when it is too similar to anything already stored or accepted earlier in the same batch.
+
+Memory is fully under user control:
+
+- A "Learn from my conversations" toggle in Personalization turns the whole system on or off. It is off by default.
+- The Personalization screen shows how many memories are stored and explains, in plain language, that past chats are being used to inform the assistant.
+- A "Clear All Memories" action removes everything that has been learned.
+
+#### Personalization grounding
+
+Two smaller grounding changes accompany the memory work. The nickname instruction was reworded so the assistant uses the user's name occasionally and naturally rather than opening every message with it. And because local models have no clock and web search is unreliable for it (date website snippets rarely contain the actual date), the current date is now injected directly into the system prompt so date and time questions are answered correctly.
+
+The design principle behind these changes is a split. Behavioral style settings such as tone, warmth, emoji, and response length stay in the system prompt because they must apply to every reply. Personal facts move into the embedding-backed memory so they surface only when a question is genuinely about the user.
 
 ### Assistant Roles and Smart Suggestions
 
@@ -548,9 +664,10 @@ The current test suite covers the core local model and chat support paths, inclu
 - Context-window staging, token budgeting, summarization inclusion, and oversized-turn behavior.
 - Script-aware token estimation (Latin/CJK/Indic weighting) and the device-memory context cap, including the VLM unchunked-prefill term and `config.json` geometry parsing.
 - Chat view model initialization, message persistence, editing, cancellation, deletion, context warnings, file text extraction, and generated chat names.
+- Memory extraction: clause atomization of run-on facts, head-noun grounding that rejects fabricated values, request-restatement filtering, and end-to-end fact parsing against a source message.
 - Core Data persistence and app state session behavior.
 
-The full `ArbiterTests` suite was run successfully on iPhone 17 Simulator during this documentation update.
+The app builds cleanly for the iPhone 17 Simulator. The memory-extraction logic (atomization, grounding, fact parsing) is additionally verified by compiling the real source directly and asserting against the cases that originally surfaced the bugs.
 
 ## Privacy Posture
 
@@ -562,6 +679,7 @@ Local by default:
 - Installed models run on device.
 - Files and images are copied into the app sandbox for local use.
 - Personalization settings are stored locally.
+- Learned memories, their embeddings, and the embedding model all stay on device, and memory can be toggled off or cleared entirely by the user.
 - No account is required for the core assistant experience.
 
 Network use is explicit or feature-specific:
@@ -612,7 +730,6 @@ Important product limitations to communicate clearly:
 - Remote model privacy depends on the user's configured local server and network.
 - The macOS model server currently serves installed MLX models. GGUF models can still run in local chat but are not served over the Mac API yet.
 - The macOS server handles one generation at a time for the loaded model.
-- Server authentication/API keys are not implemented yet.
 - Bonjour discovery can depend on local network permission, Wi-Fi configuration, and whether host/port TXT metadata is available; manual host/port entry remains the fallback.
 - Apple Foundation Model support depends on OS version, Apple Intelligence availability, and device eligibility.
 
@@ -624,14 +741,14 @@ The repo does not include a formal roadmap document. The following are useful up
 
 - **Broader file understanding:** Expand beyond PDF and plain text into common office formats such as DOCX, Markdown, CSV, and possibly images with OCR.
 - **Larger file workflows:** Replace the current small-file excerpt approach with chunking, background summarization, and retrieval so users can work with longer documents.
-- **Richer local search/RAG:** Add local embeddings and semantic search over uploaded documents or chat history.
+- **Richer local search/RAG:** Local embeddings and semantic search over uploaded documents, web search results, and a persistent user memory are now implemented (see "On-Device Memory and Retrieval"). Remaining opportunities include topic-scoped follow-up retrieval and a user-visible memory editor.
 - **Better model recommendations:** Use device memory, installed models, role, and task type to recommend the best model automatically.
 - **Model health checks:** Detect corrupt or partial downloads and offer repair/re-download actions.
 - **More transparent privacy controls:** Add an in-app privacy dashboard explaining exactly when network access is used.
 - **Search provider controls:** Let users disable search entirely, choose search providers, or configure a self-hosted search endpoint.
 - **Vision improvements:** Add multi-image input, image history management, and clearer model compatibility labels.
 - **Shortcuts expansion:** Add shortcuts for asking with a specific role, starting a new chat, summarizing a file, or querying a Mac server.
-- **macOS server hardening:** Add optional API key support, request logs, model busy queueing, LAN access controls, and clearer connection diagnostics.
+- **macOS server hardening:** Add trusted-device pairing, request limits, LAN access controls, and clearer connection diagnostics.
 
 ### iOS Roadmap Candidates
 
@@ -647,7 +764,7 @@ The repo does not include a formal roadmap document. The following are useful up
 
 - **Multi-model serving:** Serve more than one loaded or installed model from the Mac.
 - **Request queueing:** Queue local-network requests instead of rejecting when busy.
-- **Server authentication:** Optional local API key and trusted-device controls.
+- **Trusted-device pairing:** Add QR-code or one-tap pairing.
 - **Menu bar mode:** Keep the model server available without a full window.
 - **OpenAI-compatible client polish:** Improve compatibility with more local tools, IDE plugins, and chat clients.
 - **Local network onboarding:** QR code or one-tap pairing from iPhone to Mac.
@@ -659,7 +776,8 @@ The repo does not include a formal roadmap document. The following are useful up
 - Add more 4-bit MLX models optimized for Apple Silicon.
 - Add more vision-language models that fit 6 GB and 8 GB devices.
 - Add clearer labels for context length, speed, RAM requirements, modalities, and best-use cases.
-- Add model benchmarks gathered from the user's own device.
+- Add confidence intervals, outlier policy, and minimum-sample publication rules
+  as the public benchmark dataset grows.
 
 ## Suggested Product Messaging
 
@@ -698,5 +816,6 @@ This document was prepared from:
 - `Arbiter/Arbiter/models_manifest.json`.
 - Swift source files for chat, model management, MLX loading, model downloads, remote servers, macOS hosting, search, settings, personalization, shortcuts, StoreKit tips, and chat import/export.
 - The current worktree changes around remote server diagnostics, Bonjour TXT discovery, active-model switching, installed MLX serving, recommendation tuning, and updated Swift tests.
+- Later worktree changes moving Brave-first search with SearXNG fallback into a hosted gateway, persisting document chunks and embeddings to disk across chats and launches, and hardening on-device memory extraction with clause atomization and head-noun grounding plus a recalibrated retrieval threshold.
 
 Roadmap sections are labeled as candidates because the repository does not currently contain a formal public roadmap.

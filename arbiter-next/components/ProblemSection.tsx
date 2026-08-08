@@ -8,7 +8,7 @@ export default function ProblemSection() {
           The problem with AI today
         </FadeSection>
         <FadeSection as="h2" className="section-title">
-          Why cloud AI falls short
+          Where cloud AI falls short
         </FadeSection>
         <div className="problem-grid">
           <FadeSection className="problem-card">

@@ -16,6 +16,29 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Public benchmark dashboard
+
+The dashboard is available at `/benchmarks`, with model details at
+`/benchmarks/[modelKey]`. The local environment keeps two separately prefixed
+Firebase configurations: `NEXT_PUBLIC_LANDING_FIREBASE_*` for the existing
+`arbiter-landing-page` forms and Analytics project, and
+`NEXT_PUBLIC_ARBITER_BENCHMARK_FIREBASE_*` for the named benchmark app in
+project `arbiter-app-4c253`. These `NEXT_PUBLIC_` values are ordinary client
+connection metadata. Never add an Admin SDK credential or service-account key
+to this app.
+
+The browser reads only `publicBenchmarkModels`,
+`publicBenchmarkModelDevices`, and—after a model detail page is opened—the most
+recent 25 matching documents in `publicBenchmarkRuns`. It performs no Firestore
+writes. See [BENCHMARKS.md](./BENCHMARKS.md) for the authoritative data contract
+and methodology.
+
+Run the dashboard unit tests with:
+
+```bash
+npm test
+```
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

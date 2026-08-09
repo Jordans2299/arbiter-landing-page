@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
+import { createPortal } from "react-dom";
 
 interface Slide {
   darkSrc: string;
@@ -51,18 +52,18 @@ const iosSlides: Slide[] = [
 
 const macosSlides: Slide[] = [
   {
-    darkSrc: "/screenshots/dark/welcome_macOS_dark.png",
-    lightSrc: null,
-    alt: "Arbiter welcome screen on macOS",
-    title: "Arbiter on Mac",
-    text: "Use the same private AI workflow on macOS, with a wider desktop interface built for Apple Silicon.",
-  },
-  {
     darkSrc: "/screenshots/dark/normal_chat_macOS_dark.png",
     lightSrc: null,
     alt: "Local AI chat running in Arbiter for macOS",
     title: "Powerful MLX Models on Mac",
     text: "Run larger language models optimized for Apple Silicon. Take advantage of your Mac's memory and GPU for faster, smarter responses.",
+  },
+  {
+    darkSrc: "/screenshots/dark/welcome_macOS_dark.png",
+    lightSrc: null,
+    alt: "Arbiter welcome screen on macOS",
+    title: "Arbiter on Mac",
+    text: "Use the same private AI workflow on macOS, with a wider desktop interface built for Apple Silicon.",
   },
   {
     darkSrc: "/screenshots/dark/choose_model_macOS_dark.png",
@@ -98,6 +99,7 @@ export default function Slideshow() {
   const [platform, setPlatform] = useState<"ios" | "macos">("ios");
   const [current, setCurrent] = useState(0);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [isExpanded, setIsExpanded] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const slides = platform === "ios" ? iosSlides : macosSlides;
@@ -147,20 +149,17 @@ export default function Slideshow() {
     };
   }, [platform, startTimer, stopTimer]);
 
-  function changeSlide(direction: number) {
-    setCurrent((prev) => {
-      let next = prev + direction;
-      if (next >= slides.length) next = 0;
-      else if (next < 0) next = slides.length - 1;
-      return next;
-    });
-    startTimer();
-  }
-
   function goToSlide(index: number) {
     setCurrent(index);
     startTimer();
   }
+
+  const changeSlide = useCallback((direction: number) => {
+    setCurrent((prev) => {
+      const count = platform === "ios" ? iosSlides.length : macosSlides.length;
+      return (prev + direction + count) % count;
+    });
+  }, [platform]);
 
   const slide = slides[current];
 
@@ -171,87 +170,166 @@ export default function Slideshow() {
 
   const isWide = platform === "macos";
 
+  useEffect(() => {
+    if (!isExpanded) return;
+
+    stopTimer();
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") setIsExpanded(false);
+      if (event.key === "ArrowLeft") changeSlide(-1);
+      if (event.key === "ArrowRight") changeSlide(1);
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = previousOverflow;
+      startTimer();
+    };
+  }, [isExpanded, changeSlide, startTimer, stopTimer]);
+
+  const activeSrc = getSrc(slide);
+
   return (
     <div className="slideshow-section">
-      <div className="platform-toggle">
-        <button
-          className={platform === "ios" ? "active" : ""}
-          onClick={() => setPlatform("ios")}
-        >
-          <i className="fab fa-apple"></i> iPhone &amp; iPad
-        </button>
-        <button
-          className={platform === "macos" ? "active" : ""}
-          onClick={() => setPlatform("macos")}
-        >
-          <i className="fas fa-laptop"></i> Mac
-        </button>
+      <div className="slideshow-platform-bar">
+        <div className="platform-toggle" aria-label="Choose device preview">
+          <button
+            className={platform === "ios" ? "active" : ""}
+            onClick={() => setPlatform("ios")}
+            aria-pressed={platform === "ios"}
+            aria-label="Show iPhone and iPad previews"
+          >
+            <i className="fab fa-apple" aria-hidden="true"></i> iPhone &amp; iPad
+          </button>
+          <button
+            className={platform === "macos" ? "active" : ""}
+            onClick={() => setPlatform("macos")}
+            aria-pressed={platform === "macos"}
+            aria-label="Show Mac previews"
+          >
+            <i className="fas fa-laptop" aria-hidden="true"></i> Mac
+          </button>
+        </div>
       </div>
-      <h3 style={{ color: "var(--accent)" }}>
-        {platform === "ios" ? "See Arbiter on iPhone" : "See Arbiter on Mac"}
-      </h3>
+      <div className="slideshow-depth" aria-hidden="true">
+        <span></span>
+        <span></span>
+      </div>
       <div
         className={`slideshow-container ${isWide ? "slideshow-container--macos" : ""}`}
         onMouseEnter={stopTimer}
         onMouseLeave={startTimer}
       >
-        <div className="slideshow-wrapper">
-          <div
-            className="slides"
-            style={{ transform: `translateX(${-current * 100}%)` }}
-          >
-            {slides.map((s, i) => {
-              const src = getSrc(s);
-              return (
-                <div className="slide" key={`${platform}-${theme}-${i}`}>
-                  {src ? (
-                    <Image
-                      src={src}
-                      alt={s.alt}
-                      width={isWide ? 700 : 230}
-                      height={isWide ? 455 : 500}
-                      style={
-                        isWide
-                          ? { width: "100%", height: "auto", maxHeight: "430px", objectFit: "contain" }
-                          : { width: "auto", height: "500px" }
-                      }
-                    />
-                  ) : (
-                    <div className="slide-placeholder">
-                      <span>{s.alt}</span>
+        <button
+          type="button"
+          className="slideshow-wrapper"
+          onClick={() => setIsExpanded(true)}
+          aria-label={`Open ${slide.alt} at full size`}
+        >
+          <div className="slides">
+            <div className="slide" key={`${platform}-${theme}-${current}`}>
+              {activeSrc ? (
+                <div className={`device-preview ${isWide ? "device-preview--macos" : "device-preview--ios"}`}>
+                  <div className={isWide ? "macbook-frame" : "iphone-frame"}>
+                    {!isWide && <span className="iphone-island" aria-hidden="true" />}
+                    {isWide && <span className="macbook-camera" aria-hidden="true" />}
+                    <div className={isWide ? "macbook-screen" : "iphone-screen"}>
+                      <Image
+                        src={activeSrc}
+                        alt={slide.alt}
+                        width={isWide ? 3024 : 1206}
+                        height={isWide ? 1964 : 2622}
+                        priority={current === 0}
+                        unoptimized
+                        className={`slide-image ${isWide ? "slide-image--macos" : "slide-image--ios"}`}
+                        draggable={false}
+                      />
                     </div>
-                  )}
+                  </div>
+                  {isWide && <span className="macbook-base" aria-hidden="true" />}
                 </div>
-              );
-            })}
+              ) : (
+                <div className="slide-placeholder">
+                  <span>{slide.alt}</span>
+                </div>
+              )}
+            </div>
           </div>
-          <button
-            className="slideshow-controls prev"
-            onClick={() => changeSlide(-1)}
-          >
-            &#8249;
-          </button>
-          <button
-            className="slideshow-controls next"
-            onClick={() => changeSlide(1)}
-          >
-            &#8250;
-          </button>
-        </div>
+          <span className="slide-expand-hint">
+            <i className="fas fa-expand-alt" aria-hidden="true"></i>
+            Click to view full size
+          </span>
+        </button>
         <div className="slideshow-dots">
           {slides.map((_, i) => (
-            <span
+            <button
+              type="button"
               key={i}
               className={`dot ${i === current ? "active" : ""}`}
               onClick={() => goToSlide(i)}
+              aria-label={`Show preview ${i + 1} of ${slides.length}`}
+              aria-current={i === current ? "true" : undefined}
             />
           ))}
         </div>
         <div className="slideshow-caption">
-          <div className="caption-title">{slide.title}</div>
-          <div className="caption-text">{slide.text}</div>
+          <div>
+            <div className="caption-title">{slide.title}</div>
+            <div className="caption-text">{slide.text}</div>
+          </div>
+          <span className="slide-count">{String(current + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}</span>
         </div>
       </div>
+      {isExpanded && createPortal(
+        <div
+          className="screenshot-lightbox"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${slide.title} screenshot viewer`}
+        >
+          <button
+            type="button"
+            className="screenshot-lightbox-backdrop"
+            onClick={() => setIsExpanded(false)}
+            aria-label="Close screenshot viewer"
+          />
+          <div className={`screenshot-lightbox-panel ${isWide ? "is-macos" : "is-ios"}`}>
+            <div className="screenshot-lightbox-header">
+              <div>
+                <span>{isWide ? "Arbiter for Mac" : "Arbiter for iPhone & iPad"}</span>
+                <strong>{slide.title}</strong>
+              </div>
+              <div className="screenshot-lightbox-meta">
+                <span>{String(current + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}</span>
+                <button type="button" onClick={() => setIsExpanded(false)} aria-label="Close screenshot viewer">×</button>
+              </div>
+            </div>
+            <div className="screenshot-lightbox-stage">
+              <button type="button" className="lightbox-arrow previous" onClick={() => changeSlide(-1)} aria-label="Show previous screenshot">‹</button>
+              <div className="screenshot-lightbox-image">
+                <Image
+                  src={getSrc(slide) || slide.darkSrc}
+                  alt={slide.alt}
+                  fill
+                  sizes="94vw"
+                  unoptimized
+                  className="lightbox-image"
+                  priority
+                />
+              </div>
+              <button type="button" className="lightbox-arrow next" onClick={() => changeSlide(1)} aria-label="Show next screenshot">›</button>
+            </div>
+            <div className="screenshot-lightbox-footer">
+              <p>{slide.text}</p>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 }

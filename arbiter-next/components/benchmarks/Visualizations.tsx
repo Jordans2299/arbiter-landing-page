@@ -21,20 +21,23 @@ export default function Visualizations({ models }: { models: BenchmarkModel[] })
 }
 
 export function QualitySpeedChart({ models, devices, comparisonDeviceKey }: { models: BenchmarkModel[]; devices: BenchmarkModelDevice[]; comparisonDeviceKey: string }) {
-  const comparable = models.map((model) => ({ model, device: matchingDevice(model.modelKey, devices, comparisonDeviceKey) })).filter((entry) => entry.device);
+  const comparable = models
+    .map((model) => ({ model, device: matchingDevice(model.modelKey, devices, comparisonDeviceKey) }))
+    .filter((entry) => !comparisonDeviceKey || entry.device);
   return <section className="benchmark-chart-card quality-speed-card" aria-labelledby="scatter-heading">
     <div className="benchmark-section-heading compact"><div><span className="eyebrow">Quality × speed</span><h2 id="scatter-heading">Score versus generation speed</h2></div></div>
-    {comparisonDeviceKey ? <ScatterPlot entries={comparable} /> : <ChartPrompt />}
+    <ScatterPlot entries={comparable} comparisonDeviceSelected={Boolean(comparisonDeviceKey)} />
   </section>;
 }
 
-function ChartPrompt() {
-  return <div className="chart-prompt"><span aria-hidden="true">⌁</span><p>Select an exact performance device above to avoid comparing unlike Apple hardware.</p></div>;
-}
-
-function ScatterPlot({ entries }: { entries: Array<{ model: BenchmarkModel; device: BenchmarkModelDevice | undefined }> }) {
-  const points = entries.map(({ model, device }) => ({ model, speed: performanceMetric(device, "generatedTokensPerSecond").average, score: model.metrics.score.average, ram: performanceMetric(device, "peakResidentMemoryBytes").average })).filter((point) => point.speed != null && point.score != null);
-  if (!points.length) return <div className="chart-prompt"><p>No comparable speed data is available for this device.</p></div>;
+function ScatterPlot({ entries, comparisonDeviceSelected }: { entries: Array<{ model: BenchmarkModel; device: BenchmarkModelDevice | undefined }>; comparisonDeviceSelected: boolean }) {
+  const points = entries.map(({ model, device }) => ({
+    model,
+    speed: comparisonDeviceSelected ? performanceMetric(device, "generatedTokensPerSecond").average : model.metrics.generatedTokensPerSecond.average,
+    score: model.metrics.score.average,
+    ram: comparisonDeviceSelected ? performanceMetric(device, "peakResidentMemoryBytes").average : model.metrics.peakResidentMemoryBytes.average,
+  })).filter((point) => point.speed != null && point.score != null);
+  if (!points.length) return <div className="chart-prompt"><p>No generation-speed data is available for this selection.</p></div>;
   const maxX = Math.max(...points.map((point) => point.speed!), 1);
   const minY = Math.min(...points.map((point) => point.score!), 0);
   const maxY = Math.max(...points.map((point) => point.score!), 100);
@@ -42,7 +45,7 @@ function ScatterPlot({ entries }: { entries: Array<{ model: BenchmarkModel; devi
   const colors = ["#a78bfa", "#34d399", "#fb7185", "#60a5fa", "#fbbf24"];
   return <>
     <svg className="scatter-chart" viewBox="0 0 900 360" role="img" aria-labelledby="scatter-title scatter-desc">
-      <title id="scatter-title">Average Arbiter score versus generated tokens per second</title><desc id="scatter-desc">One point per model and selected device profile. Point size reflects peak process RAM when available.</desc>
+      <title id="scatter-title">Average Arbiter score versus generated tokens per second</title><desc id="scatter-desc">One point per model{comparisonDeviceSelected ? " for the selected device profile" : " across all available benchmark devices"}. Point size reflects peak process RAM when available.</desc>
       <line x1="70" y1="20" x2="70" y2="310" /><line x1="70" y1="310" x2="880" y2="310" />
       {[0, .25, .5, .75, 1].map((fraction) => <g key={fraction}><line className="gridline" x1="70" y1={310 - fraction * 280} x2="880" y2={310 - fraction * 280} /><text x="60" y={315 - fraction * 280} textAnchor="end">{Math.round(minY + (maxY - minY) * fraction)}%</text></g>)}
       {points.map((point) => { const x = 70 + (point.speed! / maxX) * 790; const y = 310 - ((point.score! - minY) / Math.max(maxY - minY, .01)) * 280; const radius = point.ram ? Math.max(6, Math.min(16, 5 + point.ram / 1024 ** 3)) : 8; return <g key={point.model.modelKey}><circle cx={x} cy={y} r={radius} fill={colors[formats.indexOf(point.model.model.format) % colors.length]}><title>{point.model.model.displayName}: {formatScore(point.score)}, {formatRate(point.speed)}, peak process RAM {formatBytes(point.ram)}</title></circle></g>; })}

@@ -100,6 +100,7 @@ export default function Slideshow() {
   const [current, setCurrent] = useState(0);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const slides = platform === "ios" ? iosSlides : macosSlides;
@@ -118,6 +119,18 @@ export default function Slideshow() {
     });
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 600px)");
+    const syncMobile = () => setIsMobile(media.matches);
+    syncMobile();
+    media.addEventListener("change", syncMobile);
+    return () => media.removeEventListener("change", syncMobile);
+  }, []);
+
+  useEffect(() => {
+    if (isMobile && isExpanded) setIsExpanded(false);
+  }, [isMobile, isExpanded]);
 
   const startTimer = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
@@ -228,7 +241,8 @@ export default function Slideshow() {
           type="button"
           className="slideshow-wrapper"
           onClick={() => setIsExpanded(true)}
-          aria-label={`Open ${slide.alt} at full size`}
+          disabled={isMobile}
+          aria-label={isMobile ? `${slide.alt} preview` : `Open ${slide.alt} at full size`}
         >
           <div className="slides">
             <div className="slide" key={`${platform}-${theme}-${current}`}>
@@ -264,6 +278,20 @@ export default function Slideshow() {
             Click to view full size
           </span>
         </button>
+        <div className="mobile-slideshow-arrows" aria-label="Screenshot navigation">
+          <button
+            type="button"
+            className="mobile-slide-arrow previous"
+            onClick={() => { changeSlide(-1); startTimer(); }}
+            aria-label="Show previous screenshot"
+          >‹</button>
+          <button
+            type="button"
+            className="mobile-slide-arrow next"
+            onClick={() => { changeSlide(1); startTimer(); }}
+            aria-label="Show next screenshot"
+          >›</button>
+        </div>
         <div className="slideshow-dots">
           {slides.map((_, i) => (
             <button
@@ -284,7 +312,7 @@ export default function Slideshow() {
           <span className="slide-count">{String(current + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}</span>
         </div>
       </div>
-      {isExpanded && createPortal(
+      {isExpanded && !isMobile && createPortal(
         <div
           className="screenshot-lightbox"
           role="dialog"
@@ -311,15 +339,17 @@ export default function Slideshow() {
             <div className="screenshot-lightbox-stage">
               <button type="button" className="lightbox-arrow previous" onClick={() => changeSlide(-1)} aria-label="Show previous screenshot">‹</button>
               <div className="screenshot-lightbox-image">
-                <Image
-                  src={getSrc(slide) || slide.darkSrc}
-                  alt={slide.alt}
-                  fill
-                  sizes="94vw"
-                  unoptimized
-                  className="lightbox-image"
-                  priority
-                />
+                <div className={`lightbox-media-frame ${isWide ? "is-macos" : "is-ios"}`}>
+                  <Image
+                    src={getSrc(slide) || slide.darkSrc}
+                    alt={slide.alt}
+                    fill
+                    sizes={isWide ? "85vw" : "45vw"}
+                    unoptimized
+                    className="lightbox-image"
+                    priority
+                  />
+                </div>
               </div>
               <button type="button" className="lightbox-arrow next" onClick={() => changeSlide(1)} aria-label="Show next screenshot">›</button>
             </div>

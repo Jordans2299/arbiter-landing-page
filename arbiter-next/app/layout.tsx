@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, DM_Sans } from "next/font/google";
 import Script from "next/script";
+import FluxAnalytics from "@/components/FluxAnalytics";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -29,6 +30,22 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 };
 
+function getFluxProjectKey(): string {
+  const keyName =
+    process.env.NODE_ENV === "production"
+      ? "FLUX_ANALYTICS_KEY_PROD"
+      : "FLUX_ANALYTICS_KEY_DEV";
+  const projectKey = process.env[keyName];
+
+  if (!projectKey) {
+    throw new Error(`Missing required environment variable: ${keyName}`);
+  }
+
+  return projectKey;
+}
+
+const fluxProjectKey = getFluxProjectKey();
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -42,6 +59,7 @@ export default function RootLayout({
             __html: `(function(){var t=localStorage.getItem("arbiter-theme");if(t==="light")document.documentElement.setAttribute("data-theme","light")})()`,
           }}
         />
+        <FluxAnalytics projectKey={fluxProjectKey} />
         {children}
         <Script
           src="https://kit.fontawesome.com/1c37cb57ef.js"

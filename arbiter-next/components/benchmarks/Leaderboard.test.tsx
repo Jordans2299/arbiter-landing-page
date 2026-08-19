@@ -24,11 +24,26 @@ describe("leaderboard pagination", () => {
   it("shows ten rows at a time and moves to the next page", () => {
     render(<Leaderboard models={Array.from({ length: 12 }, (_, index) => makeModel(index + 1))} devices={[]} comparisonDeviceKey="" />);
     expect(screen.queryByText(/Showing .* of/)).not.toBeInTheDocument();
-    expect(screen.getByText("Model 10")).toBeInTheDocument();
+    expect(screen.getAllByText("Model 10")).toHaveLength(2);
     expect(screen.queryByText("Model 11")).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Next" }));
     expect(screen.getByText("Page 2 of 2")).toBeInTheDocument();
-    expect(screen.getByText("Model 11")).toBeInTheDocument();
+    expect(screen.getAllByText("Model 11")).toHaveLength(2);
+    expect(screen.getByText("#11")).toBeInTheDocument();
     expect(screen.queryByText("Model 10")).not.toBeInTheDocument();
+  });
+
+  it("keeps score details collapsed until a mobile model row is selected", () => {
+    render(<Leaderboard models={[makeModel(1)]} devices={[]} comparisonDeviceKey="" />);
+    const modelButton = screen.getByRole("button", { name: "#1Model 1MLX · Test · 4BOverall50%" });
+
+    expect(modelButton).toHaveAttribute("aria-expanded", "false");
+    expect(screen.queryByRole("heading", { name: "Score breakdown" })).not.toBeInTheDocument();
+
+    fireEvent.click(modelButton);
+
+    expect(modelButton).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByRole("heading", { name: "Score breakdown" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /View full model results/ })).toHaveAttribute("href", "/benchmarks/model-1");
   });
 });

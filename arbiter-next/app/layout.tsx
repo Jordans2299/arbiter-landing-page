@@ -30,21 +30,10 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 };
 
-function getFluxProjectKey(): string {
-  const keyName =
-    process.env.NODE_ENV === "production"
-      ? "FLUX_ANALYTICS_KEY_PROD"
-      : "FLUX_ANALYTICS_KEY_DEV";
-  const projectKey = process.env[keyName];
-
-  if (!projectKey) {
-    throw new Error(`Missing required environment variable: ${keyName}`);
-  }
-
-  return projectKey;
-}
-
-const fluxProjectKey = getFluxProjectKey();
+const fluxProjectKey =
+  process.env.NODE_ENV === "production"
+    ? process.env.FLUX_ANALYTICS_KEY_PROD
+    : process.env.FLUX_ANALYTICS_KEY_DEV;
 
 export default function RootLayout({
   children,
@@ -59,7 +48,7 @@ export default function RootLayout({
             __html: `(function(){var t=localStorage.getItem("arbiter-theme");if(t==="light")document.documentElement.setAttribute("data-theme","light")})()`,
           }}
         />
-        <FluxAnalytics projectKey={fluxProjectKey} />
+        {fluxProjectKey && <FluxAnalytics projectKey={fluxProjectKey} />}
         {children}
         <Script
           src="https://kit.fontawesome.com/1c37cb57ef.js"

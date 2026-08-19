@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function BenchmarksPage() {
-  return <div className="main-content benchmark-page"><Navbar /><main className="benchmark-container"><header className="benchmark-hero"><span className="eyebrow">Arbiter Open Model Benchmarks</span><p>Community results for open-source models tested in Arbiter on iOS and macOS.</p></header><BenchmarkDashboard /></main><Footer /></div>;
+  return <div className="main-content benchmark-page"><Navbar /><main className="benchmark-container"><header className="benchmark-hero"><h1>Open model benchmarks</h1><p>Compare overall scores, then select a model to explore its capability and performance details.</p></header><BenchmarkDashboard /></main><Footer /></div>;
 }

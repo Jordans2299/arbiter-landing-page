@@ -33,9 +33,9 @@ export function QualitySpeedChart({ models, devices, comparisonDeviceKey }: { mo
 function ScatterPlot({ entries, comparisonDeviceSelected }: { entries: Array<{ model: BenchmarkModel; device: BenchmarkModelDevice | undefined }>; comparisonDeviceSelected: boolean }) {
   const points = entries.map(({ model, device }) => ({
     model,
-    speed: comparisonDeviceSelected ? performanceMetric(device, "generatedTokensPerSecond").average : model.metrics.generatedTokensPerSecond.average,
+    speed: performanceMetric(comparisonDeviceSelected ? device : model, "generatedTokensPerSecond").average,
     score: model.metrics.score.average,
-    ram: comparisonDeviceSelected ? performanceMetric(device, "peakResidentMemoryBytes").average : model.metrics.peakResidentMemoryBytes.average,
+    ram: performanceMetric(comparisonDeviceSelected ? device : model, "peakResidentMemoryBytes").average,
   })).filter((point) => point.speed != null && point.score != null);
   if (!points.length) return <div className="chart-prompt"><p>No generation-speed data is available for this selection.</p></div>;
   const maxX = Math.max(...points.map((point) => point.speed!), 1);

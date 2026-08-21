@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { matchingDevice, performanceMetric } from "@/lib/benchmarks/data";
+import { modelPerformanceMetric } from "@/lib/benchmarks/data";
 import { formatBytes, formatRate, formatScore, formatSeconds } from "@/lib/benchmarks/format";
 import { CATEGORY_KEYS, CATEGORY_LABELS, type BenchmarkModel, type BenchmarkModelDevice } from "@/lib/benchmarks/types";
 
@@ -33,10 +33,9 @@ export default function Leaderboard({ models, devices, comparisonDeviceKey }: { 
         <table className="benchmark-table">
           <thead><tr><th>Model</th><th>Average score</th><th>Math</th><th>Code</th><th>Instruction following</th><th>Generation speed</th><th>First-token latency</th><th>Peak process RAM</th><th>Runs</th></tr></thead>
           <tbody>{pageModels.map((model) => {
-            const device = matchingDevice(model.modelKey, devices, comparisonDeviceKey);
-            const speed = performanceMetric(device, "generatedTokensPerSecond");
-            const latency = performanceMetric(device, "averageTimeToFirstTokenSeconds");
-            const ram = performanceMetric(device, "peakResidentMemoryBytes");
+            const speed = modelPerformanceMetric(model, devices, comparisonDeviceKey, "generatedTokensPerSecond");
+            const latency = modelPerformanceMetric(model, devices, comparisonDeviceKey, "averageTimeToFirstTokenSeconds");
+            const ram = modelPerformanceMetric(model, devices, comparisonDeviceKey, "peakResidentMemoryBytes");
             return <tr key={model.modelKey}>
               <th scope="row"><Link href={`/benchmarks/${encodeURIComponent(model.modelKey)}`}>{model.model.displayName}</Link><span className="model-meta">{[model.model.format, model.model.family, model.model.parameterSize].filter(Boolean).join(" · ")}</span></th>
               <td data-label="Average score"><strong>{formatScore(model.metrics.score.average)}</strong></td>
@@ -54,10 +53,9 @@ export default function Leaderboard({ models, devices, comparisonDeviceKey }: { 
       <ol className="mobile-leaderboard" start={(currentPage - 1) * pageSize + 1} aria-label="Ranked models">
         {pageModels.map((model, index) => {
           const rank = (currentPage - 1) * pageSize + index + 1;
-          const device = matchingDevice(model.modelKey, devices, comparisonDeviceKey);
-          const speed = performanceMetric(device, "generatedTokensPerSecond");
-          const latency = performanceMetric(device, "averageTimeToFirstTokenSeconds");
-          const ram = performanceMetric(device, "peakResidentMemoryBytes");
+          const speed = modelPerformanceMetric(model, devices, comparisonDeviceKey, "generatedTokensPerSecond");
+          const latency = modelPerformanceMetric(model, devices, comparisonDeviceKey, "averageTimeToFirstTokenSeconds");
+          const ram = modelPerformanceMetric(model, devices, comparisonDeviceKey, "peakResidentMemoryBytes");
           const expanded = expandedModelKey === model.modelKey;
           const panelId = `mobile-model-details-${currentPage}-${index}`;
 

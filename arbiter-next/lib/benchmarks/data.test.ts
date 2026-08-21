@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { filterAndSortModels, performanceMetric } from "./data";
+import { filterAndSortModels, modelPerformanceMetric, performanceMetric } from "./data";
 import type { BenchmarkFilters, BenchmarkModel, BenchmarkModelDevice } from "./types";
 
 const metric = (average: number | null, count = average == null ? 0 : 1) => ({ sum: average ?? 0, count, average, minimum: average, maximum: average });
@@ -26,5 +26,13 @@ describe("benchmark filtering and sorting", () => {
   });
   it("prefers standard-condition performance metrics", () => {
     expect(performanceMetric(devices[0], "generatedTokensPerSecond")).toEqual({ average: 12, count: 2, standard: true });
+  });
+  it("uses model-level performance when no exact device is selected", () => {
+    const aggregate = {
+      ...a,
+      metrics: { ...a.metrics, generatedTokensPerSecond: metric(18, 5) },
+    };
+    expect(modelPerformanceMetric(aggregate, devices, "", "generatedTokensPerSecond"))
+      .toEqual({ average: 18, count: 5, standard: false });
   });
 });

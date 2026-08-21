@@ -8,14 +8,26 @@ import type {
 import { formatHardwareModel } from "./format";
 
 export function performanceMetric(
-  device: BenchmarkModelDevice | undefined,
+  aggregate: Pick<BenchmarkModel, "metrics" | "standardPerformanceMetrics"> | undefined,
   key: PerformanceMetricKey,
 ) {
-  if (!device) return { average: null, count: 0, standard: false };
-  const standard = device.standardPerformanceMetrics[key];
+  if (!aggregate) return { average: null, count: 0, standard: false };
+  const standard = aggregate.standardPerformanceMetrics[key];
   if (standard && standard.count > 0) return { average: standard.average, count: standard.count, standard: true };
-  const fallback = device.metrics[key];
+  const fallback = aggregate.metrics[key];
   return { average: fallback?.average ?? null, count: fallback?.count ?? 0, standard: false };
+}
+
+export function modelPerformanceMetric(
+  model: BenchmarkModel,
+  devices: BenchmarkModelDevice[],
+  comparisonDeviceKey: string,
+  key: PerformanceMetricKey,
+) {
+  const aggregate = comparisonDeviceKey
+    ? matchingDevice(model.modelKey, devices, comparisonDeviceKey)
+    : model;
+  return performanceMetric(aggregate, key);
 }
 
 export function deviceLabel(device: BenchmarkModelDevice): string {
@@ -71,14 +83,13 @@ export function filterAndSortModels(
     if (sort === "overall") return model.metrics.score.average;
     if (sort in model.categories) return model.categories[sort as keyof typeof model.categories].average;
     if (sort === "submissions") return model.submissionCount;
-    const device = matchingDevice(model.modelKey, devices, filters.comparisonDeviceKey);
     const metricMap: Partial<Record<BenchmarkSort, PerformanceMetricKey>> = {
       generationSpeed: "generatedTokensPerSecond",
       firstTokenLatency: "averageTimeToFirstTokenSeconds",
       totalDuration: "totalDurationSeconds",
       peakRam: "peakResidentMemoryBytes",
     };
-    return performanceMetric(device, metricMap[sort]!).average;
+    return modelPerformanceMetric(model, devices, filters.comparisonDeviceKey, metricMap[sort]!).average;
   };
 
   return [...filtered].sort((a, b) => {

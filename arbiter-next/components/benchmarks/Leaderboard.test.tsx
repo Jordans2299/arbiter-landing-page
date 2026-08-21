@@ -1,5 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it } from "vitest";
 import Leaderboard from "./Leaderboard";
 import type { AggregateMetric, BenchmarkModel } from "@/lib/benchmarks/types";
 
@@ -20,7 +20,22 @@ const makeModel = (index: number): BenchmarkModel => ({
   updatedAt: null,
 });
 
+afterEach(cleanup);
+
 describe("leaderboard pagination", () => {
+  it("shows measured model-level performance without an exact device selection", () => {
+    const model = makeModel(1);
+    model.metrics.generatedTokensPerSecond = metric(14.2);
+    model.metrics.averageTimeToFirstTokenSeconds = metric(0.84);
+    model.metrics.peakResidentMemoryBytes = metric(2 * 1024 ** 3);
+
+    render(<Leaderboard models={[model]} devices={[]} comparisonDeviceKey="" />);
+
+    expect(screen.getByText("14.2 tok/s")).toBeInTheDocument();
+    expect(screen.getByText("0.84s")).toBeInTheDocument();
+    expect(screen.getByText("2.00 GB")).toBeInTheDocument();
+  });
+
   it("shows ten rows at a time and moves to the next page", () => {
     render(<Leaderboard models={Array.from({ length: 12 }, (_, index) => makeModel(index + 1))} devices={[]} comparisonDeviceKey="" />);
     expect(screen.queryByText(/Showing .* of/)).not.toBeInTheDocument();

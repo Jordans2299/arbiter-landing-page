@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
-  title: "Arbiter Benchmarks — Local AI Model Results",
+  title: "Arbiter Benchmarks | Local AI Model Results",
   description: "Community-submitted Arbiter diagnostic results for local AI models running on iPhone and Mac.",
 };
 

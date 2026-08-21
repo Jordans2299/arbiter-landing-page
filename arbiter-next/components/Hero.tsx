@@ -1,4 +1,4 @@
-import Slideshow from "./Slideshow";
+import HeroShowcase from "./HeroShowcase";
 
 export default function Hero() {
   return (
@@ -6,13 +6,14 @@ export default function Hero() {
       <div className="container">
         <div className="hero-content">
           <div className="hero-copy">
+            <span className="hero-eyebrow">Private AI for Apple devices</span>
             <h1>
-              Your data. Your AI. <span>Your choice.</span>
+              Run AI models <span>locally</span> on iPhone and Mac.
             </h1>
             <p className="tagline">
-              Run powerful language models locally on iPhone, iPad, and Mac.
-              Stay offline, choose the model that fits, and keep every
-              conversation yours.
+              Chat with open models on the hardware you already own. Stay
+              offline, choose the model that fits, and keep every conversation
+              yours.
             </p>
             <div className="beta-section">
               <div className="download-btn-row">
@@ -37,7 +38,7 @@ export default function Hero() {
             </div>
           </div>
           <div className="hero-showcase">
-            <Slideshow />
+            <HeroShowcase />
           </div>
         </div>
       </div>

@@ -6,6 +6,7 @@ import ComparisonSection from "@/components/ComparisonSection";
 import FaqSection from "@/components/FaqSection";
 import Footer from "@/components/Footer";
 import FloatingPlanets from "@/components/FloatingPlanets";
+import BenchmarkPreview from "@/components/BenchmarkPreview";
 
 export default function Home() {
   return (
@@ -13,8 +14,9 @@ export default function Home() {
       <div className="main-content">
         <Navbar />
         <Hero />
-        <ProblemSection />
         <FeaturesSection />
+        <BenchmarkPreview />
+        <ProblemSection />
         <ComparisonSection />
         <FaqSection />
         <Footer />

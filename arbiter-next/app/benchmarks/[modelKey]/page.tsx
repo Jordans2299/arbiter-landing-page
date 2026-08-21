@@ -3,7 +3,7 @@ import ModelDetail from "@/components/benchmarks/ModelDetail";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 
-export const metadata: Metadata = { title: "Model Benchmark Details — Arbiter" };
+export const metadata: Metadata = { title: "Model Benchmark Details | Arbiter" };
 
 export default async function BenchmarkModelPage({ params }: { params: Promise<{ modelKey: string }> }) {
   const { modelKey } = await params;

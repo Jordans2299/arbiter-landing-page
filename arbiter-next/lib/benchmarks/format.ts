@@ -1,15 +1,15 @@
 export function formatScore(value: number | null | undefined): string {
-  if (value == null || !Number.isFinite(value)) return "—";
+  if (value == null || !Number.isFinite(value)) return "N/A";
   return `${new Intl.NumberFormat(undefined, { maximumFractionDigits: 1 }).format(value)}%`;
 }
 
 export function formatRate(value: number | null | undefined): string {
-  if (value == null || !Number.isFinite(value)) return "—";
+  if (value == null || !Number.isFinite(value)) return "N/A";
   return `${new Intl.NumberFormat(undefined, { maximumFractionDigits: 1 }).format(value)} tok/s`;
 }
 
 export function formatSeconds(value: number | null | undefined): string {
-  if (value == null || !Number.isFinite(value)) return "—";
+  if (value == null || !Number.isFinite(value)) return "N/A";
   if (value >= 90) {
     const minutes = Math.floor(value / 60);
     const seconds = Math.round(value % 60);
@@ -19,7 +19,7 @@ export function formatSeconds(value: number | null | undefined): string {
 }
 
 export function formatBytes(value: number | null | undefined): string {
-  if (value == null || !Number.isFinite(value)) return "—";
+  if (value == null || !Number.isFinite(value)) return "N/A";
   const gigabyte = 1024 ** 3;
   const megabyte = 1024 ** 2;
   if (value >= gigabyte) return `${(value / gigabyte).toFixed(value >= 10 * gigabyte ? 1 : 2)} GB`;
@@ -27,7 +27,7 @@ export function formatBytes(value: number | null | undefined): string {
 }
 
 export function formatDate(value: Date | null | undefined, includeTime = true): string {
-  if (!value) return "—";
+  if (!value) return "N/A";
   return new Intl.DateTimeFormat(undefined, includeTime
     ? { dateStyle: "medium", timeStyle: "short" }
     : { dateStyle: "medium" }).format(value);

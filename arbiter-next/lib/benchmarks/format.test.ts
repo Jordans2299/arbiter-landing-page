@@ -9,9 +9,9 @@ describe("benchmark formatting", () => {
     expect(formatBytes(2 * 1024 ** 3)).toBe("2.00 GB");
   });
 
-  it("uses an em dash for missing metrics", () => {
-    expect(formatScore(null)).toBe("—");
-    expect(formatBytes(undefined)).toBe("—");
+  it("labels missing metrics as not available", () => {
+    expect(formatScore(null)).toBe("N/A");
+    expect(formatBytes(undefined)).toBe("N/A");
   });
 
   it("marks fewer than three runs preliminary", () => {

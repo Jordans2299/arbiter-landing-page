@@ -10,6 +10,9 @@ interface ThemedImageProps {
   width: number;
   height: number;
   className?: string;
+  priority?: boolean;
+  sizes?: string;
+  unoptimized?: boolean;
 }
 
 /**
@@ -24,6 +27,9 @@ export default function ThemedImage({
   width,
   height,
   className = "",
+  priority = false,
+  sizes,
+  unoptimized = true,
 }: ThemedImageProps) {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
 
@@ -52,6 +58,9 @@ export default function ThemedImage({
       width={width}
       height={height}
       className={className}
+      priority={priority}
+      sizes={sizes}
+      unoptimized={unoptimized}
     />
   );
 }

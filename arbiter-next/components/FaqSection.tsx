@@ -7,7 +7,7 @@ const faqs = [
   {
     question: "Is my data private?",
     answer:
-      "Yes. Everything is processed and stored on your device. Your chats and files never leave your phone or Mac unless you explicitly choose to share them. This applies across iPhone and Mac — whether running models locally or serving them on your network, data never touches external servers.",
+      "Yes. Everything is processed and stored on your device. Your chats and files never leave your phone or Mac unless you explicitly choose to share them. This applies across iPhone and Mac, whether running models locally or serving them on your network. Your data never touches external servers.",
   },
   {
     question: "Do I need an internet connection to use the app?",

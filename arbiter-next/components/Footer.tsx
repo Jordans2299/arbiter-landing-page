@@ -18,6 +18,15 @@ export default function Footer() {
             <Link className="footer-contact" href="/blog">
               Blog
             </Link>
+            <a
+              className="footer-contact"
+              href="https://x.com/askArbiterAI"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Follow Arbiter AI on X"
+            >
+              X / Twitter
+            </a>
             <Link className="footer-contact" href="/privacy">
               Privacy
             </Link>

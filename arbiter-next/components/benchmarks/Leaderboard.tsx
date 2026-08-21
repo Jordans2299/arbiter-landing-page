@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { matchingDevice, performanceMetric } from "@/lib/benchmarks/data";
-import { formatBytes, formatRate, formatScore, formatSeconds, isPreliminary } from "@/lib/benchmarks/format";
+import { formatBytes, formatRate, formatScore, formatSeconds } from "@/lib/benchmarks/format";
 import { CATEGORY_KEYS, CATEGORY_LABELS, type BenchmarkModel, type BenchmarkModelDevice } from "@/lib/benchmarks/types";
 
 const PAGE_SIZES = [10, 25, 50] as const;
@@ -38,7 +38,7 @@ export default function Leaderboard({ models, devices, comparisonDeviceKey }: { 
             const latency = performanceMetric(device, "averageTimeToFirstTokenSeconds");
             const ram = performanceMetric(device, "peakResidentMemoryBytes");
             return <tr key={model.modelKey}>
-              <th scope="row"><Link href={`/benchmarks/${encodeURIComponent(model.modelKey)}`}>{model.model.displayName}</Link><span className="model-meta">{[model.model.format, model.model.family, model.model.parameterSize].filter(Boolean).join(" · ")}</span>{isPreliminary(model.submissionCount) && <span className="status-pill preliminary">Preliminary</span>}</th>
+              <th scope="row"><Link href={`/benchmarks/${encodeURIComponent(model.modelKey)}`}>{model.model.displayName}</Link><span className="model-meta">{[model.model.format, model.model.family, model.model.parameterSize].filter(Boolean).join(" · ")}</span></th>
               <td data-label="Average score"><strong>{formatScore(model.metrics.score.average)}</strong></td>
               <td data-label="Math">{formatScore(model.categories.math.average)}</td>
               <td data-label="Code">{formatScore(model.categories.code.average)}</td>
@@ -80,7 +80,6 @@ export default function Leaderboard({ models, devices, comparisonDeviceKey }: { 
             {expanded && <div className="mobile-model-details" id={panelId}>
               <div className="mobile-detail-heading">
                 <h3>Score breakdown</h3>
-                {isPreliminary(model.submissionCount) && <span className="status-pill preliminary">Preliminary</span>}
               </div>
               <div className="mobile-score-grid">
                 {CATEGORY_KEYS.map((key) => <div key={key}><span>{CATEGORY_LABELS[key]}</span><strong>{formatScore(model.categories[key].average)}</strong></div>)}

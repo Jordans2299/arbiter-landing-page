@@ -242,7 +242,6 @@ table.sr-only { display: block !important; }
 .benchmark-table a:hover { color: var(--accent-text); }
 .model-meta, .metric-note { display: block; color: var(--text-muted); font-size: .67rem; font-weight: 400; margin-top: .18rem; }
 .status-pill { display: inline-block; font-size: .61rem; padding: .18rem .45rem; margin-top: .45rem; }
-.status-pill.preliminary { color: #fbbf24; border-color: color-mix(in srgb, #fbbf24 40%, transparent); background: color-mix(in srgb, #fbbf24 10%, transparent); }
 .mobile-leaderboard { display: none; }
 .mobile-only-filter { display: none !important; }
 
@@ -312,7 +311,6 @@ table.sr-only { display: block !important; }
 .detail-score { min-width: 210px; padding-left: 2rem; border-left: 1px solid var(--border); }
 .detail-score span, .detail-score small { display: block; color: var(--text-muted); font-size: .75rem; }
 .detail-score strong { display: block; font-family: var(--font-display); font-size: 3rem; line-height: 1.1; margin: .35rem 0; }
-.preliminary-banner { margin-top: 1rem; padding: .9rem 1.1rem; border: 1px solid color-mix(in srgb, #fbbf24 35%, transparent); background: color-mix(in srgb, #fbbf24 8%, transparent); color: #fde68a; border-radius: var(--radius-md); font-size: .82rem; }
 .detail-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 1.25rem; margin: 1.25rem 0 4rem; }
 .detail-comparison-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 1.25rem; align-items: start; margin: 1.25rem 0 3rem; padding: 0; }
 .detail-list > div { display: grid; grid-template-columns: minmax(110px, .8fr) 1.2fr; gap: 1rem; border-bottom: 1px solid var(--border-soft); padding: .65rem 0; font-size: .78rem; }

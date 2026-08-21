@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { deviceLabel, performanceMetric } from "@/lib/benchmarks/data";
-import { formatBytes, formatDate, formatHardwareModel, formatRate, formatScore, formatSeconds, isPreliminary } from "@/lib/benchmarks/format";
+import { formatBytes, formatDate, formatHardwareModel, formatRate, formatScore, formatSeconds } from "@/lib/benchmarks/format";
 import { benchmarkErrorMessage, loadBenchmarkModelDetails } from "@/lib/benchmarks/firestore";
 import { findManifestModel, huggingFaceURL, loadModelManifest } from "@/lib/benchmarks/manifest";
 import { CATEGORY_KEYS, CATEGORY_LABELS, type BenchmarkModel, type BenchmarkModelDevice, type BenchmarkRun } from "@/lib/benchmarks/types";
@@ -61,7 +61,6 @@ export default function ModelDetail({ modelKey }: { modelKey: string }) {
       </div>
       <div className="detail-score"><span>Average Arbiter score</span><strong>{formatScore(model.metrics.score.average)}</strong><small>{model.submissionCount} submitted run{model.submissionCount === 1 ? "" : "s"}</small></div>
     </section>
-    {isPreliminary(model.submissionCount) && <div className="preliminary-banner"><strong>Preliminary result.</strong> Fewer than three submitted runs contribute to this model aggregate.</div>}
     <section className="detail-comparison-grid">
       <article className="benchmark-chart-card"><span className="eyebrow">Scores</span><h2>Capability breakdown</h2><div className="capability-list">{CATEGORY_KEYS.map((key) => <div key={key}><span>{CATEGORY_LABELS[key]}</span><div className="capability-track"><i style={{ width: `${Math.max(0, Math.min(100, model.categories[key].average ?? 0))}%` }} /></div><strong>{formatScore(model.categories[key].average)}</strong></div>)}</div></article>
       <article className="benchmark-chart-card device-performance-panel" aria-labelledby="device-summary-heading"><span className="eyebrow">Device performance</span><h2 id="device-summary-heading">Measured configurations</h2>
@@ -91,4 +90,4 @@ export function RunAccordion({ run, expanded, onToggle }: { run: BenchmarkRun; e
   </article>;
 }
 
-export function Methodology() { return <section className="methodology-card compact-methodology"><span className="eyebrow">About these results</span><p>These community-submitted results come from Arbiter’s 64-question benchmark for open-source models on iOS and macOS. Score reflects correct answers; speed, latency, and process RAM should also factor into choosing a model. Results with fewer than three runs are preliminary.</p></section>; }
+export function Methodology() { return <section className="methodology-card compact-methodology"><span className="eyebrow">About these results</span><p>These community-submitted results come from Arbiter’s 64-question benchmark for open-source models on iOS and macOS. Score reflects correct answers; speed, latency, and process RAM should also factor into choosing a model.</p></section>; }

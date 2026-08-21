@@ -33,10 +33,6 @@ export function formatDate(value: Date | null | undefined, includeTime = true): 
     : { dateStyle: "medium" }).format(value);
 }
 
-export function isPreliminary(submissionCount: number): boolean {
-  return submissionCount < 3;
-}
-
 const APPLE_HARDWARE_NAMES: Record<string, string> = {
   "iPhone18,1": "iPhone 17 Pro",
 };

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatBytes, formatHardwareModel, formatRate, formatScore, formatSeconds, isPreliminary } from "./format";
+import { formatBytes, formatHardwareModel, formatRate, formatScore, formatSeconds } from "./format";
 
 describe("benchmark formatting", () => {
   it("formats scores, rates, time, and process RAM", () => {
@@ -12,11 +12,6 @@ describe("benchmark formatting", () => {
   it("labels missing metrics as not available", () => {
     expect(formatScore(null)).toBe("N/A");
     expect(formatBytes(undefined)).toBe("N/A");
-  });
-
-  it("marks fewer than three runs preliminary", () => {
-    expect(isPreliminary(2)).toBe(true);
-    expect(isPreliminary(3)).toBe(false);
   });
 
   it("presents Apple hardware identifiers as consumer device names", () => {
